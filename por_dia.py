@@ -23,9 +23,9 @@ if not CLAVE_PEXELS:
 # 📅 LISTA DE TEMAS PREDEFINIDOS (20)
 # ============================================
 TEMAS_PREDEFINIDOS = [
-    "Motivacion",
+    "Motivación",
     "Constancia",
-    "Superacion",
+    "Superación",
     "Gratitud",
     "Logros",
     "AmorPropio",
@@ -33,7 +33,7 @@ TEMAS_PREDEFINIDOS = [
     "Confianza",
     "Resiliencia",
     "Felicidad",
-    "Proposito",
+    "Propósito",
     "Optimismo",
     "PazInterior",
     "Actitud",
@@ -41,108 +41,108 @@ TEMAS_PREDEFINIDOS = [
     "Cambio",
     "Libertad",
     "Aprendizaje",
-    "Sabiduria",
-    "Conexion"
+    "Sabiduría",
+    "Conexión"
 ]
 
 # ============================================
 # 🌍 GENERADOR UNIVERSAL (para cualquier tema)
 # ============================================
 SUJETOS_UNIVERSALES = [
-    "El tema", "La reflexion", "La vida", "El camino", "La experiencia",
-    "El corazon", "El alma", "La mente", "El ser", "La esencia",
-    "Cada dia", "El momento", "La oportunidad", "El cambio", "La transformacion",
-    "La fuerza interior", "La luz", "La esperanza", "El proposito", "La conexion"
+    "El tema", "La reflexión", "La vida", "El camino", "La experiencia",
+    "El corazón", "El alma", "La mente", "El ser", "La esencia",
+    "Cada día", "El momento", "La oportunidad", "El cambio", "La transformación",
+    "La fuerza interior", "La luz", "La esperanza", "El propósito", "La conexión"
 ]
 
 VERBOS_UNIVERSALES = [
-    "ensena", "transforma", "fortalece", "conecta", "alivia",
-    "guia", "impulsa", "acompara", "renueva", "despierta",
-    "eleva", "sostiene", "ilumina", "abre", "sanar",
+    "enseña", "transforma", "fortalece", "conecta", "alivia",
+    "guía", "impulsa", "acompaña", "renueva", "despierta",
+    "eleva", "sostiene", "ilumina", "abre", "sana",
     "motiva", "inspira", "empodera", "libera", "abraza"
 ]
 
 COMPLEMENTOS_UNIVERSALES = [
-    "tu corazon", "tu alma", "tu camino", "tu vida", "tu ser",
-    "tu esencia", "tu mente", "tu espiritu", "tu destino", "tu verdad",
-    "cada paso", "tus suenos", "tu proposito", "tu crecimiento", "tu bienestar",
+    "tu corazón", "tu alma", "tu camino", "tu vida", "tu ser",
+    "tu esencia", "tu mente", "tu espíritu", "tu destino", "tu verdad",
+    "cada paso", "tus sueños", "tu propósito", "tu crecimiento", "tu bienestar",
     "tu paz", "tu luz", "tu fuerza", "tu esperanza", "tu libertad"
 ]
 
 # ============================================
-# 📝 LISTAS DE SUJETOS, VERBOS Y COMPLEMENTOS PARA LOS 20 TEMAS
+# 📝 LISTAS DE SUJETOS, VERBOS Y COMPLEMENTOS PARA LOS 20 TEMAS (CORREGIDAS)
 # ============================================
 SUJETOS = {
-    "Motivacion": ["La motivacion", "La energia", "El entusiasmo", "La pasion", "La fe", "El coraje", "La determinacion", "La disciplina", "La resiliencia", "La voluntad", "El impulso", "La chispa", "La llama", "El vigor", "La conviccion", "La firmeza", "La constancia", "La perseverancia", "La tenacidad", "La entereza"],
-    "Constancia": ["La constancia", "La perseverancia", "La disciplina", "La paciencia", "El esfuerzo", "La rutina", "El habito", "La tenacidad", "La firmeza", "La resistencia", "La continuidad", "La persistencia", "La determinacion", "La voluntad", "La dedicacion", "El empeno", "La laboriosidad", "La asiduidad", "La regularidad", "La obstinacion"],
-    "Superacion": ["La superacion", "El crecimiento", "La evolucion", "La transformacion", "La mejora", "El avance", "El progreso", "El desarrollo", "El aprendizaje", "La resiliencia", "La renovacion", "La elevacion", "La expansion", "La maduracion", "La plenitud", "La fortaleza", "La entereza", "La templanza", "La firmeza", "La solidez"],
-    "Gratitud": ["La gratitud", "El agradecimiento", "La apreciacion", "El reconocimiento", "La bendicion", "La generosidad", "La humildad", "La satisfaccion", "La alegria", "La paz", "La complacencia", "La benevolencia", "La clemencia", "La indulgencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasion", "La empatia", "La solidaridad"],
-    "Logros": ["El exito", "El logro", "El triunfo", "La victoria", "El avance", "El progreso", "El cumplimiento", "La meta", "El objetivo", "La conquista", "La hazana", "La proeza", "El alcance", "La realizacion", "La materializacion", "La culminacion", "La finalizacion", "La ejecucion", "La consumacion", "El remate"],
-    "AmorPropio": ["El amor propio", "La autoaceptacion", "El autocuidado", "La autocompasion", "La confianza", "La valia personal", "La autoestima", "El respeto", "La libertad interior", "La paz", "La dignidad", "La integridad", "La autenticidad", "La sinceridad", "La honestidad", "La transparencia", "La coherencia", "La estabilidad", "La serenidad", "La plenitud"],
-    "Esperanza": ["La esperanza", "La ilusion", "La fe", "El optimismo", "La confianza", "La certeza", "La luz", "La promesa", "El nuevo comienzo", "La renovacion", "La alegria", "La conviccion", "La seguridad", "La firmeza", "La estabilidad", "La constancia", "La perseverancia", "La determinacion", "La voluntad", "La tenacidad"],
-    "Confianza": ["La confianza", "La seguridad", "La certeza", "La conviccion", "La fe", "El valor", "La determinacion", "La firmeza", "La solidez", "La estabilidad", "La garantia", "La evidencia", "La prueba", "El fundamento", "La base", "El cimiento", "El sostén", "El apoyo", "El respaldo", "La credibilidad"],
-    "Resiliencia": ["La resiliencia", "La fortaleza", "La resistencia", "La tenacidad", "La entereza", "La firmeza", "La constancia", "La determinacion", "El temple", "La dureza", "La robustez", "La solidez", "La perseverancia", "La persistencia", "La continuidad", "La regularidad", "La asiduidad", "La laboriosidad", "La obstinacion", "La firmeza"],
-    "Felicidad": ["La felicidad", "La alegria", "La plenitud", "La satisfaccion", "El bienestar", "La calma", "La paz", "El gozo", "La dicha", "El contento", "El regocijo", "El jubilo", "La euforia", "El entusiasmo", "La vitalidad", "La energia", "La armonia", "El equilibrio", "La serenidad", "La tranquilidad"],
-    "Proposito": ["El proposito", "La mision", "La vocacion", "La meta", "El objetivo", "El destino", "La razon", "El norte", "El anhelo", "La aspiracion", "El deseo", "La intencion", "El fin", "La finalidad", "El blanco", "El rumbo", "La direccion", "El camino", "El sendero", "La vision"],
-    "Optimismo": ["El optimismo", "La esperanza", "La fe", "La confianza", "La positividad", "La conviccion", "La certeza", "La alegria", "La luz", "El entusiasmo", "La vitalidad", "La energia", "La ilusion", "El contento", "La satisfaccion", "La plenitud", "La paz", "La serenidad", "La tranquilidad", "El optimismo"],
-    "PazInterior": ["La paz interior", "La serenidad", "La calma", "La tranquilidad", "La armonia", "El sosiego", "La quietud", "La placidez", "La clemencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasion", "La empatia", "La solidaridad", "La benevolencia", "La indulgencia", "La generosidad", "La humildad", "La gratitud"],
-    "Actitud": ["La actitud", "La disposicion", "La postura", "La posicion", "La mentalidad", "El enfoque", "La perspectiva", "La vision", "El angulo", "El punto de vista", "La orientacion", "La direccion", "El rumbo", "El camino", "El sendero", "La via", "La forma", "El modo", "La manera", "El estilo"],
-    "Crecimiento": ["El crecimiento", "El desarrollo", "La evolucion", "La maduracion", "La expansion", "La mejora", "El progreso", "El avance", "La superacion", "La transformacion", "La renovacion", "La elevacion", "La ampliacion", "La extension", "La multiplicacion", "La magnificacion", "El engrandecimiento", "El fortalecimiento", "La consolidacion", "La afirmacion"],
-    "Cambio": ["El cambio", "La transformacion", "La mutacion", "La evolucion", "La adaptacion", "La renovacion", "La reforma", "La innovacion", "La variacion", "La modificacion", "La alteracion", "La conversion", "La inversion", "La revolucion", "La metamorfosis", "La permutacion", "La sustitucion", "La transicion", "El viraje", "El giro"],
-    "Libertad": ["La libertad", "La independencia", "La autonomia", "La autodeterminacion", "La liberacion", "La emancipacion", "La soltura", "El desahogo", "La espontaneidad", "La fluidez", "La flexibilidad", "La adaptabilidad", "La movilidad", "La elasticidad", "La plasticidad", "La ductilidad", "La maleabilidad", "La versatilidad", "La agilidad", "La desenvoltura"],
-    "Aprendizaje": ["El aprendizaje", "La ensenanza", "La instruccion", "La educacion", "El conocimiento", "La sabiduria", "La informacion", "La experiencia", "La leccion", "La comprension", "La asimilacion", "La interiorizacion", "La asuncion", "La aceptacion", "La integracion", "La incorporacion", "La internalizacion", "La absorcion", "La captacion", "La asimilacion"],
-    "Sabiduria": ["La sabiduria", "La prudencia", "La sensatez", "La cordura", "La mesura", "La discrecion", "La templanza", "La moderacion", "La sagacidad", "La perspicacia", "La clarividencia", "La intuicion", "La percepcion", "La comprension", "La penetracion", "La agudeza", "La fineza", "La sutileza", "La delicadeza", "La elegancia"],
-    "Conexion": ["La conexion", "El vinculo", "El lazo", "El enlace", "La relacion", "La comunicacion", "El afecto", "La empatia", "La solidaridad", "La union", "La cohesion", "La integracion", "La armonia", "La concordia", "La paz", "La amistad", "El companerismo", "La hermandad", "La fraternidad", "La camaraderia"]
+    "Motivación": ["La motivación", "La energía", "El entusiasmo", "La pasión", "La fe", "El coraje", "La determinación", "La disciplina", "La resiliencia", "La voluntad", "El impulso", "La chispa", "La llama", "El vigor", "La convicción", "La firmeza", "La constancia", "La perseverancia", "La tenacidad", "La entereza"],
+    "Constancia": ["La constancia", "La perseverancia", "La disciplina", "La paciencia", "El esfuerzo", "La rutina", "El hábito", "La tenacidad", "La firmeza", "La resistencia", "La continuidad", "La persistencia", "La determinación", "La voluntad", "La dedicación", "El empeño", "La laboriosidad", "La asiduidad", "La regularidad", "La obstinación"],
+    "Superación": ["La superación", "El crecimiento", "La evolución", "La transformación", "La mejora", "El avance", "El progreso", "El desarrollo", "El aprendizaje", "La resiliencia", "La renovación", "La elevación", "La expansión", "La maduración", "La plenitud", "La fortaleza", "La entereza", "La templanza", "La firmeza", "La solidez"],
+    "Gratitud": ["La gratitud", "El agradecimiento", "La apreciación", "El reconocimiento", "La bendición", "La generosidad", "La humildad", "La satisfacción", "La alegría", "La paz", "La complacencia", "La benevolencia", "La clemencia", "La indulgencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasión", "La empatía", "La solidaridad"],
+    "Logros": ["El éxito", "El logro", "El triunfo", "La victoria", "El avance", "El progreso", "El cumplimiento", "La meta", "El objetivo", "La conquista", "La hazaña", "La proeza", "El alcance", "La realización", "La materialización", "La culminación", "La finalización", "La ejecución", "La consumación", "El remate"],
+    "AmorPropio": ["El amor propio", "La autoaceptación", "El autocuidado", "La autocompasión", "La confianza", "La valía personal", "La autoestima", "El respeto", "La libertad interior", "La paz", "La dignidad", "La integridad", "La autenticidad", "La sinceridad", "La honestidad", "La transparencia", "La coherencia", "La estabilidad", "La serenidad", "La plenitud"],
+    "Esperanza": ["La esperanza", "La ilusión", "La fe", "El optimismo", "La confianza", "La certeza", "La luz", "La promesa", "El nuevo comienzo", "La renovación", "La alegría", "La convicción", "La seguridad", "La firmeza", "La estabilidad", "La constancia", "La perseverancia", "La determinación", "La voluntad", "La tenacidad"],
+    "Confianza": ["La confianza", "La seguridad", "La certeza", "La convicción", "La fe", "El valor", "La determinación", "La firmeza", "La solidez", "La estabilidad", "La garantía", "La evidencia", "La prueba", "El fundamento", "La base", "El cimiento", "El sostén", "El apoyo", "El respaldo", "La credibilidad"],
+    "Resiliencia": ["La resiliencia", "La fortaleza", "La resistencia", "La tenacidad", "La entereza", "La firmeza", "La constancia", "La determinación", "El temple", "La dureza", "La robustez", "La solidez", "La perseverancia", "La persistencia", "La continuidad", "La regularidad", "La asiduidad", "La laboriosidad", "La obstinación", "La firmeza"],
+    "Felicidad": ["La felicidad", "La alegría", "La plenitud", "La satisfacción", "El bienestar", "La calma", "La paz", "El gozo", "La dicha", "El contento", "El regocijo", "El júbilo", "La euforia", "El entusiasmo", "La vitalidad", "La energía", "La armonía", "El equilibrio", "La serenidad", "La tranquilidad"],
+    "Propósito": ["El propósito", "La misión", "La vocación", "La meta", "El objetivo", "El destino", "La razón", "El norte", "El anhelo", "La aspiración", "El deseo", "La intención", "El fin", "La finalidad", "El blanco", "El rumbo", "La dirección", "El camino", "El sendero", "La visión"],
+    "Optimismo": ["El optimismo", "La esperanza", "La fe", "La confianza", "La positividad", "La convicción", "La certeza", "La alegría", "La luz", "El entusiasmo", "La vitalidad", "La energía", "La ilusión", "El contento", "La satisfacción", "La plenitud", "La paz", "La serenidad", "La tranquilidad", "El optimismo"],
+    "PazInterior": ["La paz interior", "La serenidad", "La calma", "La tranquilidad", "La armonía", "El sosiego", "La quietud", "La placidez", "La clemencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasión", "La empatía", "La solidaridad", "La benevolencia", "La indulgencia", "La generosidad", "La humildad", "La gratitud"],
+    "Actitud": ["La actitud", "La disposición", "La postura", "La posición", "La mentalidad", "El enfoque", "La perspectiva", "La visión", "El ángulo", "El punto de vista", "La orientación", "La dirección", "El rumbo", "El camino", "El sendero", "La vía", "La forma", "El modo", "La manera", "El estilo"],
+    "Crecimiento": ["El crecimiento", "El desarrollo", "La evolución", "La maduración", "La expansión", "La mejora", "El progreso", "El avance", "La superación", "La transformación", "La renovación", "La elevación", "La ampliación", "La extensión", "La multiplicación", "La magnificación", "El engrandecimiento", "El fortalecimiento", "La consolidación", "La afirmación"],
+    "Cambio": ["El cambio", "La transformación", "La mutación", "La evolución", "La adaptación", "La renovación", "La reforma", "La innovación", "La variación", "La modificación", "La alteración", "La conversión", "La inversión", "La revolución", "La metamorfosis", "La permutación", "La sustitución", "La transición", "El viraje", "El giro"],
+    "Libertad": ["La libertad", "La independencia", "La autonomía", "La autodeterminación", "La liberación", "La emancipación", "La soltura", "El desahogo", "La espontaneidad", "La fluidez", "La flexibilidad", "La adaptabilidad", "La movilidad", "La elasticidad", "La plasticidad", "La ductilidad", "La maleabilidad", "La versatilidad", "La agilidad", "La desenvoltura"],
+    "Aprendizaje": ["El aprendizaje", "La enseñanza", "La instrucción", "La educación", "El conocimiento", "La sabiduría", "La información", "La experiencia", "La lección", "La comprensión", "La asimilación", "La interiorización", "La asunción", "La aceptación", "La integración", "La incorporación", "La internalización", "La absorción", "La captación", "La asimilación"],
+    "Sabiduría": ["La sabiduría", "La prudencia", "La sensatez", "La cordura", "La mesura", "La discreción", "La templanza", "La moderación", "La sagacidad", "La perspicacia", "La clarividencia", "La intuición", "La percepción", "La comprensión", "La penetración", "La agudeza", "La fineza", "La sutileza", "La delicadeza", "La elegancia"],
+    "Conexión": ["La conexión", "El vínculo", "El lazo", "El enlace", "La relación", "La comunicación", "El afecto", "La empatía", "La solidaridad", "La unión", "La cohesión", "La integración", "La armonía", "La concordia", "La paz", "La amistad", "El compañerismo", "La hermandad", "La fraternidad", "La camaradería"]
 }
 
 VERBOS = {
-    "Motivacion": ["impulsa", "mueve", "enciende", "fortalece", "alienta", "despierta", "eleva", "conduce", "guia", "transforma", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplia", "extiende", "eleva"],
+    "Motivación": ["impulsa", "mueve", "enciende", "fortalece", "alienta", "despierta", "eleva", "conduce", "guía", "transforma", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva"],
     "Constancia": ["construye", "consolida", "fortalece", "afianza", "establece", "mantiene", "sostiene", "cultiva", "desarrolla", "perfecciona", "realiza", "concreta", "materializa", "culmina", "finaliza", "ejecuta", "consume", "remata", "corona", "afianza"],
-    "Superacion": ["transforma", "eleva", "fortalece", "empodera", "libera", "ensena", "moldea", "construye", "renueva", "revitaliza", "expande", "despliega", "multiplica", "intensifica", "profundiza", "amplia", "extiende", "eleva", "engrandece", "magnifica"],
-    "Gratitud": ["transforma", "ilumina", "enaltece", "purifica", "conecta", "abre", "despeja", "fortalece", "restaura", "bendice", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplia", "extiende", "eleva", "engrandece", "magnifica"],
-    "Logros": ["construyen", "celebran", "reconocen", "impulsan", "motivan", "ensenan", "fortalecen", "abren", "conducen", "materializan", "concretan", "culminan", "finalizan", "ejecutan", "consuman", "rematan", "coronan", "consolidan", "afianzan", "rematan"],
-    "AmorPropio": ["fortalece", "libera", "acepta", "valora", "respeta", "consuela", "abraza", "nutre", "protege", "empodera", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplia", "extiende", "eleva", "engrandece", "magnifica"],
-    "Esperanza": ["ilumina", "guia", "sostiene", "alienta", "fortalece", "renueva", "abre", "conecta", "asegura", "promete", "anima", "impulsa", "mueve", "despierta", "eleva", "conduce", "transforma", "activa", "estimula", "desata"],
-    "Confianza": ["fortalece", "afianza", "consolida", "reafirma", "valida", "confirma", "certifica", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetua", "consolida", "afianza", "arraiga", "cimienta", "edifica"],
-    "Resiliencia": ["fortalece", "endurece", "templa", "forja", "moldea", "construye", "asienta", "consolida", "robustece", "afianza", "vigoriza", "tonifica", "corrobora", "afirma", "consolida", "fija", "sostiene", "mantiene", "perpetua", "consolida"],
-    "Felicidad": ["ilumina", "colma", "plenifica", "satisface", "completa", "regocija", "alegra", "enaltece", "embellece", "perfecciona", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplia", "extiende", "eleva", "engrandece", "magnifica"],
-    "Proposito": ["guia", "orienta", "encamina", "dirige", "conduce", "lleva", "sirve", "motiva", "inspira", "define", "especifica", "determina", "fija", "marca", "senala", "indica", "muestra", "ensena", "descubre", "revela"],
-    "Optimismo": ["ilumina", "alienta", "fortalece", "anima", "empodera", "renueva", "inspira", "conduce", "guia", "sostiene", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplia", "extiende", "eleva"],
+    "Superación": ["transforma", "eleva", "fortalece", "empodera", "libera", "enseña", "moldea", "construye", "renueva", "revitaliza", "expande", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
+    "Gratitud": ["transforma", "ilumina", "enaltece", "purifica", "conecta", "abre", "despeja", "fortalece", "restaura", "bendice", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
+    "Logros": ["construyen", "celebran", "reconocen", "impulsan", "motivan", "enseñan", "fortalecen", "abren", "conducen", "materializan", "concretan", "culminan", "finalizan", "ejecutan", "consuman", "rematan", "coronan", "consolidan", "afianzan", "rematan"],
+    "AmorPropio": ["fortalece", "libera", "acepta", "valora", "respeta", "consuela", "abraza", "nutre", "protege", "empodera", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
+    "Esperanza": ["ilumina", "guía", "sostiene", "alienta", "fortalece", "renueva", "abre", "conecta", "asegura", "promete", "anima", "impulsa", "mueve", "despierta", "eleva", "conduce", "transforma", "activa", "estimula", "desata"],
+    "Confianza": ["fortalece", "afianza", "consolida", "reafirma", "valida", "confirma", "certifica", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetúa", "consolida", "afianza", "arraiga", "cimienta", "edifica"],
+    "Resiliencia": ["fortalece", "endurece", "templa", "forja", "moldea", "construye", "asienta", "consolida", "robustece", "afianza", "vigoriza", "tonifica", "corrobora", "afirma", "consolida", "fija", "sostiene", "mantiene", "perpetúa", "consolida"],
+    "Felicidad": ["ilumina", "colma", "plenifica", "satisface", "completa", "regocija", "alegra", "enaltece", "embellece", "perfecciona", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
+    "Propósito": ["guía", "orienta", "encamina", "dirige", "conduce", "lleva", "sirve", "motiva", "inspira", "define", "especifica", "determina", "fija", "marca", "señala", "indica", "muestra", "enseña", "descubre", "revela"],
+    "Optimismo": ["ilumina", "alienta", "fortalece", "anima", "empodera", "renueva", "inspira", "conduce", "guía", "sostiene", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva"],
     "PazInterior": ["calma", "tranquiliza", "serena", "apacigua", "aquieta", "sosiega", "armoniza", "equilibra", "alinea", "centra", "sosiega", "aquieta", "calma", "tranquiliza", "serena", "apacigua", "aquieta", "sosiega", "armoniza", "equilibra"],
-    "Actitud": ["determina", "marca", "define", "orienta", "dirige", "conduce", "abre", "cierra", "cambia", "transforma", "modifica", "altera", "varia", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova"],
+    "Actitud": ["determina", "marca", "define", "orienta", "dirige", "conduce", "abre", "cierra", "cambia", "transforma", "modifica", "altera", "varía", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova"],
     "Crecimiento": ["impulsa", "promueve", "facilita", "acelera", "prolonga", "extiende", "intensifica", "multiplica", "magnifica", "engrandece", "eleva", "expande", "despliega", "desata", "desencadena", "destraba", "suelta", "desprende", "libera", "desbloquea"],
-    "Cambio": ["transforma", "modifica", "altera", "varia", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova", "cambia", "convierte", "adapta", "ajusta", "reorienta", "reencauza", "reconduce", "redefine", "reestructura"],
-    "Libertad": ["expande", "abre", "libera", "desata", "despeja", "desbloquea", "desencadena", "destraba", "suelta", "desprende", "extiende", "multiplica", "intensifica", "profundiza", "amplia", "eleva", "engrandece", "magnifica", "expande", "despliega"],
-    "Aprendizaje": ["ensena", "ilumina", "despeja", "aclara", "educa", "forma", "moldea", "instruye", "capacita", "desarrolla", "entrena", "adiestra", "prepara", "habilita", "familiariza", "introduce", "inicia", "orienta", "guia", "conduce"],
-    "Sabiduria": ["ilumina", "orienta", "guia", "aconseja", "ensena", "descubre", "revela", "acredita", "certifica", "valida", "confirma", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetua", "consolida"],
-    "Conexion": ["une", "vincula", "enlaza", "conecta", "comunica", "acerca", "integra", "compromete", "solidariza", "comparte", "asocia", "relaciona", "complementa", "armoniza", "equilibra", "sincroniza", "coordina", "ajusta", "adapta", "fusiona"]
+    "Cambio": ["transforma", "modifica", "altera", "varía", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova", "cambia", "convierte", "adapta", "ajusta", "reorienta", "reencauza", "reconduce", "redefine", "reestructura"],
+    "Libertad": ["expande", "abre", "libera", "desata", "despeja", "desbloquea", "desencadena", "destraba", "suelta", "desprende", "extiende", "multiplica", "intensifica", "profundiza", "amplía", "eleva", "engrandece", "magnifica", "expande", "despliega"],
+    "Aprendizaje": ["enseña", "ilumina", "despeja", "aclara", "educa", "forma", "moldea", "instruye", "capacita", "desarrolla", "entrena", "adiestra", "prepara", "habilita", "familiariza", "introduce", "inicia", "orienta", "guía", "conduce"],
+    "Sabiduría": ["ilumina", "orienta", "guía", "aconseja", "enseña", "descubre", "revela", "acredita", "certifica", "valida", "confirma", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetúa", "consolida"],
+    "Conexión": ["une", "vincula", "enlaza", "conecta", "comunica", "acerca", "integra", "compromete", "solidariza", "comparte", "asocia", "relaciona", "complementa", "armoniza", "equilibra", "sincroniza", "coordina", "ajusta", "adapta", "fusiona"]
 }
 
 COMPLEMENTOS = {
-    "Motivacion": ["tus suenos", "tu camino", "tus metas", "tu fuerza interior", "tu proposito", "tu crecimiento", "tu mejor version", "tu destino", "tu verdad", "cada paso", "tu ser", "tu alma", "tu mente", "tu corazon", "tu espiritu", "tu vida", "tu futuro", "tu presente", "tu pasado", "tu esencia"],
-    "Constancia": ["el exito", "tus metas", "tus logros", "tu progreso", "tu camino", "tu futuro", "tu disciplina", "tu resistencia", "tu grandeza", "tu victoria", "tu constancia", "tu perseverancia", "tu esfuerzo", "tu trabajo", "tu dedicacion", "tu empeno", "tu labor", "tu obra", "tu legado", "tu huella"],
-    "Superacion": ["tu vida", "tu mente", "tu caracter", "tu espiritu", "tu futuro", "tu realidad", "tu ser", "tu proposito", "tu camino", "tu libertad", "tu alma", "tu corazon", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor"],
-    "Gratitud": ["tu vida", "tu corazon", "tu alma", "tu ser", "tu camino", "tu realidad", "tu entorno", "tu familia", "tu presente", "tu futuro", "tu pasado", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo"],
-    "Logros": ["tu esfuerzo", "tu dedicacion", "tu trabajo", "tu constancia", "tu vision", "tu camino", "tu legado", "tu historia", "tu progreso", "tu destino", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion"],
-    "AmorPropio": ["tu ser", "tu alma", "tu mente", "tu cuerpo", "tu espiritu", "tu esencia", "tu corazon", "tu vida", "tu paz", "tu libertad", "tu verdad", "tu destino", "tu camino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
-    "Esperanza": ["tu futuro", "tu camino", "tu vida", "tu alma", "tu fe", "tu destino", "tu proposito", "tu manana", "tus suenos", "tu luz", "tu esperanza", "tu ilusion", "tu optimismo", "tu confianza", "tu certeza", "tu conviccion", "tu seguridad", "tu firmeza", "tu estabilidad", "tu constancia"],
-    "Confianza": ["tu decision", "tu camino", "tu proceso", "tu vida", "tu instinto", "tu ser", "tu proposito", "tu destino", "tu esfuerzo", "tu trabajo", "tu dedicacion", "tu empeno", "tu labor", "tu obra", "tu legado", "tu huella", "tu verdad", "tu esencia", "tu alma", "tu corazon"],
-    "Resiliencia": ["tu espiritu", "tu corazon", "tu mente", "tu alma", "tu caracter", "tu fuerza", "tu fe", "tu proposito", "tu vida", "tu camino", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicacion", "tu empeno"],
-    "Felicidad": ["tu vida", "tu alma", "tu corazon", "tu mente", "tu ser", "tu espiritu", "tu familia", "tus amigos", "tu camino", "tu destino", "tu proposito", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista"],
-    "Proposito": ["tu vida", "tu camino", "tu destino", "tu mision", "tu vocacion", "tu llamado", "tu esfuerzo", "tu trabajo", "tu legado", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion", "tu plenitud"],
-    "Optimismo": ["tu futuro", "tu vida", "tu camino", "tu destino", "tu proposito", "tu fe", "tu alma", "tu corazon", "tu esperanza", "tu luz", "tu ilusion", "tu optimismo", "tu confianza", "tu certeza", "tu conviccion", "tu seguridad", "tu firmeza", "tu estabilidad", "tu constancia", "tu perseverancia"],
-    "PazInterior": ["tu mente", "tu corazon", "tu alma", "tu espiritu", "tu ser", "tu vida", "tu destino", "tu camino", "tu proposito", "tu felicidad", "tu paz", "tu tranquilidad", "tu serenidad", "tu calma", "tu armonia", "tu equilibrio", "tu sosiego", "tu quietud", "tu placidez", "tu clemencia"],
-    "Actitud": ["tu dia", "tu semana", "tu mes", "tu ano", "tu vida", "tu proyecto", "tu meta", "tu objetivo", "tu mision", "tu proposito", "tu camino", "tu destino", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion"],
-    "Crecimiento": ["tu persona", "tu caracter", "tu mente", "tu espiritu", "tu alma", "tu vida", "tu futuro", "tu camino", "tu destino", "tu mision", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion"],
-    "Cambio": ["tu vida", "tu realidad", "tu futuro", "tu camino", "tu destino", "tu proposito", "tu ser", "tu alma", "tu mente", "tu corazon", "tu espiritu", "tu esencia", "tu verdad", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
-    "Libertad": ["tu ser", "tu alma", "tu mente", "tu corazon", "tu espiritu", "tu vida", "tu camino", "tu destino", "tu proposito", "tu verdad", "tu esencia", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicacion", "tu empeno"],
-    "Aprendizaje": ["tu vida", "tu camino", "tu mente", "tu ser", "tu alma", "tu espiritu", "tu destino", "tu proposito", "tu legado", "tu futuro", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion"],
-    "Sabiduria": ["tu vida", "tu camino", "tu destino", "tu proposito", "tu ser", "tu alma", "tu mente", "tu corazon", "tu espiritu", "tu legado", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion"],
-    "Conexion": ["tu vida", "tu camino", "tu destino", "tu proposito", "tu ser", "tu alma", "tu mente", "tu corazon", "tu espiritu", "tu legado", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion"]
+    "Motivación": ["tus sueños", "tu camino", "tus metas", "tu fuerza interior", "tu propósito", "tu crecimiento", "tu mejor versión", "tu destino", "tu verdad", "cada paso", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu vida", "tu futuro", "tu presente", "tu pasado", "tu esencia"],
+    "Constancia": ["el éxito", "tus metas", "tus logros", "tu progreso", "tu camino", "tu futuro", "tu disciplina", "tu resistencia", "tu grandeza", "tu victoria", "tu constancia", "tu perseverancia", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño", "tu labor", "tu obra", "tu legado", "tu huella"],
+    "Superación": ["tu vida", "tu mente", "tu carácter", "tu espíritu", "tu futuro", "tu realidad", "tu ser", "tu propósito", "tu camino", "tu libertad", "tu alma", "tu corazón", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor"],
+    "Gratitud": ["tu vida", "tu corazón", "tu alma", "tu ser", "tu camino", "tu realidad", "tu entorno", "tu familia", "tu presente", "tu futuro", "tu pasado", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo"],
+    "Logros": ["tu esfuerzo", "tu dedicación", "tu trabajo", "tu constancia", "tu visión", "tu camino", "tu legado", "tu historia", "tu progreso", "tu destino", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
+    "AmorPropio": ["tu ser", "tu alma", "tu mente", "tu cuerpo", "tu espíritu", "tu esencia", "tu corazón", "tu vida", "tu paz", "tu libertad", "tu verdad", "tu destino", "tu camino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
+    "Esperanza": ["tu futuro", "tu camino", "tu vida", "tu alma", "tu fe", "tu destino", "tu propósito", "tu mañana", "tus sueños", "tu luz", "tu esperanza", "tu ilusión", "tu optimismo", "tu confianza", "tu certeza", "tu convicción", "tu seguridad", "tu firmeza", "tu estabilidad", "tu constancia"],
+    "Confianza": ["tu decisión", "tu camino", "tu proceso", "tu vida", "tu instinto", "tu ser", "tu propósito", "tu destino", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño", "tu labor", "tu obra", "tu legado", "tu huella", "tu verdad", "tu esencia", "tu alma", "tu corazón"],
+    "Resiliencia": ["tu espíritu", "tu corazón", "tu mente", "tu alma", "tu carácter", "tu fuerza", "tu fe", "tu propósito", "tu vida", "tu camino", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño"],
+    "Felicidad": ["tu vida", "tu alma", "tu corazón", "tu mente", "tu ser", "tu espíritu", "tu familia", "tus amigos", "tu camino", "tu destino", "tu propósito", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista"],
+    "Propósito": ["tu vida", "tu camino", "tu destino", "tu misión", "tu vocación", "tu llamado", "tu esfuerzo", "tu trabajo", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización", "tu plenitud"],
+    "Optimismo": ["tu futuro", "tu vida", "tu camino", "tu destino", "tu propósito", "tu fe", "tu alma", "tu corazón", "tu esperanza", "tu luz", "tu ilusión", "tu optimismo", "tu confianza", "tu certeza", "tu convicción", "tu seguridad", "tu firmeza", "tu estabilidad", "tu constancia", "tu perseverancia"],
+    "PazInterior": ["tu mente", "tu corazón", "tu alma", "tu espíritu", "tu ser", "tu vida", "tu destino", "tu camino", "tu propósito", "tu felicidad", "tu paz", "tu tranquilidad", "tu serenidad", "tu calma", "tu armonía", "tu equilibrio", "tu sosiego", "tu quietud", "tu placidez", "tu clemencia"],
+    "Actitud": ["tu día", "tu semana", "tu mes", "tu año", "tu vida", "tu proyecto", "tu meta", "tu objetivo", "tu misión", "tu propósito", "tu camino", "tu destino", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
+    "Crecimiento": ["tu persona", "tu carácter", "tu mente", "tu espíritu", "tu alma", "tu vida", "tu futuro", "tu camino", "tu destino", "tu misión", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
+    "Cambio": ["tu vida", "tu realidad", "tu futuro", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu esencia", "tu verdad", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
+    "Libertad": ["tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu vida", "tu camino", "tu destino", "tu propósito", "tu verdad", "tu esencia", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño"],
+    "Aprendizaje": ["tu vida", "tu camino", "tu mente", "tu ser", "tu alma", "tu espíritu", "tu destino", "tu propósito", "tu legado", "tu futuro", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
+    "Sabiduría": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
+    "Conexión": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"]
 }
 
 # ============================================
-# 🗣️ FRASES PARA HUMANIZAR EL TEXTO
+# 🗣️ FRASES PARA HUMANIZAR EL TEXTO (corregidas)
 # ============================================
 INTROS_HUMANAS = [
     "Mira,",
@@ -181,12 +181,24 @@ PREGUNTAS_RETORICAS = [
 ]
 
 def humanizar_frase(frase):
-    """Añade una muletilla o pregunta retórica para sonar más natural."""
+    """Añade una muletilla o pregunta retórica para sonar más natural, respetando gramática."""
+    # Asegurar mayúscula inicial
+    if frase and frase[0].islower():
+        frase = frase[0].upper() + frase[1:]
     if random.random() < 0.4:
         intro = random.choice(INTROS_HUMANAS)
-        frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
+        # Si la intro ya termina en signo de puntuación, no añadir coma
+        if intro[-1] in [",", ":", ";"]:
+            frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
+        else:
+            frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
     if random.random() < 0.3:
-        frase += " " + random.choice(PREGUNTAS_RETORICAS)
+        # Añadir pregunta retórica al final, sin duplicar signos
+        pregunta = random.choice(PREGUNTAS_RETORICAS)
+        if frase[-1] in [".", "?", "!"]:
+            frase = frase[:-1] + " " + pregunta
+        else:
+            frase = frase + " " + pregunta
     return frase
 
 # ============================================
@@ -216,9 +228,9 @@ INICIOS_PREGUNTA = [
 ]
 
 def generar_pregunta(tema_nombre):
-    sujeto = random.choice(SUJETOS.get(tema_nombre, SUJETOS["Motivacion"])).lower()
-    verbo = random.choice(VERBOS.get(tema_nombre, VERBOS["Motivacion"])).lower()
-    complemento = random.choice(COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS["Motivacion"])).lower()
+    sujeto = random.choice(SUJETOS.get(tema_nombre, SUJETOS["Motivación"])).lower()
+    verbo = random.choice(VERBOS.get(tema_nombre, VERBOS["Motivación"])).lower()
+    complemento = random.choice(COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS["Motivación"])).lower()
     inicio = random.choice(INICIOS_PREGUNTA)
     opciones = [
         inicio + " " + sujeto + " " + verbo + " " + complemento + "?",
@@ -241,8 +253,15 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
-        articulo = "El" if not tema_nombre.endswith(("a", "ad", "ión", "umbre", "dad", "tad", "sis")) else "La"
-        if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "proposito", "optimismo", "entusiasmo"]:
+        # Determinar artículo correcto para temas no predefinidos
+        # Reglas de género: terminaciones típicas femeninas
+        femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
+        if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
+            articulo = "La"
+        else:
+            articulo = "El"
+        # Excepciones específicas
+        if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "El"
         patrones = [
             f"{articulo} {tema_nombre} {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
@@ -258,8 +277,13 @@ def generar_frase_desarrollo(tema_nombre):
         complemento = random.choice(complementos)
         frase = f"{sujeto} {verbo} {complemento}."
     
+    # Humanizar (con probabilidad)
     if random.random() < 0.7:
         frase = humanizar_frase(frase)
+    else:
+        # Asegurar mayúscula inicial incluso si no se humaniza
+        if frase and frase[0].islower():
+            frase = frase[0].upper() + frase[1:]
     return frase
 
 def generar_texto_completo(tema_nombre):
@@ -404,13 +428,13 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
         altura_bloque = total_lineas * (font_size * 1.3)
         y_inicio = 1920 - altura_bloque - 200
 
-        # Dibujar cada línea con borde negro grueso (sin fondo)
+        # Dibujar cada línea con borde negro grueso (stroke_width=5) - SIN FONDO
         y = y_inicio
         for linea in lineas:
             bbox = draw.textbbox((0, 0), linea, font=font)
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
-            # Borde negro grueso (stroke_width=5) y sombra ligera (opcional)
+            # Borde negro grueso y texto blanco
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
