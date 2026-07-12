@@ -7,6 +7,7 @@ import random
 import argparse
 import textwrap
 import zipfile
+import time  # <--- ESTO FALTABA
 from datetime import datetime, timezone, timedelta
 from moviepy.editor import ImageClip, concatenate_videoclips
 from PIL import Image, ImageDraw, ImageFont
@@ -93,7 +94,6 @@ def obtener_imagenes(query, cantidad):
     return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
 def crear_video(tema, dia_semana, numero):
-    # Número de párrafos y duración
     num_parrafos = random.choice([6, 7, 8])
     duracion_total = random.uniform(70, 85)
     duracion_por_parrafo = duracion_total / num_parrafos
@@ -103,12 +103,10 @@ def crear_video(tema, dia_semana, numero):
     print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
     os.makedirs("videos", exist_ok=True)
 
-    # Generar contenido
     pregunta = generar_pregunta(tema)
     frases = random.sample(FRASES[tema], min(8, len(FRASES[tema])))
     parrafos = dividir_en_parrafos(pregunta, frases, num_parrafos)
 
-    # Buscar imágenes
     query = tema.lower()
     imagenes_urls = obtener_imagenes(query, num_parrafos)
     while len(imagenes_urls) < num_parrafos:
@@ -116,7 +114,6 @@ def crear_video(tema, dia_semana, numero):
 
     clips = []
     for i, parrafo in enumerate(parrafos):
-        # Descargar imagen
         try:
             img_data = requests.get(imagenes_urls[i], timeout=10).content
             with open(f"temp_fondo_{i}.jpg", "wb") as f:
@@ -128,7 +125,6 @@ def crear_video(tema, dia_semana, numero):
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
 
-        # Dibujar texto principal
         lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
         total_lineas = len(lineas)
         if total_lineas == 0:
@@ -158,7 +154,7 @@ def crear_video(tema, dia_semana, numero):
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
-        # 🔥 FIRMA (esquina superior izquierda)
+        # FIRMA
         firma = "@jonathan_irigoyen"
         try:
             font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
@@ -170,7 +166,6 @@ def crear_video(tema, dia_semana, numero):
         margen = 20
         draw.text((margen, margen), firma, font=font_firma, fill='white', stroke_width=2, stroke_fill='black')
 
-        # Guardar y crear clip
         img.save(f"temp_texto_{i}.jpg", "JPEG")
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         clips.append(clip)
@@ -180,10 +175,8 @@ def crear_video(tema, dia_semana, numero):
         except:
             pass
 
-    # Unir clips
     video = concatenate_videoclips(clips, method="compose")
 
-    # Guardar video
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
     fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
@@ -191,7 +184,6 @@ def crear_video(tema, dia_semana, numero):
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {nombre}")
 
-    # Limpiar archivos temporales
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
             try:
@@ -204,25 +196,23 @@ def crear_video(tema, dia_semana, numero):
 # ============================================
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--videos", type=int, default=1, help="Videos por día (solo 1 para prueba)")
+    parser.add_argument("--videos", type=int, default=1, help="Videos por día")
     parser.add_argument("--tema", type=str, default="Motivacion", help="Tema")
     parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
     args = parser.parse_args()
 
-    print("🎬 ¡Generador de videos (versión simplificada)!")
+    print("🎬 ¡Generador de videos (versión estable)!")
     print("=" * 50)
     print(f"📝 Videos a generar: {args.videos}")
     print(f"🎯 Tema: {args.tema}")
     print("=" * 50)
 
-    # Generar los videos (solo 1 día para prueba)
     for i in range(args.videos):
         crear_video(args.tema, "Lunes", i+1)
-        time.sleep(0.5)
+        time.sleep(0.5)  # <--- AHORA time ESTÁ DEFINIDO
 
     print("\n🎉 ¡Todos los videos generados!")
 
-    # Crear ZIP
     if not args.no_zip:
         nombre_zip = "videos-generados.zip"
         print(f"📦 Creando ZIP: {nombre_zip} ...")
