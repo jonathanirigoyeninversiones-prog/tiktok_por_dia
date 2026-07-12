@@ -45,4 +45,4 @@ jobs:
         with:
           name: videos-generados
           path: |
-            *.zip
+            videos-generados.zip
