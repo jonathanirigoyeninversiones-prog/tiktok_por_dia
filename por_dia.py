@@ -198,12 +198,14 @@ def generar_frase_desarrollo(tema_nombre):
         return f"{sujeto} {verbo} {complemento}."
 
 def generar_texto_completo(tema_nombre):
+    # 🔥 GANCHO: SIEMPRE empieza con una pregunta
     pregunta = generar_pregunta(tema_nombre)
     num_desarrollo = random.choice([6, 7, 8])
     desarrollo = []
     for _ in range(num_desarrollo):
         desarrollo.append(generar_frase_desarrollo(tema_nombre))
     random.shuffle(desarrollo)
+    # La pregunta va al inicio, el resto son párrafos de desarrollo
     texto_completo = pregunta + "\n\n" + "\n\n".join(desarrollo)
     return texto_completo
 
@@ -249,8 +251,11 @@ def dividir_en_parrafos(texto, num_partes):
     return parrafos[:num_partes]
 
 def crear_video(texto, dia_semana, tema_nombre, numero):
+    # Número aleatorio de párrafos (6, 7 u 8)
     num_parrafos = random.choice([6, 7, 8])
+    # 🔥 DURACIÓN TOTAL: entre 70 y 85 segundos
     duracion_total = random.uniform(70, 85)
+    # Se reparte equitativamente entre todos los párrafos
     duracion_por_parrafo = duracion_total / num_parrafos
     duraciones = [duracion_por_parrafo] * num_parrafos
 
@@ -258,6 +263,7 @@ def crear_video(texto, dia_semana, tema_nombre, numero):
     print(f"   ⏱️  Cada parrafo: {duracion_por_parrafo:.1f}s")
     os.makedirs("videos", exist_ok=True)
 
+    # Dividir el texto en párrafos (la pregunta es el primer párrafo)
     parrafos = dividir_en_parrafos(texto, num_parrafos)
 
     palabras_clave = texto.split()[:4]
