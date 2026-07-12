@@ -34,7 +34,7 @@ TEMAS_PREDEFINIDOS = [
     "Felicidad",
     "Proposito",
     "Optimismo",
-    "PazInterior",
+    "Paz",          # <--- CAMBIADO: antes era "PazInterior"
     "Actitud",
     "Crecimiento",
     "Cambio",
@@ -45,7 +45,7 @@ TEMAS_PREDEFINIDOS = [
 ]
 
 # ============================================
-# 📝 FRASES PARA CADA TEMA (con sujeto + verbo + predicado, lenguaje normal)
+# 📝 FRASES CON LENGUAJE NORMAL (sin palabras raras)
 # ============================================
 FRASES_POR_TEMA = {
     "Motivacion": [
@@ -68,30 +68,30 @@ FRASES_POR_TEMA = {
         "El esfuerzo constante vence cualquier obstáculo.",
         "La rutina bien llevada te da estabilidad y progreso.",
         "La disciplina te mantiene enfocado en lo que importa.",
-        "La tenacidad te impide rendirte cuando las cosas se ponen difíciles.",
+        "La constancia te impide rendirte cuando las cosas se ponen difíciles.",
         "La resistencia te permite seguir avanzando sin desfallecer.",
         "La perseverancia es el secreto de todas las grandes historias."
     ],
     "Superacion": [
-        "La superación te saca de tu zona de confort y te hace crecer.",
+        "Superarse es salir de tu zona de confort y crecer.",
         "Los errores te enseñan lecciones que ningún libro puede dar.",
         "Cada desafío te vuelve más fuerte y más sabio.",
         "La transformación personal empieza cuando decides cambiar.",
         "El aprendizaje continuo te convierte en una mejor versión de ti mismo.",
-        "La resiliencia te permite recuperarte de las caídas más duras.",
+        "La fortaleza te permite recuperarte de las caídas más duras.",
         "La renovación te da la oportunidad de empezar de nuevo cada mañana.",
-        "La elevación personal te lleva a lugares que nunca imaginaste.",
-        "La mejora constante es el camino hacia la excelencia.",
-        "El progreso, por pequeño que sea, siempre es un avance."
+        "Mejorar cada día te lleva a lugares que nunca imaginaste.",
+        "El progreso constante es el camino hacia la excelencia.",
+        "El avance, por pequeño que sea, siempre suma."
     ],
     "Gratitud": [
-        "La gratitud te cambia la perspectiva y te llena de paz.",
-        "El agradecimiento te conecta con lo mejor de la vida.",
-        "La apreciación te ayuda a valorar lo que realmente tienes.",
-        "Reconocer lo bueno te hace más feliz y más humano.",
-        "La bendición de dar gracias abre tu corazón a la alegría.",
+        "Agradecer te cambia la perspectiva y te llena de paz.",
+        "Dar las gracias te conecta con lo mejor de la vida.",
+        "Valorar lo que tienes te hace más feliz y más humano.",
+        "Reconocer lo bueno te ayuda a vivir mejor.",
+        "Decir gracias abre tu corazón a la alegría.",
         "La generosidad florece cuando practicas la gratitud a diario.",
-        "La humildad te recuerda que todo lo bueno es un regalo.",
+        "Ser humilde te recuerda que todo lo bueno es un regalo.",
         "La satisfacción nace cuando valoras cada pequeño momento.",
         "La alegría se multiplica cuando compartes tu agradecimiento.",
         "La paz interior llega cuando aceptas con gratitud lo que la vida te da."
@@ -106,19 +106,19 @@ FRASES_POR_TEMA = {
         "La realización personal llega cuando cumples tus objetivos.",
         "Las conquistas diarias construyen tu historia de éxito.",
         "Los avances, aunque lentos, siempre te acercan a tu destino.",
-        "El cumplimiento de tus metas te llena de satisfacción y orgullo."
+        "Cumplir tus metas te llena de satisfacción y orgullo."
     ],
     "AmorPropio": [
-        "El amor propio te enseña a valorarte tal como eres.",
-        "La autoaceptación es el primer paso hacia la felicidad plena.",
-        "El autocuidado te da la fuerza para cuidar de los demás.",
-        "La autocompasión te permite perdonarte y seguir adelante.",
-        "La confianza en ti mismo es el cimiento de todo logro.",
-        "El respeto hacia ti mismo es la base de todas las relaciones.",
+        "Amarte a ti mismo es el primer amor verdadero.",
+        "Aceptarte es el primer paso hacia la felicidad plena.",
+        "Cuidarte te da la fuerza para cuidar de los demás.",
+        "Perdonarte te permite seguir adelante sin culpas.",
+        "Confiar en ti mismo es el cimiento de todo logro.",
+        "Respetarte a ti mismo es la base de todas las relaciones.",
         "La libertad interior nace cuando te aceptas sin condiciones.",
         "La paz llega cuando dejas de juzgarte y empiezas a quererte.",
-        "La dignidad te recuerda que mereces todo lo bueno de la vida.",
-        "La integridad te mantiene fiel a tus principios y a tu esencia."
+        "Tu dignidad te recuerda que mereces todo lo bueno de la vida.",
+        "Ser fiel a tus principios te mantiene en tu esencia."
     ],
     "Esperanza": [
         "La esperanza ilumina los días más oscuros y te da fuerzas.",
@@ -133,15 +133,15 @@ FRASES_POR_TEMA = {
         "La seguridad de que todo tiene solución te da paz y serenidad."
     ],
     "Confianza": [
-        "La confianza en ti mismo es la clave para tomar decisiones acertadas.",
+        "Confiar en ti mismo es la clave para tomar decisiones acertadas.",
         "La seguridad personal te permite enfrentar cualquier reto sin miedo.",
-        "La certeza de tus capacidades te da tranquilidad en momentos difíciles.",
+        "Saber lo que vales te da tranquilidad en momentos difíciles.",
         "La convicción te ayuda a mantener el rumbo cuando dudas.",
         "La fe en tus habilidades te impulsa a lograr lo que te propones.",
         "La determinación te lleva a cumplir tus metas sin rendirte.",
         "La firmeza te da la fortaleza para decir no cuando es necesario.",
         "La estabilidad emocional nace de la confianza en ti mismo.",
-        "La garantía de que puedes hacerlo te da el valor para intentarlo.",
+        "La certeza de que puedes hacerlo te da el valor para intentarlo.",
         "El respaldo de tu propia conciencia te hace sentir seguro."
     ],
     "Resiliencia": [
@@ -192,16 +192,16 @@ FRASES_POR_TEMA = {
         "La ilusión te mantiene joven y con ganas de vivir cada día.",
         "La certeza de que todo irá bien te da paz y tranquilidad."
     ],
-    "PazInterior": [
+    "Paz": [  # <--- CAMBIADO: antes era "PazInterior"
         "La paz interior te permite vivir con serenidad y equilibrio.",
         "La calma te ayuda a tomar decisiones sin dejarte llevar por el estrés.",
         "La tranquilidad llega cuando aprendes a soltar lo que no puedes controlar.",
         "La armonía te conecta con tu esencia y con el mundo que te rodea.",
-        "El sosiego te da la claridad mental para resolver cualquier problema.",
+        "La tranquilidad te da la claridad mental para resolver cualquier problema.",  # <--- CAMBIADO: "sosiego" → "tranquilidad"
         "La quietud te permite escuchar tu voz interior y actuar con sabiduría.",
         "La serenidad te envuelve cuando aceptas la vida tal como es.",
         "El equilibrio emocional es la clave para una vida plena y feliz.",
-        "La mansedumbre te ayuda a responder con calma ante la adversidad.",
+        "La amabilidad te ayuda a responder con calma ante la adversidad.",
         "La compasión hacia ti mismo es el primer paso para la paz interior."
     ],
     "Actitud": [
