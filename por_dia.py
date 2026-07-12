@@ -140,27 +140,78 @@ COMPLEMENTOS = {
     "Conexion": ["tu vida", "tu camino", "tu destino", "tu proposito", "tu ser", "tu alma", "tu mente", "tu corazon", "tu espiritu", "tu legado", "tu meta", "tu objetivo", "tu exito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realizacion"]
 }
 
+# ============================================
+# 🗣️ FRASES PARA HUMANIZAR EL TEXTO
+# ============================================
+INTROS_HUMANAS = [
+    "Mira,",
+    "La verdad es que",
+    "Piensa en esto:",
+    "No hay duda de que",
+    "A veces",
+    "Siempre he creído que",
+    "Es curioso, pero",
+    "Fíjate:",
+    "Resulta que",
+    "Lo cierto es que",
+    "Sin duda,",
+    "Para ser sincero,",
+    "Hay que reconocer que",
+    "Te invito a reflexionar:",
+    "Imagina por un momento",
+    "No es casualidad que",
+    "Vamos a ver:",
+    "Vale la pena recordar que",
+    "Lo interesante es que",
+    "Por supuesto,"
+]
+
+PREGUNTAS_RETORICAS = [
+    "¿No te parece?",
+    "¿Verdad?",
+    "¿No crees?",
+    "¿Te suena familiar?",
+    "¿Sabes a lo que me refiero?",
+    "¿No es así?",
+    "¿Te das cuenta?",
+    "¿No te hace pensar?",
+    "¿Lo ves?",
+    "¿No es increíble?"
+]
+
+def humanizar_frase(frase):
+    """Añade una muletilla o pregunta retórica para sonar más natural."""
+    if random.random() < 0.4:
+        intro = random.choice(INTROS_HUMANAS)
+        frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
+    if random.random() < 0.3:
+        frase += " " + random.choice(PREGUNTAS_RETORICAS)
+    return frase
+
+# ============================================
+# 📝 GENERACIÓN DE PREGUNTA Y DESARROLLO
+# ============================================
 INICIOS_PREGUNTA = [
     "Alguna vez has sentido que",
-    "Que pasaria si",
-    "Cuanto tiempo mas vas a",
-    "Por que",
-    "Como",
-    "Que te impide",
-    "Que harías si",
-    "Estas listo para",
-    "Cuando fue la ultima vez que",
-    "En que momento decidiste",
-    "De que manera",
-    "Hasta cuando",
-    "Que crees que pasaria si",
-    "Por que crees que",
-    "Que significa para ti",
-    "Como te sientes cuando",
-    "Que cambiarías de",
-    "Cual es la razon por la que",
-    "Que esperas de",
-    "Que te gustaria decirle a"
+    "Qué pasaría si",
+    "Cuánto tiempo más vas a",
+    "Por qué",
+    "Cómo",
+    "Qué te impide",
+    "Qué harías si",
+    "Estás listo para",
+    "Cuándo fue la última vez que",
+    "En qué momento decidiste",
+    "De qué manera",
+    "Hasta cuándo",
+    "Qué crees que pasaría si",
+    "Por qué crees que",
+    "Qué significa para ti",
+    "Cómo te sientes cuando",
+    "Qué cambiarías de",
+    "Cuál es la razón por la que",
+    "Qué esperas de",
+    "Qué te gustaría decirle a"
 ]
 
 def generar_pregunta(tema_nombre):
@@ -172,10 +223,16 @@ def generar_pregunta(tema_nombre):
         inicio + " " + sujeto + " " + verbo + " " + complemento + "?",
         inicio + " " + sujeto + " " + verbo + " " + complemento + " sin miedo?",
         inicio + " " + sujeto + " " + verbo + " " + complemento + " y alcanzar tus metas?",
-        inicio + " " + sujeto + " " + verbo + " " + complemento + " cuando todo parece dificil?",
-        inicio + " " + sujeto + " " + verbo + " " + complemento + " a pesar de los obstaculos?"
+        inicio + " " + sujeto + " " + verbo + " " + complemento + " cuando todo parece difícil?",
+        inicio + " " + sujeto + " " + verbo + " " + complemento + " a pesar de los obstáculos?"
     ]
-    return random.choice(opciones)
+    pregunta = random.choice(opciones)
+    # Asegurar signos de interrogación al inicio y al final
+    if not pregunta.startswith("¿"):
+        pregunta = "¿" + pregunta
+    if not pregunta.endswith("?"):
+        pregunta += "?"
+    return pregunta
 
 def generar_frase_desarrollo(tema_nombre):
     sujetos = SUJETOS.get(tema_nombre, SUJETOS_UNIVERSALES)
@@ -183,23 +240,27 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
-        # Determinar artículo correcto para temas no predefinidos
         articulo = "El" if not tema_nombre.endswith(("a", "ad", "ión", "umbre", "dad", "tad", "sis")) else "La"
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "proposito", "optimismo", "entusiasmo"]:
             articulo = "El"
         patrones = [
             f"{articulo} {tema_nombre} {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
             f"Reflexionar sobre {articulo.lower()} {tema_nombre} {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Cada dia es una oportunidad para transformar {articulo.lower()} {tema_nombre} en {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"{articulo} {tema_nombre} te ensena a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"Cada día es una oportunidad para transformar {articulo.lower()} {tema_nombre} en {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"{articulo} {tema_nombre} te enseña a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
             f"Aceptar {articulo.lower()} {tema_nombre} es el primer paso para {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}."
         ]
-        return random.choice(patrones)
+        frase = random.choice(patrones)
     else:
         sujeto = random.choice(sujetos)
         verbo = random.choice(verbos)
         complemento = random.choice(complementos)
-        return f"{sujeto} {verbo} {complemento}."
+        frase = f"{sujeto} {verbo} {complemento}."
+    
+    # Humanizar: añadir intro o pregunta retórica
+    if random.random() < 0.7:
+        frase = humanizar_frase(frase)
+    return frase
 
 def generar_texto_completo(tema_nombre):
     pregunta = generar_pregunta(tema_nombre)
@@ -229,7 +290,7 @@ def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
     oraciones = re.findall(r'[^.!?]+[.!?]', texto_desarrollo)
     oraciones = [o.strip() for o in oraciones if len(o.strip()) > 5]
     if not oraciones:
-        oraciones = ["Sigue adelante con fe y determinacion."]
+        oraciones = ["Sigue adelante con fe y determinación."]
     
     # 3. Mezclar oraciones de desarrollo
     random.shuffle(oraciones)
@@ -237,18 +298,15 @@ def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
     # 4. Número de párrafos intermedios (total - 2: pregunta y cierre)
     num_intermedios = num_parrafos - 2
     if num_intermedios < 1:
-        # Forzar al menos 3 párrafos (pregunta, un intermedio, cierre)
         num_parrafos = 3
         num_intermedios = 1
     
     # 5. Repartir oraciones entre los párrafos intermedios
     total_oraciones = len(oraciones)
-    # Asegurar que haya al menos una oración por párrafo intermedio
     while total_oraciones < num_intermedios:
-        oraciones.append("Sigue adelante con fe y determinacion.")
+        oraciones.append("Sigue adelante con fe y determinación.")
         total_oraciones += 1
     
-    # Dividir en grupos lo más equitativamente posible
     oraciones_por_parrafo = total_oraciones // num_intermedios
     resto = total_oraciones % num_intermedios
     grupos = []
@@ -259,39 +317,35 @@ def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
         grupos.append(oraciones[indice:fin])
         indice = fin
     
-    # Unir cada grupo en un párrafo
     parrafos_intermedios = [" ".join(g) for g in grupos]
     
     # 6. Armar lista final: [pregunta] + intermedios + [cierre]
     parrafos = [parrafo_pregunta] + parrafos_intermedios + ["Te leo en los comentarios"]
     
-    # Ajustar por si sobra o falta algún párrafo (por seguridad)
+    # Ajustar por si sobra o falta algún párrafo
     if len(parrafos) > num_parrafos:
         parrafos = parrafos[:num_parrafos]
         parrafos[-1] = "Te leo en los comentarios"
     elif len(parrafos) < num_parrafos:
         while len(parrafos) < num_parrafos - 1:
-            parrafos.insert(-1, "Sigue adelante con fe y determinacion.")
+            parrafos.insert(-1, "Sigue adelante con fe y determinación.")
         if len(parrafos) < num_parrafos:
             parrafos.append("Te leo en los comentarios")
     
     return parrafos
 
 def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
-    # 🔥 Número de párrafos aleatorio entre 5 y 7
     num_parrafos = random.choice([5, 6, 7])
     duracion_total = random.uniform(70, 85)
     duracion_por_parrafo = duracion_total / num_parrafos
     duraciones = [duracion_por_parrafo] * num_parrafos
 
-    print(f"   🎬 Video {numero} ({dia_semana} - {tema_nombre}) - {num_parrafos} parrafos, {duracion_total:.1f}s")
-    print(f"   ⏱️  Cada parrafo: {duracion_por_parrafo:.1f}s")
+    print(f"   🎬 Video {numero} ({dia_semana} - {tema_nombre}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
+    print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
     os.makedirs("videos", exist_ok=True)
 
-    # Dividir en párrafos (la pregunta al inicio, el cierre al final)
     parrafos = dividir_en_parrafos(pregunta, desarrollo, num_parrafos)
 
-    # Obtener imagen de fondo
     palabras_clave = (pregunta + " " + " ".join(desarrollo)).split()[:4]
     tema_imagen = " ".join(palabras_clave) if palabras_clave else "motivacion"
     tema_imagen = re.sub(r'[^\w\s]', '', tema_imagen)
@@ -326,9 +380,14 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
 
+        # Dividir el párrafo en líneas
         lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
         total_lineas = len(lineas)
+        if total_lineas == 0:
+            lineas = [" "]
+            total_lineas = 1
 
+        # Calcular tamaño de fuente
         MARGEN_Y = 200
         font_size = int((1920 - 2 * MARGEN_Y) / (total_lineas * 1.4))
         font_size = max(30, min(font_size, 70))
@@ -341,16 +400,35 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
             except:
                 font = ImageFont.load_default()
 
+        # Calcular posición central inferior
         altura_bloque = total_lineas * (font_size * 1.3)
         y_inicio = 1920 - altura_bloque - 200
 
+        # Dibujar un fondo semitransparente para mejorar legibilidad
+        # (opcional, pero ayuda mucho en fondos claros)
+        # Calculamos el ancho máximo de línea
+        max_ancho = 0
+        for linea in lineas:
+            bbox = draw.textbbox((0, 0), linea, font=font)
+            ancho = bbox[2] - bbox[0]
+            if ancho > max_ancho:
+                max_ancho = ancho
+        # Dibujar rectángulo negro semitransparente detrás del texto
+        margen_x = 30
+        x0 = (1080 - max_ancho) // 2 - margen_x
+        y0 = y_inicio - 30
+        x1 = (1080 + max_ancho) // 2 + margen_x
+        y1 = y_inicio + altura_bloque + 30
+        draw.rectangle([x0, y0, x1, y1], fill=(0, 0, 0, 120))  # 120 de opacidad
+
+        # Dibujar cada línea con borde negro grueso
         y = y_inicio
         for linea in lineas:
             bbox = draw.textbbox((0, 0), linea, font=font)
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
-            draw.text((x+3, y+3), linea, fill=(0, 0, 0, 180), font=font)
-            draw.text((x, y), linea, fill='white', font=font, stroke_width=3, stroke_fill='black')
+            # Borde negro más grueso (stroke_width=5)
+            draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
         img.save(f"temp_texto_{i}.jpg", "JPEG")
@@ -388,7 +466,7 @@ def seleccionar_temas(opcion, videos_por_dia):
         return {i: opcion for i in range(7)}
 
 # ============================================
-# 🚀 EJECUCIÓN PRINCIPAL (con argumentos)
+# 🚀 EJECUCIÓN PRINCIPAL
 # ============================================
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generador de videos semanales")
@@ -416,7 +494,7 @@ if __name__ == "__main__":
 
     TEMAS = seleccionar_temas(tema_input, videos_por_dia)
 
-    DIAS_SEMANA = {0: "Lunes", 1: "Martes", 2: "Miercoles", 3: "Jueves", 4: "Viernes", 5: "Sabado", 6: "Domingo"}
+    DIAS_SEMANA = {0: "Lunes", 1: "Martes", 2: "Miércoles", 3: "Jueves", 4: "Viernes", 5: "Sábado", 6: "Domingo"}
 
     print(f"\n📝 Generando {videos_por_dia} videos por cada día de la semana")
     print(f"📊 Total: {videos_por_dia * 7} videos")
