@@ -6,7 +6,6 @@ import requests
 import re
 import time
 import random
-import argparse
 from datetime import datetime, timezone, timedelta
 from moviepy.editor import ImageClip, concatenate_videoclips
 from PIL import Image, ImageDraw, ImageFont
@@ -23,9 +22,9 @@ if not CLAVE_PEXELS:
 # 📅 LISTA DE TEMAS PREDEFINIDOS (20)
 # ============================================
 TEMAS_PREDEFINIDOS = [
-    "Motivación",
+    "Motivacion",
     "Constancia",
-    "Superación",
+    "Superacion",
     "Gratitud",
     "Logros",
     "AmorPropio",
@@ -33,7 +32,7 @@ TEMAS_PREDEFINIDOS = [
     "Confianza",
     "Resiliencia",
     "Felicidad",
-    "Propósito",
+    "Proposito",
     "Optimismo",
     "PazInterior",
     "Actitud",
@@ -41,8 +40,8 @@ TEMAS_PREDEFINIDOS = [
     "Cambio",
     "Libertad",
     "Aprendizaje",
-    "Sabiduría",
-    "Conexión"
+    "Sabiduria",
+    "Conexion"
 ]
 
 # ============================================
@@ -70,12 +69,12 @@ COMPLEMENTOS_UNIVERSALES = [
 ]
 
 # ============================================
-# 📝 LISTAS DE SUJETOS, VERBOS Y COMPLEMENTOS (con tildes y corregidas)
+# 📝 LISTAS DE SUJETOS, VERBOS Y COMPLEMENTOS
 # ============================================
 SUJETOS = {
-    "Motivación": ["La motivación", "La energía", "El entusiasmo", "La pasión", "La fe", "El coraje", "La determinación", "La disciplina", "La resiliencia", "La voluntad", "El impulso", "La chispa", "La llama", "El vigor", "La convicción", "La firmeza", "La constancia", "La perseverancia", "La tenacidad", "La entereza"],
+    "Motivacion": ["La motivación", "La energía", "El entusiasmo", "La pasión", "La fe", "El coraje", "La determinación", "La disciplina", "La resiliencia", "La voluntad", "El impulso", "La chispa", "La llama", "El vigor", "La convicción", "La firmeza", "La constancia", "La perseverancia", "La tenacidad", "La entereza"],
     "Constancia": ["La constancia", "La perseverancia", "La disciplina", "La paciencia", "El esfuerzo", "La rutina", "El hábito", "La tenacidad", "La firmeza", "La resistencia", "La continuidad", "La persistencia", "La determinación", "La voluntad", "La dedicación", "El empeño", "La laboriosidad", "La asiduidad", "La regularidad", "La obstinación"],
-    "Superación": ["La superación", "El crecimiento", "La evolución", "La transformación", "La mejora", "El avance", "El progreso", "El desarrollo", "El aprendizaje", "La resiliencia", "La renovación", "La elevación", "La expansión", "La maduración", "La plenitud", "La fortaleza", "La entereza", "La templanza", "La firmeza", "La solidez"],
+    "Superacion": ["La superación", "El crecimiento", "La evolución", "La transformación", "La mejora", "El avance", "El progreso", "El desarrollo", "El aprendizaje", "La resiliencia", "La renovación", "La elevación", "La expansión", "La maduración", "La plenitud", "La fortaleza", "La entereza", "La templanza", "La firmeza", "La solidez"],
     "Gratitud": ["La gratitud", "El agradecimiento", "La apreciación", "El reconocimiento", "La bendición", "La generosidad", "La humildad", "La satisfacción", "La alegría", "La paz", "La complacencia", "La benevolencia", "La clemencia", "La indulgencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasión", "La empatía", "La solidaridad"],
     "Logros": ["El éxito", "El logro", "El triunfo", "La victoria", "El avance", "El progreso", "El cumplimiento", "La meta", "El objetivo", "La conquista", "La hazaña", "La proeza", "El alcance", "La realización", "La materialización", "La culminación", "La finalización", "La ejecución", "La consumación", "El remate"],
     "AmorPropio": ["El amor propio", "La autoaceptación", "El autocuidado", "La autocompasión", "La confianza", "La valía personal", "La autoestima", "El respeto", "La libertad interior", "La paz", "La dignidad", "La integridad", "La autenticidad", "La sinceridad", "La honestidad", "La transparencia", "La coherencia", "La estabilidad", "La serenidad", "La plenitud"],
@@ -83,7 +82,7 @@ SUJETOS = {
     "Confianza": ["La confianza", "La seguridad", "La certeza", "La convicción", "La fe", "El valor", "La determinación", "La firmeza", "La solidez", "La estabilidad", "La garantía", "La evidencia", "La prueba", "El fundamento", "La base", "El cimiento", "El sostén", "El apoyo", "El respaldo", "La credibilidad"],
     "Resiliencia": ["La resiliencia", "La fortaleza", "La resistencia", "La tenacidad", "La entereza", "La firmeza", "La constancia", "La determinación", "El temple", "La dureza", "La robustez", "La solidez", "La perseverancia", "La persistencia", "La continuidad", "La regularidad", "La asiduidad", "La laboriosidad", "La obstinación", "La firmeza"],
     "Felicidad": ["La felicidad", "La alegría", "La plenitud", "La satisfacción", "El bienestar", "La calma", "La paz", "El gozo", "La dicha", "El contento", "El regocijo", "El júbilo", "La euforia", "El entusiasmo", "La vitalidad", "La energía", "La armonía", "El equilibrio", "La serenidad", "La tranquilidad"],
-    "Propósito": ["El propósito", "La misión", "La vocación", "La meta", "El objetivo", "El destino", "La razón", "El norte", "El anhelo", "La aspiración", "El deseo", "La intención", "El fin", "La finalidad", "El blanco", "El rumbo", "La dirección", "El camino", "El sendero", "La visión"],
+    "Proposito": ["El propósito", "La misión", "La vocación", "La meta", "El objetivo", "El destino", "La razón", "El norte", "El anhelo", "La aspiración", "El deseo", "La intención", "El fin", "La finalidad", "El blanco", "El rumbo", "La dirección", "El camino", "El sendero", "La visión"],
     "Optimismo": ["El optimismo", "La esperanza", "La fe", "La confianza", "La positividad", "La convicción", "La certeza", "La alegría", "La luz", "El entusiasmo", "La vitalidad", "La energía", "La ilusión", "El contento", "La satisfacción", "La plenitud", "La paz", "La serenidad", "La tranquilidad", "El optimismo"],
     "PazInterior": ["La paz interior", "La serenidad", "La calma", "La tranquilidad", "La armonía", "El sosiego", "La quietud", "La placidez", "La clemencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasión", "La empatía", "La solidaridad", "La benevolencia", "La indulgencia", "La generosidad", "La humildad", "La gratitud"],
     "Actitud": ["La actitud", "La disposición", "La postura", "La posición", "La mentalidad", "El enfoque", "La perspectiva", "La visión", "El ángulo", "El punto de vista", "La orientación", "La dirección", "El rumbo", "El camino", "El sendero", "La vía", "La forma", "El modo", "La manera", "El estilo"],
@@ -91,14 +90,14 @@ SUJETOS = {
     "Cambio": ["El cambio", "La transformación", "La mutación", "La evolución", "La adaptación", "La renovación", "La reforma", "La innovación", "La variación", "La modificación", "La alteración", "La conversión", "La inversión", "La revolución", "La metamorfosis", "La permutación", "La sustitución", "La transición", "El viraje", "El giro"],
     "Libertad": ["La libertad", "La independencia", "La autonomía", "La autodeterminación", "La liberación", "La emancipación", "La soltura", "El desahogo", "La espontaneidad", "La fluidez", "La flexibilidad", "La adaptabilidad", "La movilidad", "La elasticidad", "La plasticidad", "La ductilidad", "La maleabilidad", "La versatilidad", "La agilidad", "La desenvoltura"],
     "Aprendizaje": ["El aprendizaje", "La enseñanza", "La instrucción", "La educación", "El conocimiento", "La sabiduría", "La información", "La experiencia", "La lección", "La comprensión", "La asimilación", "La interiorización", "La asunción", "La aceptación", "La integración", "La incorporación", "La internalización", "La absorción", "La captación", "La asimilación"],
-    "Sabiduría": ["La sabiduría", "La prudencia", "La sensatez", "La cordura", "La mesura", "La discreción", "La templanza", "La moderación", "La sagacidad", "La perspicacia", "La clarividencia", "La intuición", "La percepción", "La comprensión", "La penetración", "La agudeza", "La fineza", "La sutileza", "La delicadeza", "La elegancia"],
-    "Conexión": ["La conexión", "El vínculo", "El lazo", "El enlace", "La relación", "La comunicación", "El afecto", "La empatía", "La solidaridad", "La unión", "La cohesión", "La integración", "La armonía", "La concordia", "La paz", "La amistad", "El compañerismo", "La hermandad", "La fraternidad", "La camaradería"]
+    "Sabiduria": ["La sabiduría", "La prudencia", "La sensatez", "La cordura", "La mesura", "La discreción", "La templanza", "La moderación", "La sagacidad", "La perspicacia", "La clarividencia", "La intuición", "La percepción", "La comprensión", "La penetración", "La agudeza", "La fineza", "La sutileza", "La delicadeza", "La elegancia"],
+    "Conexion": ["La conexión", "El vínculo", "El lazo", "El enlace", "La relación", "La comunicación", "El afecto", "La empatía", "La solidaridad", "La unión", "La cohesión", "La integración", "La armonía", "La concordia", "La paz", "La amistad", "El compañerismo", "La hermandad", "La fraternidad", "La camaradería"]
 }
 
 VERBOS = {
-    "Motivación": ["impulsa", "mueve", "enciende", "fortalece", "alienta", "despierta", "eleva", "conduce", "guía", "transforma", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva"],
+    "Motivacion": ["impulsa", "mueve", "enciende", "fortalece", "alienta", "despierta", "eleva", "conduce", "guía", "transforma", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva"],
     "Constancia": ["construye", "consolida", "fortalece", "afianza", "establece", "mantiene", "sostiene", "cultiva", "desarrolla", "perfecciona", "realiza", "concreta", "materializa", "culmina", "finaliza", "ejecuta", "consume", "remata", "corona", "afianza"],
-    "Superación": ["transforma", "eleva", "fortalece", "empodera", "libera", "enseña", "moldea", "construye", "renueva", "revitaliza", "expande", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
+    "Superacion": ["transforma", "eleva", "fortalece", "empodera", "libera", "enseña", "moldea", "construye", "renueva", "revitaliza", "expande", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
     "Gratitud": ["transforma", "ilumina", "enaltece", "purifica", "conecta", "abre", "despeja", "fortalece", "restaura", "bendice", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
     "Logros": ["construyen", "celebran", "reconocen", "impulsan", "motivan", "enseñan", "fortalecen", "abren", "conducen", "materializan", "concretan", "culminan", "finalizan", "ejecutan", "consuman", "rematan", "coronan", "consolidan", "afianzan", "rematan"],
     "AmorPropio": ["fortalece", "libera", "acepta", "valora", "respeta", "consuela", "abraza", "nutre", "protege", "empodera", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
@@ -106,7 +105,7 @@ VERBOS = {
     "Confianza": ["fortalece", "afianza", "consolida", "reafirma", "valida", "confirma", "certifica", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetúa", "consolida", "afianza", "arraiga", "cimienta", "edifica"],
     "Resiliencia": ["fortalece", "endurece", "templa", "forja", "moldea", "construye", "asienta", "consolida", "robustece", "afianza", "vigoriza", "tonifica", "corrobora", "afirma", "consolida", "fija", "sostiene", "mantiene", "perpetúa", "consolida"],
     "Felicidad": ["ilumina", "colma", "plenifica", "satisface", "completa", "regocija", "alegra", "enaltece", "embellece", "perfecciona", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
-    "Propósito": ["guía", "orienta", "encamina", "dirige", "conduce", "lleva", "sirve", "motiva", "inspira", "define", "especifica", "determina", "fija", "marca", "señala", "indica", "muestra", "enseña", "descubre", "revela"],
+    "Proposito": ["guía", "orienta", "encamina", "dirige", "conduce", "lleva", "sirve", "motiva", "inspira", "define", "especifica", "determina", "fija", "marca", "señala", "indica", "muestra", "enseña", "descubre", "revela"],
     "Optimismo": ["ilumina", "alienta", "fortalece", "anima", "empodera", "renueva", "inspira", "conduce", "guía", "sostiene", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva"],
     "PazInterior": ["calma", "tranquiliza", "serena", "apacigua", "aquieta", "sosiega", "armoniza", "equilibra", "alinea", "centra", "sosiega", "aquieta", "calma", "tranquiliza", "serena", "apacigua", "aquieta", "sosiega", "armoniza", "equilibra"],
     "Actitud": ["determina", "marca", "define", "orienta", "dirige", "conduce", "abre", "cierra", "cambia", "transforma", "modifica", "altera", "varía", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova"],
@@ -114,14 +113,14 @@ VERBOS = {
     "Cambio": ["transforma", "modifica", "altera", "varía", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova", "cambia", "convierte", "adapta", "ajusta", "reorienta", "reencauza", "reconduce", "redefine", "reestructura"],
     "Libertad": ["expande", "abre", "libera", "desata", "despeja", "desbloquea", "desencadena", "destraba", "suelta", "desprende", "extiende", "multiplica", "intensifica", "profundiza", "amplía", "eleva", "engrandece", "magnifica", "expande", "despliega"],
     "Aprendizaje": ["enseña", "ilumina", "despeja", "aclara", "educa", "forma", "moldea", "instruye", "capacita", "desarrolla", "entrena", "adiestra", "prepara", "habilita", "familiariza", "introduce", "inicia", "orienta", "guía", "conduce"],
-    "Sabiduría": ["ilumina", "orienta", "guía", "aconseja", "enseña", "descubre", "revela", "acredita", "certifica", "valida", "confirma", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetúa", "consolida"],
-    "Conexión": ["une", "vincula", "enlaza", "conecta", "comunica", "acerca", "integra", "compromete", "solidariza", "comparte", "asocia", "relaciona", "complementa", "armoniza", "equilibra", "sincroniza", "coordina", "ajusta", "adapta", "fusiona"]
+    "Sabiduria": ["ilumina", "orienta", "guía", "aconseja", "enseña", "descubre", "revela", "acredita", "certifica", "valida", "confirma", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetúa", "consolida"],
+    "Conexion": ["une", "vincula", "enlaza", "conecta", "comunica", "acerca", "integra", "compromete", "solidariza", "comparte", "asocia", "relaciona", "complementa", "armoniza", "equilibra", "sincroniza", "coordina", "ajusta", "adapta", "fusiona"]
 }
 
 COMPLEMENTOS = {
-    "Motivación": ["tus sueños", "tu camino", "tus metas", "tu fuerza interior", "tu propósito", "tu crecimiento", "tu mejor versión", "tu destino", "tu verdad", "cada paso", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu vida", "tu futuro", "tu presente", "tu pasado", "tu esencia"],
+    "Motivacion": ["tus sueños", "tu camino", "tus metas", "tu fuerza interior", "tu propósito", "tu crecimiento", "tu mejor versión", "tu destino", "tu verdad", "cada paso", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu vida", "tu futuro", "tu presente", "tu pasado", "tu esencia"],
     "Constancia": ["el éxito", "tus metas", "tus logros", "tu progreso", "tu camino", "tu futuro", "tu disciplina", "tu resistencia", "tu grandeza", "tu victoria", "tu constancia", "tu perseverancia", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño", "tu labor", "tu obra", "tu legado", "tu huella"],
-    "Superación": ["tu vida", "tu mente", "tu carácter", "tu espíritu", "tu futuro", "tu realidad", "tu ser", "tu propósito", "tu camino", "tu libertad", "tu alma", "tu corazón", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor"],
+    "Superacion": ["tu vida", "tu mente", "tu carácter", "tu espíritu", "tu futuro", "tu realidad", "tu ser", "tu propósito", "tu camino", "tu libertad", "tu alma", "tu corazón", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor"],
     "Gratitud": ["tu vida", "tu corazón", "tu alma", "tu ser", "tu camino", "tu realidad", "tu entorno", "tu familia", "tu presente", "tu futuro", "tu pasado", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo"],
     "Logros": ["tu esfuerzo", "tu dedicación", "tu trabajo", "tu constancia", "tu visión", "tu camino", "tu legado", "tu historia", "tu progreso", "tu destino", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
     "AmorPropio": ["tu ser", "tu alma", "tu mente", "tu cuerpo", "tu espíritu", "tu esencia", "tu corazón", "tu vida", "tu paz", "tu libertad", "tu verdad", "tu destino", "tu camino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
@@ -129,7 +128,7 @@ COMPLEMENTOS = {
     "Confianza": ["tu decisión", "tu camino", "tu proceso", "tu vida", "tu instinto", "tu ser", "tu propósito", "tu destino", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño", "tu labor", "tu obra", "tu legado", "tu huella", "tu verdad", "tu esencia", "tu alma", "tu corazón"],
     "Resiliencia": ["tu espíritu", "tu corazón", "tu mente", "tu alma", "tu carácter", "tu fuerza", "tu fe", "tu propósito", "tu vida", "tu camino", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño"],
     "Felicidad": ["tu vida", "tu alma", "tu corazón", "tu mente", "tu ser", "tu espíritu", "tu familia", "tus amigos", "tu camino", "tu destino", "tu propósito", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista"],
-    "Propósito": ["tu vida", "tu camino", "tu destino", "tu misión", "tu vocación", "tu llamado", "tu esfuerzo", "tu trabajo", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización", "tu plenitud"],
+    "Proposito": ["tu vida", "tu camino", "tu destino", "tu misión", "tu vocación", "tu llamado", "tu esfuerzo", "tu trabajo", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización", "tu plenitud"],
     "Optimismo": ["tu futuro", "tu vida", "tu camino", "tu destino", "tu propósito", "tu fe", "tu alma", "tu corazón", "tu esperanza", "tu luz", "tu ilusión", "tu optimismo", "tu confianza", "tu certeza", "tu convicción", "tu seguridad", "tu firmeza", "tu estabilidad", "tu constancia", "tu perseverancia"],
     "PazInterior": ["tu mente", "tu corazón", "tu alma", "tu espíritu", "tu ser", "tu vida", "tu destino", "tu camino", "tu propósito", "tu felicidad", "tu paz", "tu tranquilidad", "tu serenidad", "tu calma", "tu armonía", "tu equilibrio", "tu sosiego", "tu quietud", "tu placidez", "tu clemencia"],
     "Actitud": ["tu día", "tu semana", "tu mes", "tu año", "tu vida", "tu proyecto", "tu meta", "tu objetivo", "tu misión", "tu propósito", "tu camino", "tu destino", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
@@ -137,14 +136,14 @@ COMPLEMENTOS = {
     "Cambio": ["tu vida", "tu realidad", "tu futuro", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu esencia", "tu verdad", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
     "Libertad": ["tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu vida", "tu camino", "tu destino", "tu propósito", "tu verdad", "tu esencia", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño"],
     "Aprendizaje": ["tu vida", "tu camino", "tu mente", "tu ser", "tu alma", "tu espíritu", "tu destino", "tu propósito", "tu legado", "tu futuro", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
-    "Sabiduría": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
-    "Conexión": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"]
+    "Sabiduria": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
+    "Conexion": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"]
 }
 
 # ============================================
-# 🗣️ FRASES COLOQUIALES (corregidas gramaticalmente)
+# 🗣️ FRASES COLOQUIALES Y SENCILLAS
 # ============================================
-INTROS_COLOQUIALES = [
+INICIOS_COLOQUIALES = [
     "Mira,",
     "Es que",
     "La cosa es que",
@@ -161,11 +160,10 @@ INTROS_COLOQUIALES = [
     "Imagínate que",
     "Lo cierto es que",
     "Sin duda,",
-    "Hay que ver que",
     "Vale,"
 ]
 
-PREGUNTAS_RETORICAS_COLOQUIALES = [
+PREGUNTAS_RETORICAS_SENCILLAS = [
     "¿sabes?",
     "¿no te parece?",
     "¿verdad?",
@@ -178,36 +176,27 @@ PREGUNTAS_RETORICAS_COLOQUIALES = [
     "¿qué te parece?"
 ]
 
-def coloquializar_frase(frase):
-    """Convierte una frase en una más coloquial y natural, manteniendo coherencia."""
+def hacer_sencilla(frase):
+    """Convierte una frase en algo más sencillo y coloquial."""
     if not frase:
         return frase
-    
-    # Asegurar mayúscula inicial
+    # Asegurar mayúscula
     if frase[0].islower():
         frase = frase[0].upper() + frase[1:]
-    
-    # Añadir intro coloquial (con probabilidad)
-    if random.random() < 0.4:
-        intro = random.choice(INTROS_COLOQUIALES)
-        # Si la frase ya tiene signo de puntuación, no duplicamos
-        if frase[-1] in [".", "?", "!"]:
-            frase = frase[:-1] + ". " + intro + " " + frase[0].lower() + frase[1:]
+    # Añadir inicio coloquial (a veces)
+    if random.random() < 0.5:
+        intro = random.choice(INICIOS_COLOQUIALES)
+        if intro[-1] in [",", ":", ";"]:
+            frase = f"{intro} {frase[0].lower() + frase[1:]}"
         else:
-            frase = intro + " " + frase
-    
-    # Añadir pregunta retórica coloquial (con probabilidad)
+            frase = f"{intro} {frase[0].lower() + frase[1:]}"
+    # Añadir pregunta retórica (a veces)
     if random.random() < 0.3:
-        pregunta = random.choice(PREGUNTAS_RETORICAS_COLOQUIALES)
+        pregunta = random.choice(PREGUNTAS_RETORICAS_SENCILLAS)
         if frase[-1] in [".", "?", "!"]:
             frase = frase[:-1] + " " + pregunta
         else:
             frase = frase + " " + pregunta
-    
-    # Limpiar puntuación doble
-    frase = re.sub(r'[.!?]{2,}', '.', frase)
-    frase = re.sub(r'\s+', ' ', frase).strip()
-    
     return frase
 
 # ============================================
@@ -237,9 +226,9 @@ INICIOS_PREGUNTA = [
 ]
 
 def generar_pregunta(tema_nombre):
-    sujeto = random.choice(SUJETOS.get(tema_nombre, SUJETOS["Motivación"])).lower()
-    verbo = random.choice(VERBOS.get(tema_nombre, VERBOS["Motivación"])).lower()
-    complemento = random.choice(COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS["Motivación"])).lower()
+    sujeto = random.choice(SUJETOS.get(tema_nombre, SUJETOS["Motivacion"])).lower()
+    verbo = random.choice(VERBOS.get(tema_nombre, VERBOS["Motivacion"])).lower()
+    complemento = random.choice(COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS["Motivacion"])).lower()
     inicio = random.choice(INICIOS_PREGUNTA)
     opciones = [
         f"{inicio} {sujeto} {verbo} {complemento}?",
@@ -249,6 +238,7 @@ def generar_pregunta(tema_nombre):
         f"{inicio} {sujeto} {verbo} {complemento} a pesar de los obstáculos?"
     ]
     pregunta = random.choice(opciones)
+    # Asegurar signos de interrogación
     if not pregunta.startswith("¿"):
         pregunta = "¿" + pregunta
     if not pregunta.endswith("?"):
@@ -261,7 +251,7 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
-        # Determinar artículo correcto
+        # Detectar género para el artículo
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
         if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "La"
@@ -270,23 +260,21 @@ def generar_frase_desarrollo(tema_nombre):
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "El"
         
-        # Plantillas con sentido completo
-        patrones_coloquiales = [
-            f"{articulo} {tema_nombre} te enseña a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Reflexionar sobre {articulo.lower()} {tema_nombre} te ayuda a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Cada día puedes usar {articulo.lower()} {tema_nombre} para {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"{articulo} {tema_nombre} está ahí para que {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Aceptar {articulo.lower()} {tema_nombre} es el primer paso para {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Cuando hablamos de {articulo.lower()} {tema_nombre}, hablamos de {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"{articulo} {tema_nombre} no es complicado, solo hay que {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Lo importante de {articulo.lower()} {tema_nombre} es que te permite {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}."
+        # Patrones sencillos para temas no predefinidos
+        patrones = [
+            f"{articulo} {tema_nombre} te enseña a {random.choice(verbos)} {random.choice(complementos)}.",
+            f"Reflexionar sobre {articulo.lower()} {tema_nombre} te ayuda a {random.choice(verbos)} {random.choice(complementos)}.",
+            f"Cada día puedes usar {articulo.lower()} {tema_nombre} para {random.choice(verbos)} {random.choice(complementos)}.",
+            f"{articulo} {tema_nombre} está ahí para que {random.choice(verbos)} {random.choice(complementos)}.",
+            f"Aceptar {articulo.lower()} {tema_nombre} es el primer paso para {random.choice(verbos)} {random.choice(complementos)}.",
+            f"Cuando hablamos de {articulo.lower()} {tema_nombre}, hablamos de {random.choice(verbos)} {random.choice(complementos)}.",
         ]
-        frase = random.choice(patrones_coloquiales)
+        frase = random.choice(patrones)
     else:
         sujeto = random.choice(sujetos)
         verbo = random.choice(verbos)
         complemento = random.choice(complementos)
-        # Plantillas con sentido completo
+        # Patrones más sencillos y directos
         plantillas = [
             f"{sujeto} {verbo} {complemento}.",
             f"Es que {sujeto.lower()} {verbo} {complemento}.",
@@ -295,17 +283,15 @@ def generar_frase_desarrollo(tema_nombre):
             f"O sea, {sujeto.lower()} {verbo} {complemento}.",
             f"Bueno, {sujeto.lower()} {verbo} {complemento}.",
             f"Mira, {sujeto.lower()} {verbo} {complemento}.",
-            f"Piensa: {sujeto.lower()} {verbo} {complemento}."
         ]
         frase = random.choice(plantillas)
     
-    # Aplicar coloquialización (pero sin romper la gramática)
-    if random.random() < 0.5:
-        frase = coloquializar_frase(frase)
+    # Aplicar simplificación (con probabilidad)
+    if random.random() < 0.6:
+        frase = hacer_sencilla(frase)
     else:
         if frase and frase[0].islower():
             frase = frase[0].upper() + frase[1:]
-    
     return frase
 
 def generar_texto_completo(tema_nombre):
@@ -315,113 +301,98 @@ def generar_texto_completo(tema_nombre):
     for _ in range(num_desarrollo):
         desarrollo.append(generar_frase_desarrollo(tema_nombre))
     random.shuffle(desarrollo)
-    return pregunta, desarrollo
+    # Unir pregunta y desarrollo con saltos de línea
+    texto_completo = pregunta + "\n\n" + "\n\n".join(desarrollo)
+    return texto_completo
 
-def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
-    oraciones_pregunta = re.findall(r'[^.!?]+[.!?]', pregunta)
-    if not oraciones_pregunta:
-        oraciones_pregunta = [pregunta.strip()]
-    parrafo_pregunta = " ".join(oraciones_pregunta)
-    
-    texto_desarrollo = " ".join(desarrollo)
-    oraciones = re.findall(r'[^.!?]+[.!?]', texto_desarrollo)
+def dividir_en_parrafos(texto, num_partes):
+    """
+    Divide el texto en párrafos de entre 3 y 5 líneas, sin cortar oraciones.
+    """
+    texto = re.sub(r'Te leo en los comentarios\s*[.!?]*\s*', '', texto)
+    oraciones = re.findall(r'[^.!?]+[.!?]', texto)
     oraciones = [o.strip() for o in oraciones if len(o.strip()) > 5]
+    
     if not oraciones:
-        oraciones = ["Sigue adelante con fe y determinación."]
+        oraciones = [texto.strip()]
     
     random.shuffle(oraciones)
     
-    num_intermedios = num_parrafos - 2
-    if num_intermedios < 1:
-        num_parrafos = 3
-        num_intermedios = 1
+    parrafos = []
+    grupo_actual = []
+    lineas_objetivo = random.randint(3, 5)
+    lineas_actuales = 0
     
-    total_oraciones = len(oraciones)
-    while total_oraciones < num_intermedios:
-        oraciones.append("Sigue adelante con fe y determinación.")
-        total_oraciones += 1
+    for oracion in oraciones:
+        lineas_oracion = max(1, len(oracion) // 28)
+        if lineas_actuales + lineas_oracion > lineas_objetivo and grupo_actual:
+            parrafos.append(" ".join(grupo_actual))
+            grupo_actual = []
+            lineas_actuales = 0
+            lineas_objetivo = random.randint(3, 5)
+        grupo_actual.append(oracion)
+        lineas_actuales += lineas_oracion
     
-    oraciones_por_parrafo = total_oraciones // num_intermedios
-    resto = total_oraciones % num_intermedios
-    grupos = []
-    indice = 0
-    for i in range(num_intermedios):
-        extra = 1 if i < resto else 0
-        fin = indice + oraciones_por_parrafo + extra
-        grupos.append(oraciones[indice:fin])
-        indice = fin
+    if grupo_actual:
+        parrafos.append(" ".join(grupo_actual))
     
-    parrafos_intermedios = [" ".join(g) for g in grupos]
-    parrafos = [parrafo_pregunta] + parrafos_intermedios + ["Te leo en los comentarios"]
+    while len(parrafos) > num_partes - 1:
+        ultimo = parrafos.pop() + " " + parrafos.pop()
+        parrafos.append(ultimo)
+    while len(parrafos) < num_partes - 1:
+        parrafos.append("Sigue adelante con fe y determinación.")
     
-    if len(parrafos) > num_parrafos:
-        parrafos = parrafos[:num_parrafos]
-        parrafos[-1] = "Te leo en los comentarios"
-    elif len(parrafos) < num_parrafos:
-        while len(parrafos) < num_parrafos - 1:
-            parrafos.insert(-1, "Sigue adelante con fe y determinación.")
-        if len(parrafos) < num_parrafos:
-            parrafos.append("Te leo en los comentarios")
-    
-    return parrafos
+    parrafos.append("Te leo en los comentarios")
+    return parrafos[:num_partes]
 
-def obtener_imagenes_pexels(query, cantidad):
+def crear_video(texto, dia_semana, tema_nombre, numero):
+    num_parrafos = random.choice([6, 7, 8])
+    duracion_total = random.uniform(70, 85)
+    duracion_por_parrafo = duracion_total / num_parrafos
+    duraciones = [duracion_por_parrafo] * num_parrafos
+
+    print(f"   🎬 Video {numero} ({dia_semana} - {tema_nombre}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
+    print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
+    os.makedirs("videos", exist_ok=True)
+
+    parrafos = dividir_en_parrafos(texto, num_parrafos)
+
+    palabras_clave = texto.split()[:4]
+    tema_imagen = " ".join(palabras_clave) if palabras_clave else "motivacion"
+    tema_imagen = re.sub(r'[^\w\s]', '', tema_imagen)
+
     url = "https://api.pexels.com/v1/search"
     headers = {"Authorization": CLAVE_PEXELS}
-    params = {
-        "query": query,
-        "per_page": max(cantidad, 5),
-        "orientation": "portrait",
-        "page": random.randint(1, 5)
-    }
+    params = {"query": tema_imagen, "per_page": 3, "orientation": "portrait", "page": random.randint(1, 5)}
+
+    imagen_url = None
     try:
         resp = requests.get(url, headers=headers, params=params, timeout=10)
         if resp.status_code == 200:
             fotos = resp.json().get("photos", [])
             if fotos:
-                return [foto["src"]["large"] for foto in fotos[:cantidad]]
+                imagen_url = random.choice(fotos)["src"]["large"]
     except:
         pass
-    return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
-def crear_video(pregunta, desarrollo, dia_semana, tema_nombre):
-    num_parrafos = random.choice([5, 6, 7])
-    duracion_total = random.uniform(70, 85)
-    duracion_por_parrafo = duracion_total / num_parrafos
-    duraciones = [duracion_por_parrafo] * num_parrafos
+    if not imagen_url:
+        imagen_url = "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"
 
-    print(f"   🎬 Video {dia_semana} - {tema_nombre} - {num_parrafos} párrafos, {duracion_total:.1f}s")
-    print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
-    os.makedirs("videos", exist_ok=True)
-
-    parrafos = dividir_en_parrafos(pregunta, desarrollo, num_parrafos)
-
-    palabras_clave = (pregunta + " " + " ".join(desarrollo)).split()[:6]
-    query = " ".join(palabras_clave) if palabras_clave else "motivacion"
-    query = re.sub(r'[^\w\s]', '', query)
-
-    imagenes_urls = obtener_imagenes_pexels(query, num_parrafos)
-    while len(imagenes_urls) < num_parrafos:
-        imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
+    try:
+        img_data = requests.get(imagen_url, timeout=10).content
+        with open("temp_fondo.jpg", "wb") as f:
+            f.write(img_data)
+    except:
+        return
 
     clips = []
     for i, parrafo in enumerate(parrafos):
-        try:
-            img_data = requests.get(imagenes_urls[i], timeout=10).content
-            with open(f"temp_fondo_{i}.jpg", "wb") as f:
-                f.write(img_data)
-            img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
-        except:
-            img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
-        
+        img = Image.open("temp_fondo.jpg").convert("RGB")
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
 
         lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
         total_lineas = len(lineas)
-        if total_lineas == 0:
-            lineas = [" "]
-            total_lineas = 1
 
         MARGEN_Y = 200
         font_size = int((1920 - 2 * MARGEN_Y) / (total_lineas * 1.4))
@@ -443,6 +414,7 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre):
             bbox = draw.textbbox((0, 0), linea, font=font)
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
+            # Borde negro grueso
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
@@ -450,24 +422,17 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre):
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         clips.append(clip)
 
-        try:
-            os.remove(f"temp_fondo_{i}.jpg")
-        except:
-            pass
-
     video = concatenate_videoclips(clips, method="compose")
 
-    # 🔥 NOMBRE VÁLIDO PARA GITHUB ACTIONS (sin : ni espacios)
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
     fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
-    tema_limpio = tema_nombre.replace(" ", "-")
-    nombre = f"{dia_semana}-{tema_limpio}-{fecha_hora}.mp4"
+    nombre = f"videos/{dia_semana}-{tema_nombre}-{fecha_hora}-video-{numero:03d}.mp4"
 
-    ruta = os.path.join("videos", nombre)
-    video.write_videofile(ruta, fps=15, codec="libx264", audio=False)
-    print(f"   ✅ Video guardado: {ruta}")
+    video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
+    print(f"   ✅ Video guardado: {nombre}")
 
+    # Limpieza de temporales
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
             try:
@@ -488,9 +453,11 @@ def seleccionar_temas(opcion, videos_por_dia):
         return {i: opcion for i in range(7)}
 
 # ============================================
-# 🚀 EJECUCIÓN PRINCIPAL
+# 🚀 EJECUCIÓN PRINCIPAL (con argumentos y ZIP directo)
 # ============================================
 if __name__ == "__main__":
+    import argparse
+
     parser = argparse.ArgumentParser(description="Generador de videos semanales")
     parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
     parser.add_argument("--tema", type=str, default="todo", help="Tema o 'todo' para aleatorio")
@@ -501,10 +468,9 @@ if __name__ == "__main__":
     videos_por_dia = args.videos
     tema_input = args.tema
 
-    # 🔥 El nombre del ZIP ahora es DD-MM-AAAA.zip
+    # 🔥 El ZIP se llamará DD-MM-AAAA.zip por defecto
     fecha_actual = datetime.now().strftime("%d-%m-%Y")
     if args.zip:
-        # Si el usuario pasa un nombre, lo usamos, sino usamos el formato DD-MM-AAAA
         nombre_zip = args.zip if args.zip.endswith(".zip") else args.zip + ".zip"
     else:
         nombre_zip = f"{fecha_actual}.zip"
@@ -530,8 +496,8 @@ if __name__ == "__main__":
         print(f"   📝 Generando {videos_por_dia} videos...")
 
         for i in range(videos_por_dia):
-            pregunta, desarrollo = generar_texto_completo(tema_nombre)
-            crear_video(pregunta, desarrollo, dia_nombre, tema_nombre)
+            texto = generar_texto_completo(tema_nombre)
+            crear_video(texto, dia_nombre, tema_nombre, i+1)
             time.sleep(0.5)
 
     print("\n🎉 ¡Todos los videos generados!")
@@ -541,7 +507,7 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    # Los vídeos se añaden directamente en la raíz del ZIP
+                    # 🔥 Añadir solo el nombre del archivo (sin ruta)
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
