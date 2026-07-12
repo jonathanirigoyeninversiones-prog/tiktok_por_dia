@@ -5,8 +5,9 @@ import requests
 import re
 import time
 import random
+import argparse
 from datetime import datetime, timezone, timedelta
-from moviepy import *
+from moviepy.editor import ImageClip, concatenate_videoclips
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
 import zipfile
@@ -336,12 +337,13 @@ def crear_video(texto, dia_semana, tema_nombre, numero):
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {nombre}")
 
-    for i in range(len(parrafos)):
-        try:
-            os.remove(f"temp_{i}.jpg")
-            os.remove(f"temp_texto_{i}.jpg")
-        except:
-            pass
+    # Limpieza de archivos temporales
+    for f in os.listdir("."):
+        if f.startswith("temp_") and f.endswith(".jpg"):
+            try:
+                os.remove(f)
+            except:
+                pass
 
 # ============================================
 # 🎯 SELECCIÓN DE TEMAS
@@ -356,51 +358,34 @@ def seleccionar_temas(opcion, videos_por_dia):
         return {i: opcion for i in range(7)}
 
 # ============================================
-# 🚀 EJECUCIÓN PRINCIPAL
+# 🚀 EJECUCIÓN PRINCIPAL (con argumentos)
 # ============================================
 if __name__ == "__main__":
-    print("🎬 ¡Generador de videos para toda la semana!")
-    print("=" * 50)
+    parser = argparse.ArgumentParser(description="Generador de videos semanales")
+    parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
+    parser.add_argument("--tema", type=str, default="todo", help="Tema o 'todo' para aleatorio")
+    parser.add_argument("--zip", type=str, help="Nombre del archivo ZIP (sin extensión o con .zip)")
+    parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
+    args = parser.parse_args()
 
-    # Cantidad de videos por día
-    if len(sys.argv) > 1:
-        try:
-            videos_por_dia = int(sys.argv[1])
-        except:
-            videos_por_dia = 5
-    else:
-        while True:
-            try:
-                videos_por_dia = int(input("📝 ¿Cuántos videos por día? (ej: 5): "))
-                if 0 < videos_por_dia <= 50:
-                    break
-                print("❌ Debe ser entre 1 y 50.")
-            except:
-                print("❌ Ingresa un número válido.")
+    videos_por_dia = args.videos
+    tema_input = args.tema
 
     # Nombre del ZIP
-    fecha_zip = datetime.now().strftime("%d-%m-%Y")
-    nombre_zip_defecto = f"Videos-{fecha_zip}.zip"
-    nombre_zip = input(f"📦 Nombre del archivo ZIP (por defecto '{nombre_zip_defecto}'): ").strip()
-    if not nombre_zip:
-        nombre_zip = nombre_zip_defecto
-    if not nombre_zip.endswith(".zip"):
-        nombre_zip += ".zip"
-    print(f"📦 El ZIP se llamará: {nombre_zip}")
+    if args.zip:
+        nombre_zip = args.zip if args.zip.endswith(".zip") else args.zip + ".zip"
+    else:
+        fecha_zip = datetime.now().strftime("%d-%m-%Y")
+        nombre_zip = f"Videos-{fecha_zip}.zip"
 
-    # Temática
-    print("\n📌 Puedes elegir:")
-    print("   - Escribe 'todo' para 7 temas aleatorios (variedad)")
-    print("   - O escribe CUALQUIER tema (ej: 'Tristeza', 'Amistad', 'Familia', etc.)")
-    print(f"   Temas predefinidos: {', '.join(TEMAS_PREDEFINIDOS)}")
-    print("   (Si escribes un tema que no está en la lista, se usará un generador universal)")
+    print("🎬 ¡Generador de videos para toda la semana!")
+    print("=" * 50)
+    print(f"📝 Videos por día: {videos_por_dia}")
+    print(f"🎯 Temática: {tema_input}")
+    print(f"📦 ZIP: {nombre_zip}")
+    print("=" * 50)
 
-    while True:
-        tema_input = input("🎯 ¿Qué temática quieres? (todo / cualquier tema): ").strip()
-        if tema_input:
-            break
-        print("❌ No puedes dejar vacío. Escribe 'todo' o un tema.")
-
+    # Selección de temas
     TEMAS = seleccionar_temas(tema_input, videos_por_dia)
 
     DIAS_SEMANA = {0: "Lunes", 1: "Martes", 2: "Miercoles", 3: "Jueves", 4: "Viernes", 5: "Sabado", 6: "Domingo"}
@@ -421,11 +406,14 @@ if __name__ == "__main__":
 
     print("\n🎉 ¡Todos los videos generados!")
 
-    # Crear ZIP
-    print(f"📦 Creando ZIP: {nombre_zip} ...")
-    with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for root, dirs, files in os.walk("videos"):
-            for file in files:
-                zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), "."))
-    print(f"✅ ZIP creado: {nombre_zip}")
-    print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
+    # Crear ZIP (a menos que se haya pedido no hacerlo)
+    if not args.no_zip:
+        print(f"📦 Creando ZIP: {nombre_zip} ...")
+        with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk("videos"):
+                for file in files:
+                    zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), "."))
+        print(f"✅ ZIP creado: {nombre_zip}")
+        print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
+    else:
+        print("⏭️  No se creó ZIP (opción --no-zip activada).")
