@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       videos_por_dia:
-        description: 'Número de videos por día (ej: 5)'
+        description: 'Número de videos por día (ej: 1 para prueba)'
         required: true
-        default: 5
+        default: 1
         type: number
       tema:
-        description: 'Tema o "todo" para aleatorio'
+        description: 'Tema (ej: Motivacion)'
         required: false
-        default: 'todo'
+        default: 'Motivacion'
         type: string
   schedule:
     - cron: '0 10 * * 0'
@@ -34,7 +34,7 @@ jobs:
           pip install --upgrade pip
           pip install moviepy==1.0.3 pillow requests
 
-      - name: Ejecutar generador semanal
+      - name: Ejecutar generador
         env:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: |
