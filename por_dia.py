@@ -47,276 +47,381 @@ TEMAS_PREDEFINIDOS = [
 # ============================================
 # 🌍 GENERADOR UNIVERSAL (para cualquier tema)
 # ============================================
-SUJETOS_UNIVERSALES = [
-    "la vida", "el camino", "la experiencia", "el corazón", "el alma",
-    "la mente", "el ser", "la esencia", "cada día", "el momento",
-    "la oportunidad", "el cambio", "la transformación", "la fuerza interior",
-    "la luz", "la esperanza", "el propósito", "la conexión"
+# Para temas no predefinidos, usamos frases genéricas pero con sentido.
+FRASES_UNIVERSALES = [
+    "A veces, lo más importante es aprender a {verbo} {complemento}.",
+    "Cuando piensas en {tema}, te das cuenta de que {verbo} {complemento}.",
+    "La clave está en {verbo} {complemento} con calma y sin prisas.",
+    "Si quieres avanzar, tienes que {verbo} {complemento}.",
+    "No olvides que {verbo} {complemento} es parte del camino.",
+    "Todos podemos {verbo} {complemento} si nos lo proponemos.",
+    "A veces, solo hace falta {verbo} {complemento} para sentirte mejor.",
+    "Recuerda que {verbo} {complemento} te ayuda a crecer.",
+    "Piensa en lo que significa {verbo} {complemento} en tu día a día.",
+    "Lo bonito de la vida es que siempre puedes {verbo} {complemento}."
 ]
 
 VERBOS_UNIVERSALES = [
-    "enseña", "transforma", "fortalece", "conecta", "alivia",
-    "guía", "impulsa", "acompaña", "renueva", "despierta",
-    "eleva", "sostiene", "ilumina", "abre", "sana",
-    "motiva", "inspira", "empodera", "libera", "abraza"
+    "cuidar", "escuchar", "valorar", "disfrutar", "confiar",
+    "agradecer", "sonreír", "abrazar", "perdonar", "aprender",
+    "compartir", "ayudar", "crecer", "soñar", "avanzar"
 ]
 
 COMPLEMENTOS_UNIVERSALES = [
-    "tu corazón", "tu alma", "tu camino", "tu vida", "tu ser",
-    "tu esencia", "tu mente", "tu espíritu", "tu destino", "tu verdad",
-    "cada paso", "tus sueños", "tu propósito", "tu crecimiento", "tu bienestar",
-    "tu paz", "tu luz", "tu fuerza", "tu esperanza", "tu libertad"
+    "tu bienestar", "tu paz interior", "a los que quieres", "el momento presente",
+    "tus logros", "tu camino", "las pequeñas cosas", "tus metas",
+    "tu salud mental", "tu felicidad", "tu esfuerzo", "tu familia"
 ]
 
 # ============================================
-# 📝 LISTAS DE SUJETOS, VERBOS Y COMPLEMENTOS
+# 📝 FRASES CON SENTIDO PARA CADA TEMA (predefinidas)
 # ============================================
-SUJETOS = {
-    "Motivacion": ["La motivación", "La energía", "El entusiasmo", "La pasión", "La fe", "El coraje", "La determinación", "La disciplina", "La resiliencia", "La voluntad", "El impulso", "La chispa", "La llama", "El vigor", "La convicción", "La firmeza", "La constancia", "La perseverancia", "La tenacidad", "La entereza"],
-    "Constancia": ["La constancia", "La perseverancia", "La disciplina", "La paciencia", "El esfuerzo", "La rutina", "El hábito", "La tenacidad", "La firmeza", "La resistencia", "La continuidad", "La persistencia", "La determinación", "La voluntad", "La dedicación", "El empeño", "La laboriosidad", "La asiduidad", "La regularidad", "La obstinación"],
-    "Superacion": ["La superación", "El crecimiento", "La evolución", "La transformación", "La mejora", "El avance", "El progreso", "El desarrollo", "El aprendizaje", "La resiliencia", "La renovación", "La elevación", "La expansión", "La maduración", "La plenitud", "La fortaleza", "La entereza", "La templanza", "La firmeza", "La solidez"],
-    "Gratitud": ["La gratitud", "El agradecimiento", "La apreciación", "El reconocimiento", "La bendición", "La generosidad", "La humildad", "La satisfacción", "La alegría", "La paz", "La complacencia", "La benevolencia", "La clemencia", "La indulgencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasión", "La empatía", "La solidaridad"],
-    "Logros": ["El éxito", "El logro", "El triunfo", "La victoria", "El avance", "El progreso", "El cumplimiento", "La meta", "El objetivo", "La conquista", "La hazaña", "La proeza", "El alcance", "La realización", "La materialización", "La culminación", "La finalización", "La ejecución", "La consumación", "El remate"],
-    "AmorPropio": ["El amor propio", "La autoaceptación", "El autocuidado", "La autocompasión", "La confianza", "La valía personal", "La autoestima", "El respeto", "La libertad interior", "La paz", "La dignidad", "La integridad", "La autenticidad", "La sinceridad", "La honestidad", "La transparencia", "La coherencia", "La estabilidad", "La serenidad", "La plenitud"],
-    "Esperanza": ["La esperanza", "La ilusión", "La fe", "El optimismo", "La confianza", "La certeza", "La luz", "La promesa", "El nuevo comienzo", "La renovación", "La alegría", "La convicción", "La seguridad", "La firmeza", "La estabilidad", "La constancia", "La perseverancia", "La determinación", "La voluntad", "La tenacidad"],
-    "Confianza": ["La confianza", "La seguridad", "La certeza", "La convicción", "La fe", "El valor", "La determinación", "La firmeza", "La solidez", "La estabilidad", "La garantía", "La evidencia", "La prueba", "El fundamento", "La base", "El cimiento", "El sostén", "El apoyo", "El respaldo", "La credibilidad"],
-    "Resiliencia": ["La resiliencia", "La fortaleza", "La resistencia", "La tenacidad", "La entereza", "La firmeza", "La constancia", "La determinación", "El temple", "La dureza", "La robustez", "La solidez", "La perseverancia", "La persistencia", "La continuidad", "La regularidad", "La asiduidad", "La laboriosidad", "La obstinación", "La firmeza"],
-    "Felicidad": ["La felicidad", "La alegría", "La plenitud", "La satisfacción", "El bienestar", "La calma", "La paz", "El gozo", "La dicha", "El contento", "El regocijo", "El júbilo", "La euforia", "El entusiasmo", "La vitalidad", "La energía", "La armonía", "El equilibrio", "La serenidad", "La tranquilidad"],
-    "Proposito": ["El propósito", "La misión", "La vocación", "La meta", "El objetivo", "El destino", "La razón", "El norte", "El anhelo", "La aspiración", "El deseo", "La intención", "El fin", "La finalidad", "El blanco", "El rumbo", "La dirección", "El camino", "El sendero", "La visión"],
-    "Optimismo": ["El optimismo", "La esperanza", "La fe", "La confianza", "La positividad", "La convicción", "La certeza", "La alegría", "La luz", "El entusiasmo", "La vitalidad", "La energía", "La ilusión", "El contento", "La satisfacción", "La plenitud", "La paz", "La serenidad", "La tranquilidad", "El optimismo"],
-    "PazInterior": ["La paz interior", "La serenidad", "La calma", "La tranquilidad", "La armonía", "El sosiego", "La quietud", "La placidez", "La clemencia", "La mansedumbre", "La dulzura", "La benignidad", "La compasión", "La empatía", "La solidaridad", "La benevolencia", "La indulgencia", "La generosidad", "La humildad", "La gratitud"],
-    "Actitud": ["La actitud", "La disposición", "La postura", "La posición", "La mentalidad", "El enfoque", "La perspectiva", "La visión", "El ángulo", "El punto de vista", "La orientación", "La dirección", "El rumbo", "El camino", "El sendero", "La vía", "La forma", "El modo", "La manera", "El estilo"],
-    "Crecimiento": ["El crecimiento", "El desarrollo", "La evolución", "La maduración", "La expansión", "La mejora", "El progreso", "El avance", "La superación", "La transformación", "La renovación", "La elevación", "La ampliación", "La extensión", "La multiplicación", "La magnificación", "El engrandecimiento", "El fortalecimiento", "La consolidación", "La afirmación"],
-    "Cambio": ["El cambio", "La transformación", "La mutación", "La evolución", "La adaptación", "La renovación", "La reforma", "La innovación", "La variación", "La modificación", "La alteración", "La conversión", "La inversión", "La revolución", "La metamorfosis", "La permutación", "La sustitución", "La transición", "El viraje", "El giro"],
-    "Libertad": ["La libertad", "La independencia", "La autonomía", "La autodeterminación", "La liberación", "La emancipación", "La soltura", "El desahogo", "La espontaneidad", "La fluidez", "La flexibilidad", "La adaptabilidad", "La movilidad", "La elasticidad", "La plasticidad", "La ductilidad", "La maleabilidad", "La versatilidad", "La agilidad", "La desenvoltura"],
-    "Aprendizaje": ["El aprendizaje", "La enseñanza", "La instrucción", "La educación", "El conocimiento", "La sabiduría", "La información", "La experiencia", "La lección", "La comprensión", "La asimilación", "La interiorización", "La asunción", "La aceptación", "La integración", "La incorporación", "La internalización", "La absorción", "La captación", "La asimilación"],
-    "Sabiduria": ["La sabiduría", "La prudencia", "La sensatez", "La cordura", "La mesura", "La discreción", "La templanza", "La moderación", "La sagacidad", "La perspicacia", "La clarividencia", "La intuición", "La percepción", "La comprensión", "La penetración", "La agudeza", "La fineza", "La sutileza", "La delicadeza", "La elegancia"],
-    "Conexion": ["La conexión", "El vínculo", "El lazo", "El enlace", "La relación", "La comunicación", "El afecto", "La empatía", "La solidaridad", "La unión", "La cohesión", "La integración", "La armonía", "La concordia", "La paz", "La amistad", "El compañerismo", "La hermandad", "La fraternidad", "La camaradería"]
+FRASES_POR_TEMA = {
+    "Motivacion": [
+        "La motivación es como el combustible del alma.",
+        "Cuando estás motivado, todo parece más fácil.",
+        "No necesitas una razón gigante para empezar, solo un pequeño impulso.",
+        "La motivación viene y va, pero tú puedes decidir mantenerla.",
+        "Cada día es una nueva oportunidad para encender tu fuego interior.",
+        "A veces, solo necesitas recordar por qué comenzaste.",
+        "La energía positiva atrae buenas cosas.",
+        "Tu entusiasmo puede contagiar a los demás.",
+        "La fe en ti mismo es el primer paso hacia el éxito.",
+        "El coraje no es no tener miedo, es seguir adelante a pesar de él."
+    ],
+    "Constancia": [
+        "La constancia es la clave para lograr grandes cosas.",
+        "No importa lo lento que vayas, si no te detienes, llegas.",
+        "Los hábitos diarios construyen tu futuro.",
+        "La perseverancia siempre tiene recompensa.",
+        "Es mejor avanzar poco a poco que no avanzar nada.",
+        "El esfuerzo constante vence cualquier obstáculo.",
+        "La disciplina es la hermana de la constancia.",
+        "Cada pequeño paso cuenta cuando se mantiene en el tiempo.",
+        "La paciencia y la constancia mueven montañas.",
+        "Nadie logra nada importante sin ser constante."
+    ],
+    "Superacion": [
+        "Superarse es salir de tu zona de confort.",
+        "Los errores son oportunidades para aprender y mejorar.",
+        "Cada desafío te hace más fuerte si decides enfrentarlo.",
+        "La verdadera superación viene de dentro.",
+        "No compares tu progreso con el de otros, solo con el tuyo de ayer.",
+        "Caerse está permitido, levantarse es obligatorio.",
+        "La transformación personal requiere valentía.",
+        "Siempre hay una versión mejor de ti esperando.",
+        "Los obstáculos son el gimnasio del alma.",
+        "El crecimiento duele, pero el resultado vale la pena."
+    ],
+    "Gratitud": [
+        "Agradecer te cambia la perspectiva de la vida.",
+        "Cuando das gracias, el corazón se llena de paz.",
+        "La gratitud convierte lo poco en suficiente.",
+        "Ser agradecido te ayuda a valorar lo que tienes.",
+        "Reconocer lo bueno de tu vida te hace más feliz.",
+        "Un simple 'gracias' puede iluminar el día de alguien.",
+        "La gratitud es la memoria del corazón.",
+        "Agradece incluso por los pequeños momentos.",
+        "La vida se vuelve más ligera cuando practicas la gratitud.",
+        "Cada noche, piensa en tres cosas buenas que te pasaron."
+    ],
+    "Logros": [
+        "Tus logros son el reflejo de tu esfuerzo.",
+        "Celebra cada victoria, por pequeña que sea.",
+        "Los logros grandes empiezan con decisiones pequeñas.",
+        "No olvides reconocer tu propio trabajo.",
+        "Cada meta alcanzada te acerca a tu propósito.",
+        "El éxito no es casualidad, es constancia.",
+        "Tus triunfos inspiran a quienes te rodean.",
+        "El camino al éxito está lleno de aprendizajes.",
+        "A veces, el mayor logro es haber intentado.",
+        "No subestimes lo que has conseguido hasta ahora."
+    ],
+    "AmorPropio": [
+        "Amarte a ti mismo es el primer amor verdadero.",
+        "Cuídate como cuidarías a alguien que quieres.",
+        "El respeto hacia ti mismo es innegociable.",
+        "No necesitas la aprobación de otros para valer.",
+        "Aceptarte con tus virtudes y defectos es libertad.",
+        "Mímate, date tiempo, escúchate.",
+        "Tu autoestima es el cimiento de todo.",
+        "Habla bien de ti, incluso en silencio.",
+        "El amor propio no es egoísmo, es autocuidado.",
+        "Sé tu mejor versión, pero sin exigirte perfección."
+    ],
+    "Esperanza": [
+        "La esperanza es la luz en los días oscuros.",
+        "Siempre hay una razón para seguir adelante.",
+        "Después de la tormenta, siempre sale el sol.",
+        "La ilusión te da fuerzas para continuar.",
+        "Nunca pierdas la fe en que las cosas pueden mejorar.",
+        "Un nuevo día trae nuevas oportunidades.",
+        "La esperanza es lo último que se pierde.",
+        "Cree que todo va a salir bien, aunque ahora no lo veas.",
+        "El optimismo abre puertas que el miedo cierra.",
+        "La vida siempre encuentra una forma de sorprenderte."
+    ],
+    "Confianza": [
+        "Confiar en ti es el primer paso para todo.",
+        "Sin confianza, hasta lo más fácil se vuelve difícil.",
+        "La seguridad en uno mismo se construye con pequeños logros.",
+        "No dudes de tu capacidad para resolver problemas.",
+        "La fe en tus decisiones te da tranquilidad.",
+        "La confianza no es arrogancia, es saber lo que vales.",
+        "Cuando confías, atraes lo mejor.",
+        "La incertidumbre se disipa con la confianza.",
+        "Cree en tu instinto, casi nunca falla.",
+        "La confianza es como un músculo, se ejercita."
+    ],
+    "Resiliencia": [
+        "Resiliencia es caer y levantarse una y otra vez.",
+        "Los golpes de la vida te enseñan a ser más fuerte.",
+        "Las heridas sanan y te hacen más sabio.",
+        "No importa cuántas veces te caigas, lo importante es volver a intentarlo.",
+        "La adversidad forja el carácter.",
+        "Siempre tienes la fuerza para sobreponerte.",
+        "Acepta el dolor, pero no te estanques en él.",
+        "Cada tropiezo es una lección disfrazada.",
+        "La resiliencia es el arte de renacer.",
+        "Lo que no te mata, te hace más fuerte."
+    ],
+    "Felicidad": [
+        "La felicidad está en las cosas simples.",
+        "No la busques fuera, está dentro de ti.",
+        "Ser feliz no es tenerlo todo, es disfrutar lo que tienes.",
+        "Sonríe, que la vida es corta.",
+        "La alegría es contagiosa, compártela.",
+        "El bienestar empieza por aceptar quién eres.",
+        "La paz interior es el primer paso para la felicidad.",
+        "Disfruta del presente, no te pierdas en el futuro.",
+        "Las pequeñas cosas son las que más felicidad dan.",
+        "La felicidad no es un destino, es una forma de viajar."
+    ],
+    "Proposito": [
+        "Tener un propósito da sentido a tu vida.",
+        "Tu misión es única, nadie puede hacerla por ti.",
+        "Encuentra lo que te apasiona y síguelo.",
+        "El propósito te guía cuando estás perdido.",
+        "No hay una sola manera de cumplir tu misión.",
+        "Cada persona tiene un talento especial que ofrecer.",
+        "La vocación es cuando tu trabajo y tu pasión se unen.",
+        "Pregúntate: ¿qué quiero dejar en el mundo?",
+        "El propósito no es un destino, es un camino.",
+        "Cuando encuentras tu norte, todo tiene más sentido."
+    ],
+    "Optimismo": [
+        "Ver el vaso medio lleno cambia tu día.",
+        "El optimismo es una elección, no un don.",
+        "Siempre hay un lado bueno en cada situación.",
+        "Las dificultades son oportunidades disfrazadas.",
+        "La actitud positiva te abre puertas.",
+        "Ríete de los problemas, les quitas poder.",
+        "El optimismo atrae buenas energías.",
+        "Cree que todo irá bien y así será.",
+        "Una sonrisa puede cambiar tu perspectiva.",
+        "La esperanza es el cimiento del optimismo."
+    ],
+    "PazInterior": [
+        "La paz interior empieza cuando aceptas lo que no puedes cambiar.",
+        "No dejes que el ruido exterior te robe la calma.",
+        "Respira profundamente y suelta lo que no te sirve.",
+        "La serenidad es un refugio en medio del caos.",
+        "Aprende a desconectar para reconectar contigo.",
+        "El silencio también es una forma de hablar.",
+        "La tranquilidad mental no tiene precio.",
+        "El equilibrio emocional se construye día a día.",
+        "Medita, camina, escucha tu interior.",
+        "La paz no es ausencia de problemas, es la forma de enfrentarlos."
+    ],
+    "Actitud": [
+        "Tu actitud determina tu altitud.",
+        "Elige ver lo positivo, aunque cueste.",
+        "La forma en que enfrentas las cosas marca la diferencia.",
+        "Una buena actitud atrae soluciones.",
+        "La disposición es más importante que la habilidad.",
+        "No dejes que los demás te contaminen con su negatividad.",
+        "Cada día es una nueva oportunidad para empezar con buena actitud.",
+        "La actitud correcta convierte los problemas en retos.",
+        "Sonreír ante la adversidad es un superpoder.",
+        "Tu perspectiva lo cambia todo."
+    ],
+    "Crecimiento": [
+        "Crecer es salir de tu zona de confort.",
+        "El aprendizaje es un viaje sin fin.",
+        "Cada experiencia te hace más sabio.",
+        "La madurez llega cuando aceptas tus errores.",
+        "El crecimiento personal requiere paciencia.",
+        "No tengas miedo al cambio, es necesario para crecer.",
+        "Las caídas te enseñan a levantarte mejor.",
+        "La evolución es constante, como la vida.",
+        "Aprender de los demás también es crecer.",
+        "Cada día puedes ser un poco mejor que ayer."
+    ],
+    "Cambio": [
+        "El cambio es la única constante en la vida.",
+        "Adaptarse es clave para sobrevivir.",
+        "A veces, los cambios más difíciles son los que más te benefician.",
+        "No temas a lo nuevo, puede ser el inicio de algo mejor.",
+        "La vida te pone desafíos para que evoluciones.",
+        "Cambiar de opinión no es debilidad, es crecimiento.",
+        "Los cambios pequeños pueden tener grandes efectos.",
+        "Acepta el cambio, aunque no lo entiendas.",
+        "El cambio es la oportunidad de reinventarse.",
+        "No te aferres a lo que ya no te sirve."
+    ],
+    "Libertad": [
+        "La libertad es la capacidad de elegir tu propio camino.",
+        "Ser libre es tomar decisiones sin miedo.",
+        "La independencia no es hacer lo que quieras, sino hacer lo que debes sin ataduras.",
+        "La auténtica libertad está en la mente.",
+        "No dejes que nadie te quite tu poder de decidir.",
+        "La libertad se gana con responsabilidad.",
+        "Despégate de lo que te limita.",
+        "Ser libre es ser dueño de tus actos.",
+        "La libertad interior no depende de lo exterior.",
+        "Vivir sin ataduras es el mayor lujo."
+    ],
+    "Aprendizaje": [
+        "Aprender es abrir puertas que desconocías.",
+        "Cada error es una lección, no un fracaso.",
+        "La curiosidad es el motor del aprendizaje.",
+        "Nunca es tarde para aprender algo nuevo.",
+        "El conocimiento te da alas para volar más alto.",
+        "Aprende de los demás, pero también de tus errores.",
+        "La educación es la herramienta más poderosa.",
+        "Cada experiencia te enseña algo valioso.",
+        "Enseñar es la mejor forma de aprender.",
+        "La sabiduría no es saber mucho, es saber aplicar."
+    ],
+    "Sabiduria": [
+        "La sabiduría no se mide por lo que sabes, sino por cómo vives.",
+        "La prudencia te ayuda a tomar mejores decisiones.",
+        "Las experiencias te dan sabiduría si sabes escucharlas.",
+        "Saber cuándo callar es tan importante como saber hablar.",
+        "La cordura es actuar con sensatez, incluso en la tormenta.",
+        "La sabiduría te permite ver más allá de lo evidente.",
+        "Aprende de los que han vivido más que tú.",
+        "La intuición es una forma de sabiduría silenciosa.",
+        "No basta con tener información, hay que entenderla.",
+        "La sabiduría se comparte, no se guarda."
+    ],
+    "Conexion": [
+        "Conectar con los demás te hace más humano.",
+        "La empatía es el puente entre las personas.",
+        "Una buena relación se construye con comunicación.",
+        "El vínculo verdadero va más allá de las palabras.",
+        "La comunidad te da fuerza y apoyo.",
+        "Escuchar es la base de cualquier conexión.",
+        "Compartir emociones te acerca a los demás.",
+        "La armonía nace cuando nos entendemos.",
+        "Una sonrisa puede ser el inicio de una gran amistad.",
+        "La solidaridad une corazones."
+    ]
 }
-
-VERBOS = {
-    "Motivacion": ["impulsa", "mueve", "enciende", "fortalece", "alienta", "despierta", "eleva", "conduce", "guía", "transforma", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva"],
-    "Constancia": ["construye", "consolida", "fortalece", "afianza", "establece", "mantiene", "sostiene", "cultiva", "desarrolla", "perfecciona", "realiza", "concreta", "materializa", "culmina", "finaliza", "ejecuta", "consume", "remata", "corona", "afianza"],
-    "Superacion": ["transforma", "eleva", "fortalece", "empodera", "libera", "enseña", "moldea", "construye", "renueva", "revitaliza", "expande", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
-    "Gratitud": ["transforma", "ilumina", "enaltece", "purifica", "conecta", "abre", "despeja", "fortalece", "restaura", "bendice", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
-    "Logros": ["construyen", "celebran", "reconocen", "impulsan", "motivan", "enseñan", "fortalecen", "abren", "conducen", "materializan", "concretan", "culminan", "finalizan", "ejecutan", "consuman", "rematan", "coronan", "consolidan", "afianzan", "rematan"],
-    "AmorPropio": ["fortalece", "libera", "acepta", "valora", "respeta", "consuela", "abraza", "nutre", "protege", "empodera", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
-    "Esperanza": ["ilumina", "guía", "sostiene", "alienta", "fortalece", "renueva", "abre", "conecta", "asegura", "promete", "anima", "impulsa", "mueve", "despierta", "eleva", "conduce", "transforma", "activa", "estimula", "desata"],
-    "Confianza": ["fortalece", "afianza", "consolida", "reafirma", "valida", "confirma", "certifica", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetúa", "consolida", "afianza", "arraiga", "cimienta", "edifica"],
-    "Resiliencia": ["fortalece", "endurece", "templa", "forja", "moldea", "construye", "asienta", "consolida", "robustece", "afianza", "vigoriza", "tonifica", "corrobora", "afirma", "consolida", "fija", "sostiene", "mantiene", "perpetúa", "consolida"],
-    "Felicidad": ["ilumina", "colma", "plenifica", "satisface", "completa", "regocija", "alegra", "enaltece", "embellece", "perfecciona", "eleva", "expande", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva", "engrandece", "magnifica"],
-    "Proposito": ["guía", "orienta", "encamina", "dirige", "conduce", "lleva", "sirve", "motiva", "inspira", "define", "especifica", "determina", "fija", "marca", "señala", "indica", "muestra", "enseña", "descubre", "revela"],
-    "Optimismo": ["ilumina", "alienta", "fortalece", "anima", "empodera", "renueva", "inspira", "conduce", "guía", "sostiene", "activa", "estimula", "desata", "despliega", "multiplica", "intensifica", "profundiza", "amplía", "extiende", "eleva"],
-    "PazInterior": ["calma", "tranquiliza", "serena", "apacigua", "aquieta", "sosiega", "armoniza", "equilibra", "alinea", "centra", "sosiega", "aquieta", "calma", "tranquiliza", "serena", "apacigua", "aquieta", "sosiega", "armoniza", "equilibra"],
-    "Actitud": ["determina", "marca", "define", "orienta", "dirige", "conduce", "abre", "cierra", "cambia", "transforma", "modifica", "altera", "varía", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova"],
-    "Crecimiento": ["impulsa", "promueve", "facilita", "acelera", "prolonga", "extiende", "intensifica", "multiplica", "magnifica", "engrandece", "eleva", "expande", "despliega", "desata", "desencadena", "destraba", "suelta", "desprende", "libera", "desbloquea"],
-    "Cambio": ["transforma", "modifica", "altera", "varía", "renueva", "reinventa", "reforma", "revoluciona", "rompe", "renueva", "innova", "cambia", "convierte", "adapta", "ajusta", "reorienta", "reencauza", "reconduce", "redefine", "reestructura"],
-    "Libertad": ["expande", "abre", "libera", "desata", "despeja", "desbloquea", "desencadena", "destraba", "suelta", "desprende", "extiende", "multiplica", "intensifica", "profundiza", "amplía", "eleva", "engrandece", "magnifica", "expande", "despliega"],
-    "Aprendizaje": ["enseña", "ilumina", "despeja", "aclara", "educa", "forma", "moldea", "instruye", "capacita", "desarrolla", "entrena", "adiestra", "prepara", "habilita", "familiariza", "introduce", "inicia", "orienta", "guía", "conduce"],
-    "Sabiduria": ["ilumina", "orienta", "guía", "aconseja", "enseña", "descubre", "revela", "acredita", "certifica", "valida", "confirma", "corrobora", "asegura", "garantiza", "establece", "fija", "sostiene", "mantiene", "perpetúa", "consolida"],
-    "Conexion": ["une", "vincula", "enlaza", "conecta", "comunica", "acerca", "integra", "compromete", "solidariza", "comparte", "asocia", "relaciona", "complementa", "armoniza", "equilibra", "sincroniza", "coordina", "ajusta", "adapta", "fusiona"]
-}
-
-COMPLEMENTOS = {
-    "Motivacion": ["tus sueños", "tu camino", "tus metas", "tu fuerza interior", "tu propósito", "tu crecimiento", "tu mejor versión", "tu destino", "tu verdad", "cada paso", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu vida", "tu futuro", "tu presente", "tu pasado", "tu esencia"],
-    "Constancia": ["el éxito", "tus metas", "tus logros", "tu progreso", "tu camino", "tu futuro", "tu disciplina", "tu resistencia", "tu grandeza", "tu victoria", "tu constancia", "tu perseverancia", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño", "tu labor", "tu obra", "tu legado", "tu huella"],
-    "Superacion": ["tu vida", "tu mente", "tu carácter", "tu espíritu", "tu futuro", "tu realidad", "tu ser", "tu propósito", "tu camino", "tu libertad", "tu alma", "tu corazón", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor"],
-    "Gratitud": ["tu vida", "tu corazón", "tu alma", "tu ser", "tu camino", "tu realidad", "tu entorno", "tu familia", "tu presente", "tu futuro", "tu pasado", "tu esencia", "tu verdad", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo"],
-    "Logros": ["tu esfuerzo", "tu dedicación", "tu trabajo", "tu constancia", "tu visión", "tu camino", "tu legado", "tu historia", "tu progreso", "tu destino", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
-    "AmorPropio": ["tu ser", "tu alma", "tu mente", "tu cuerpo", "tu espíritu", "tu esencia", "tu corazón", "tu vida", "tu paz", "tu libertad", "tu verdad", "tu destino", "tu camino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
-    "Esperanza": ["tu futuro", "tu camino", "tu vida", "tu alma", "tu fe", "tu destino", "tu propósito", "tu mañana", "tus sueños", "tu luz", "tu esperanza", "tu ilusión", "tu optimismo", "tu confianza", "tu certeza", "tu convicción", "tu seguridad", "tu firmeza", "tu estabilidad", "tu constancia"],
-    "Confianza": ["tu decisión", "tu camino", "tu proceso", "tu vida", "tu instinto", "tu ser", "tu propósito", "tu destino", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño", "tu labor", "tu obra", "tu legado", "tu huella", "tu verdad", "tu esencia", "tu alma", "tu corazón"],
-    "Resiliencia": ["tu espíritu", "tu corazón", "tu mente", "tu alma", "tu carácter", "tu fuerza", "tu fe", "tu propósito", "tu vida", "tu camino", "tu destino", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño"],
-    "Felicidad": ["tu vida", "tu alma", "tu corazón", "tu mente", "tu ser", "tu espíritu", "tu familia", "tus amigos", "tu camino", "tu destino", "tu propósito", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista"],
-    "Proposito": ["tu vida", "tu camino", "tu destino", "tu misión", "tu vocación", "tu llamado", "tu esfuerzo", "tu trabajo", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización", "tu plenitud"],
-    "Optimismo": ["tu futuro", "tu vida", "tu camino", "tu destino", "tu propósito", "tu fe", "tu alma", "tu corazón", "tu esperanza", "tu luz", "tu ilusión", "tu optimismo", "tu confianza", "tu certeza", "tu convicción", "tu seguridad", "tu firmeza", "tu estabilidad", "tu constancia", "tu perseverancia"],
-    "PazInterior": ["tu mente", "tu corazón", "tu alma", "tu espíritu", "tu ser", "tu vida", "tu destino", "tu camino", "tu propósito", "tu felicidad", "tu paz", "tu tranquilidad", "tu serenidad", "tu calma", "tu armonía", "tu equilibrio", "tu sosiego", "tu quietud", "tu placidez", "tu clemencia"],
-    "Actitud": ["tu día", "tu semana", "tu mes", "tu año", "tu vida", "tu proyecto", "tu meta", "tu objetivo", "tu misión", "tu propósito", "tu camino", "tu destino", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
-    "Crecimiento": ["tu persona", "tu carácter", "tu mente", "tu espíritu", "tu alma", "tu vida", "tu futuro", "tu camino", "tu destino", "tu misión", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
-    "Cambio": ["tu vida", "tu realidad", "tu futuro", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu esencia", "tu verdad", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo"],
-    "Libertad": ["tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu vida", "tu camino", "tu destino", "tu propósito", "tu verdad", "tu esencia", "tu historia", "tu legado", "tu huella", "tu obra", "tu labor", "tu esfuerzo", "tu trabajo", "tu dedicación", "tu empeño"],
-    "Aprendizaje": ["tu vida", "tu camino", "tu mente", "tu ser", "tu alma", "tu espíritu", "tu destino", "tu propósito", "tu legado", "tu futuro", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
-    "Sabiduria": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"],
-    "Conexion": ["tu vida", "tu camino", "tu destino", "tu propósito", "tu ser", "tu alma", "tu mente", "tu corazón", "tu espíritu", "tu legado", "tu meta", "tu objetivo", "tu éxito", "tu triunfo", "tu victoria", "tu avance", "tu progreso", "tu cumplimiento", "tu conquista", "tu realización"]
-}
-
-# ============================================
-# 🗣️ FRASES COLOQUIALES Y SENCILLAS
-# ============================================
-INICIOS_COLOQUIALES = [
-    "Mira,",
-    "Es que",
-    "La cosa es que",
-    "A veces pasa que",
-    "Te digo algo,",
-    "Lo bueno es que",
-    "El tema es que",
-    "Fíjate que",
-    "Resulta que",
-    "La verdad es que",
-    "O sea,",
-    "Bueno,",
-    "Piensa esto:",
-    "Imagínate que",
-    "Lo cierto es que",
-    "Sin duda,",
-    "Vale,"
-]
-
-PREGUNTAS_RETORICAS_SENCILLAS = [
-    "¿sabes?",
-    "¿no te parece?",
-    "¿verdad?",
-    "¿te das cuenta?",
-    "¿no crees?",
-    "¿a que sí?",
-    "¿lo ves?",
-    "¿me entiendes?",
-    "¿no es así?",
-    "¿qué te parece?"
-]
-
-def hacer_sencilla(frase):
-    """Convierte una frase en algo más sencillo y coloquial."""
-    if not frase:
-        return frase
-    # Asegurar mayúscula
-    if frase[0].islower():
-        frase = frase[0].upper() + frase[1:]
-    # Añadir inicio coloquial (a veces)
-    if random.random() < 0.5:
-        intro = random.choice(INICIOS_COLOQUIALES)
-        if intro[-1] in [",", ":", ";"]:
-            frase = f"{intro} {frase[0].lower() + frase[1:]}"
-        else:
-            frase = f"{intro} {frase[0].lower() + frase[1:]}"
-    # Añadir pregunta retórica (a veces)
-    if random.random() < 0.3:
-        pregunta = random.choice(PREGUNTAS_RETORICAS_SENCILLAS)
-        if frase[-1] in [".", "?", "!"]:
-            frase = frase[:-1] + " " + pregunta
-        else:
-            frase = frase + " " + pregunta
-    return frase
 
 # ============================================
 # 📝 GENERACIÓN DE PREGUNTA Y DESARROLLO
 # ============================================
-INICIOS_PREGUNTA = [
-    "Alguna vez has sentido que",
-    "Qué pasaría si",
-    "Cuánto tiempo más vas a",
-    "Por qué",
-    "Cómo",
-    "Qué te impide",
-    "Qué harías si",
-    "Estás listo para",
-    "Cuándo fue la última vez que",
-    "En qué momento decidiste",
-    "De qué manera",
-    "Hasta cuándo",
-    "Qué crees que pasaría si",
-    "Por qué crees que",
-    "Qué significa para ti",
-    "Cómo te sientes cuando",
-    "Qué cambiarías de",
-    "Cuál es la razón por la que",
-    "Qué esperas de",
-    "Qué te gustaría decirle a"
-]
-
 def generar_pregunta(tema_nombre):
-    sujeto = random.choice(SUJETOS.get(tema_nombre, SUJETOS["Motivacion"])).lower()
-    verbo = random.choice(VERBOS.get(tema_nombre, VERBOS["Motivacion"])).lower()
-    complemento = random.choice(COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS["Motivacion"])).lower()
-    inicio = random.choice(INICIOS_PREGUNTA)
-    opciones = [
-        f"{inicio} {sujeto} {verbo} {complemento}?",
-        f"{inicio} {sujeto} {verbo} {complemento} sin miedo?",
-        f"{inicio} {sujeto} {verbo} {complemento} y alcanzar tus metas?",
-        f"{inicio} {sujeto} {verbo} {complemento} cuando todo parece difícil?",
-        f"{inicio} {sujeto} {verbo} {complemento} a pesar de los obstáculos?"
+    """Genera una pregunta clara y directa sobre el tema."""
+    preguntas_base = [
+        f"¿Alguna vez has reflexionado sobre la importancia de {tema_nombre.lower()} en tu vida?",
+        f"¿Qué significa para ti {tema_nombre.lower()}?",
+        f"¿Cómo aplicas {tema_nombre.lower()} en tu día a día?",
+        f"¿Crees que {tema_nombre.lower()} puede cambiar tu forma de ver las cosas?",
+        f"¿Cuál es tu mayor aprendizaje sobre {tema_nombre.lower()}?",
+        f"¿Te has preguntado alguna vez cómo {tema_nombre.lower()} influye en tus decisiones?",
+        f"¿Qué harías si te faltara {tema_nombre.lower()} en tu vida?",
+        f"¿Cuándo fue la última vez que practicaste {tema_nombre.lower()} de forma consciente?",
+        f"¿Cómo te sientes cuando hablas de {tema_nombre.lower()}?",
+        f"¿Qué consejo darías sobre {tema_nombre.lower()} a alguien que empieza?"
     ]
-    pregunta = random.choice(opciones)
-    # Asegurar signos de interrogación
-    if not pregunta.startswith("¿"):
-        pregunta = "¿" + pregunta
-    if not pregunta.endswith("?"):
-        pregunta += "?"
-    return pregunta
+    return random.choice(preguntas_base)
 
 def generar_frase_desarrollo(tema_nombre):
-    sujetos = SUJETOS.get(tema_nombre, SUJETOS_UNIVERSALES)
-    verbos = VERBOS.get(tema_nombre, VERBOS_UNIVERSALES)
-    complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
-    
-    if tema_nombre not in SUJETOS:
-        # Detectar género para el artículo
+    """Genera una frase de desarrollo con sentido, específica para el tema."""
+    # Si el tema está en la lista de frases predefinidas, usamos esas
+    if tema_nombre in FRASES_POR_TEMA:
+        frases = FRASES_POR_TEMA[tema_nombre]
+        frase = random.choice(frases)
+    else:
+        # Para temas no predefinidos, usamos plantillas universales
+        # Detectamos género para el artículo (opcional)
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
         if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
-            articulo = "La"
+            articulo = "la"
         else:
-            articulo = "El"
+            articulo = "el"
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
-            articulo = "El"
+            articulo = "el"
         
-        # Patrones sencillos para temas no predefinidos
-        patrones = [
-            f"{articulo} {tema_nombre} te enseña a {random.choice(verbos)} {random.choice(complementos)}.",
-            f"Reflexionar sobre {articulo.lower()} {tema_nombre} te ayuda a {random.choice(verbos)} {random.choice(complementos)}.",
-            f"Cada día puedes usar {articulo.lower()} {tema_nombre} para {random.choice(verbos)} {random.choice(complementos)}.",
-            f"{articulo} {tema_nombre} está ahí para que {random.choice(verbos)} {random.choice(complementos)}.",
-            f"Aceptar {articulo.lower()} {tema_nombre} es el primer paso para {random.choice(verbos)} {random.choice(complementos)}.",
-            f"Cuando hablamos de {articulo.lower()} {tema_nombre}, hablamos de {random.choice(verbos)} {random.choice(complementos)}.",
-        ]
-        frase = random.choice(patrones)
-    else:
-        sujeto = random.choice(sujetos)
-        verbo = random.choice(verbos)
-        complemento = random.choice(complementos)
-        # Patrones más sencillos y directos
-        plantillas = [
-            f"{sujeto} {verbo} {complemento}.",
-            f"Es que {sujeto.lower()} {verbo} {complemento}.",
-            f"La verdad es que {sujeto.lower()} {verbo} {complemento}.",
-            f"Fíjate que {sujeto.lower()} {verbo} {complemento}.",
-            f"O sea, {sujeto.lower()} {verbo} {complemento}.",
-            f"Bueno, {sujeto.lower()} {verbo} {complemento}.",
-            f"Mira, {sujeto.lower()} {verbo} {complemento}.",
-        ]
-        frase = random.choice(plantillas)
+        verbo = random.choice(VERBOS_UNIVERSALES)
+        complemento = random.choice(COMPLEMENTOS_UNIVERSALES)
+        
+        plantilla = random.choice(FRASES_UNIVERSALES)
+        frase = plantilla.format(
+            verbo=verbo,
+            complemento=complemento,
+            tema=articulo + " " + tema_nombre
+        )
+        # Asegurar mayúscula inicial y punto final
+        frase = frase[0].upper() + frase[1:]
+        if frase[-1] not in [".", "!", "?"]:
+            frase += "."
     
-    # Aplicar simplificación (con probabilidad)
-    if random.random() < 0.6:
-        frase = hacer_sencilla(frase)
-    else:
-        if frase and frase[0].islower():
-            frase = frase[0].upper() + frase[1:]
+    # Añadir un toque coloquial (a veces)
+    if random.random() < 0.2:
+        intro = random.choice(["Mira, ", "O sea, ", "Fíjate, ", "Es que ", "La verdad es que "])
+        frase = intro + frase[0].lower() + frase[1:]
+    
+    # Añadir pregunta retórica (a veces, pero no siempre)
+    if random.random() < 0.2:
+        retorica = random.choice([" ¿no te parece?", " ¿verdad?", " ¿a que sí?"])
+        frase = frase.rstrip(".!?") + retorica + "."
+    
     return frase
 
 def generar_texto_completo(tema_nombre):
+    """Genera el texto completo: pregunta + 6-8 frases de desarrollo."""
     pregunta = generar_pregunta(tema_nombre)
-    num_desarrollo = random.choice([6, 7, 8])
-    desarrollo = []
-    for _ in range(num_desarrollo):
-        desarrollo.append(generar_frase_desarrollo(tema_nombre))
-    random.shuffle(desarrollo)
-    # Unir pregunta y desarrollo con saltos de línea
-    texto_completo = pregunta + "\n\n" + "\n\n".join(desarrollo)
+    
+    # Seleccionar un conjunto de frases (6-8) para este tema
+    # Si el tema está en las predefinidas, tomamos de ahí; si no, usamos universales.
+    num_frases = random.choice([6, 7, 8])
+    frases = []
+    for _ in range(num_frases):
+        frases.append(generar_frase_desarrollo(tema_nombre))
+    
+    # Mezclar las frases para que no siempre aparezcan en el mismo orden
+    random.shuffle(frases)
+    
+    # Unir todo con saltos de línea dobles
+    texto_completo = pregunta + "\n\n" + "\n\n".join(frases)
     return texto_completo
 
 def dividir_en_parrafos(texto, num_partes):
     """
     Divide el texto en párrafos de entre 3 y 5 líneas, sin cortar oraciones.
     """
+    # Eliminar posibles cierres previos
     texto = re.sub(r'Te leo en los comentarios\s*[.!?]*\s*', '', texto)
+    
+    # Separar por oraciones (., !, ?)
     oraciones = re.findall(r'[^.!?]+[.!?]', texto)
     oraciones = [o.strip() for o in oraciones if len(o.strip()) > 5]
     
     if not oraciones:
         oraciones = [texto.strip()]
     
-    random.shuffle(oraciones)
+    # Mezclar un poco las oraciones, pero mantener la pregunta al inicio
+    # Para ello, guardamos la primera oración (que debería ser la pregunta)
+    if oraciones and "¿" in oraciones[0]:
+        pregunta = oraciones[0]
+        resto = oraciones[1:]
+        random.shuffle(resto)
+        oraciones = [pregunta] + resto
+    else:
+        random.shuffle(oraciones)
     
     parrafos = []
     grupo_actual = []
@@ -336,6 +441,7 @@ def dividir_en_parrafos(texto, num_partes):
     if grupo_actual:
         parrafos.append(" ".join(grupo_actual))
     
+    # Ajustar al número deseado de párrafos
     while len(parrafos) > num_partes - 1:
         ultimo = parrafos.pop() + " " + parrafos.pop()
         parrafos.append(ultimo)
@@ -357,6 +463,7 @@ def crear_video(texto, dia_semana, tema_nombre, numero):
 
     parrafos = dividir_en_parrafos(texto, num_parrafos)
 
+    # Obtener imagen de fondo
     palabras_clave = texto.split()[:4]
     tema_imagen = " ".join(palabras_clave) if palabras_clave else "motivacion"
     tema_imagen = re.sub(r'[^\w\s]', '', tema_imagen)
@@ -414,7 +521,6 @@ def crear_video(texto, dia_semana, tema_nombre, numero):
             bbox = draw.textbbox((0, 0), linea, font=font)
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
-            # Borde negro grueso
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
@@ -453,7 +559,7 @@ def seleccionar_temas(opcion, videos_por_dia):
         return {i: opcion for i in range(7)}
 
 # ============================================
-# 🚀 EJECUCIÓN PRINCIPAL (con argumentos y ZIP directo)
+# 🚀 EJECUCIÓN PRINCIPAL
 # ============================================
 if __name__ == "__main__":
     import argparse
@@ -468,7 +574,7 @@ if __name__ == "__main__":
     videos_por_dia = args.videos
     tema_input = args.tema
 
-    # 🔥 El ZIP se llamará DD-MM-AAAA.zip por defecto
+    # ZIP con formato DD-MM-AAAA.zip
     fecha_actual = datetime.now().strftime("%d-%m-%Y")
     if args.zip:
         nombre_zip = args.zip if args.zip.endswith(".zip") else args.zip + ".zip"
@@ -507,7 +613,6 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    # 🔥 Añadir solo el nombre del archivo (sin ruta)
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
