@@ -14,7 +14,7 @@ on:
         default: 'todo'
         type: string
   schedule:
-    - cron: '0 10 * * 0'  # Todos los domingos a las 10 AM UTC (6 AM Venezuela)
+    - cron: '0 10 * * 0'  # Todos los domingos a las 10 AM UTC
 
 jobs:
   generar:
@@ -31,7 +31,8 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          pip install moviepy pillow requests
+          pip install --upgrade pip
+          pip install moviepy==1.0.3 pillow requests
 
       - name: Ejecutar generador semanal
         env:
