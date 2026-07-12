@@ -183,10 +183,8 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
-        # 🔥 CORRECCIÓN: Determinar artículo correcto para temas no predefinidos
-        # Por defecto usamos "El" (masculino), pero si termina en "a" usamos "La"
+        # Determinar artículo correcto para temas no predefinidos
         articulo = "El" if not tema_nombre.endswith(("a", "ad", "ión", "umbre", "dad", "tad", "sis")) else "La"
-        # Excepciones conocidas
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "proposito", "optimismo", "entusiasmo"]:
             articulo = "El"
         patrones = [
@@ -204,78 +202,84 @@ def generar_frase_desarrollo(tema_nombre):
         return f"{sujeto} {verbo} {complemento}."
 
 def generar_texto_completo(tema_nombre):
-    # 🔥 Generamos la pregunta por separado
     pregunta = generar_pregunta(tema_nombre)
     num_desarrollo = random.choice([6, 7, 8])
     desarrollo = []
     for _ in range(num_desarrollo):
         desarrollo.append(generar_frase_desarrollo(tema_nombre))
     random.shuffle(desarrollo)
-    # Devolvemos la pregunta y la lista de desarrollo por separado
     return pregunta, desarrollo
 
-def dividir_en_parrafos(pregunta, desarrollo, num_partes):
+def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
     """
-    Divide el texto en párrafos. La pregunta va siempre al inicio.
-    El resto de párrafos se forman a partir de las oraciones de desarrollo.
+    Divide el contenido en exactamente num_parrafos párrafos.
+    - El primer párrafo es siempre la pregunta.
+    - El último párrafo es siempre "Te leo en los comentarios".
+    - Los párrafos intermedios se rellenan con las oraciones de desarrollo,
+      distribuidas de manera equitativa.
     """
-    # Primero, separamos la pregunta en oraciones (solo una, pero por si acaso)
+    # 1. Preparar la pregunta como un solo párrafo
     oraciones_pregunta = re.findall(r'[^.!?]+[.!?]', pregunta)
     if not oraciones_pregunta:
         oraciones_pregunta = [pregunta.strip()]
+    parrafo_pregunta = " ".join(oraciones_pregunta)
     
-    # Unimos todas las oraciones de desarrollo en un solo texto
+    # 2. Extraer oraciones del desarrollo
     texto_desarrollo = " ".join(desarrollo)
-    # Extraemos oraciones del desarrollo
-    oraciones_desarrollo = re.findall(r'[^.!?]+[.!?]', texto_desarrollo)
-    oraciones_desarrollo = [o.strip() for o in oraciones_desarrollo if len(o.strip()) > 5]
+    oraciones = re.findall(r'[^.!?]+[.!?]', texto_desarrollo)
+    oraciones = [o.strip() for o in oraciones if len(o.strip()) > 5]
+    if not oraciones:
+        oraciones = ["Sigue adelante con fe y determinacion."]
     
-    if not oraciones_desarrollo:
-        oraciones_desarrollo = ["Sigue adelante con fe y determinacion."]
+    # 3. Mezclar oraciones de desarrollo
+    random.shuffle(oraciones)
     
-    # Mezclamos las oraciones de desarrollo (pero no la pregunta)
-    random.shuffle(oraciones_desarrollo)
+    # 4. Número de párrafos intermedios (total - 2: pregunta y cierre)
+    num_intermedios = num_parrafos - 2
+    if num_intermedios < 1:
+        # Forzar al menos 3 párrafos (pregunta, un intermedio, cierre)
+        num_parrafos = 3
+        num_intermedios = 1
     
-    # Construimos los párrafos: el primero es la pregunta
-    parrafos = []
-    # Agregamos la pregunta como un solo párrafo (puede tener varias oraciones, pero las unimos)
-    parrafos.append(" ".join(oraciones_pregunta))
+    # 5. Repartir oraciones entre los párrafos intermedios
+    total_oraciones = len(oraciones)
+    # Asegurar que haya al menos una oración por párrafo intermedio
+    while total_oraciones < num_intermedios:
+        oraciones.append("Sigue adelante con fe y determinacion.")
+        total_oraciones += 1
     
-    # Ahora agrupamos las oraciones de desarrollo en párrafos de 3 a 5 líneas
-    grupo_actual = []
-    lineas_objetivo = random.randint(3, 5)
-    lineas_actuales = 0
+    # Dividir en grupos lo más equitativamente posible
+    oraciones_por_parrafo = total_oraciones // num_intermedios
+    resto = total_oraciones % num_intermedios
+    grupos = []
+    indice = 0
+    for i in range(num_intermedios):
+        extra = 1 if i < resto else 0
+        fin = indice + oraciones_por_parrafo + extra
+        grupos.append(oraciones[indice:fin])
+        indice = fin
     
-    for oracion in oraciones_desarrollo:
-        lineas_oracion = max(1, len(oracion) // 28)
-        if lineas_actuales + lineas_oracion > lineas_objetivo and grupo_actual:
-            parrafos.append(" ".join(grupo_actual))
-            grupo_actual = []
-            lineas_actuales = 0
-            lineas_objetivo = random.randint(3, 5)
-        grupo_actual.append(oracion)
-        lineas_actuales += lineas_oracion
+    # Unir cada grupo en un párrafo
+    parrafos_intermedios = [" ".join(g) for g in grupos]
     
-    if grupo_actual:
-        parrafos.append(" ".join(grupo_actual))
+    # 6. Armar lista final: [pregunta] + intermedios + [cierre]
+    parrafos = [parrafo_pregunta] + parrafos_intermedios + ["Te leo en los comentarios"]
     
-    # Ajustamos para que el número total de párrafos sea exactamente num_partes
-    while len(parrafos) > num_partes:
-        # Si hay más párrafos de los necesarios, fusionamos los dos últimos
-        ultimo = parrafos.pop() + " " + parrafos.pop()
-        parrafos.append(ultimo)
-    while len(parrafos) < num_partes:
-        # Si faltan, añadimos una frase de relleno
-        parrafos.append("Sigue adelante con fe y determinacion.")
+    # Ajustar por si sobra o falta algún párrafo (por seguridad)
+    if len(parrafos) > num_parrafos:
+        parrafos = parrafos[:num_parrafos]
+        parrafos[-1] = "Te leo en los comentarios"
+    elif len(parrafos) < num_parrafos:
+        while len(parrafos) < num_parrafos - 1:
+            parrafos.insert(-1, "Sigue adelante con fe y determinacion.")
+        if len(parrafos) < num_parrafos:
+            parrafos.append("Te leo en los comentarios")
     
-    # Aseguramos que el último párrafo sea "Te leo en los comentarios"
-    parrafos[-1] = "Te leo en los comentarios"
-    
-    return parrafos[:num_partes]
+    return parrafos
 
 def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
-    # Número aleatorio de párrafos (6, 7 u 8)
-    num_parrafos = random.choice([6, 7, 8])
+    # 🔥 Número de párrafos aleatorio entre 5 y 7
+    num_parrafos = random.choice([5, 6, 7])
     duracion_total = random.uniform(70, 85)
     duracion_por_parrafo = duracion_total / num_parrafos
     duraciones = [duracion_por_parrafo] * num_parrafos
@@ -284,7 +288,7 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
     print(f"   ⏱️  Cada parrafo: {duracion_por_parrafo:.1f}s")
     os.makedirs("videos", exist_ok=True)
 
-    # Dividir en párrafos (la pregunta va al inicio)
+    # Dividir en párrafos (la pregunta al inicio, el cierre al final)
     parrafos = dividir_en_parrafos(pregunta, desarrollo, num_parrafos)
 
     # Obtener imagen de fondo
