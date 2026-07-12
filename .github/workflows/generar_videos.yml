@@ -1,44 +1,41 @@
-name: Generar Videos TikTok
+name: Generar videos por día
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
+    inputs:
+      videos_por_dia:
+        description: 'Número de videos por día (ej: 5)'
+        required: true
+        default: '5'
+        type: number
+  schedule:
+    - cron: '0 10 * * 0'  # Todos los domingos a las 10 AM UTC (6 AM Venezuela)
 
 jobs:
-  build:
+  generar:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
-
+      
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
-      - name: Instalar ffmpeg (necesario para moviepy)
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
-      - name: Instalar dependencias desde requirements.txt
+      
+      - name: Instalar dependencias
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Verificar instalación
-        run: pip list | grep -E "moviepy|requests|Pillow"
-
-      - name: Ejecutar generador
+          pip install google-genai moviepy pillow requests
+      
+      - name: Ejecutar generador semanal
         env:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-          NUM_VIDEOS: 3
-          THEME: "todo"
-          ZIP_NAME: "Videos-$(date +'%Y%m%d').zip"
-        run: python por_dia.py
-
-      - name: Subir ZIP como artefacto
+        run: |
+          echo "${{ github.event.inputs.videos_por_dia }}" | python por_dia.py
+      
+      - name: Subir videos generados
         uses: actions/upload-artifact@v4
         with:
           name: videos-generados
-          path: Videos-*.zip
+          path: videos/
