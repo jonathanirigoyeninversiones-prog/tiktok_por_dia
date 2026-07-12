@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 import json
@@ -227,7 +228,7 @@ def generar_pregunta(tema_nombre):
         inicio + " " + sujeto + " " + verbo + " " + complemento + " a pesar de los obstáculos?"
     ]
     pregunta = random.choice(opciones)
-    # Asegurar signos de interrogación al inicio y al final
+    # Asegurar signos de interrogación
     if not pregunta.startswith("¿"):
         pregunta = "¿" + pregunta
     if not pregunta.endswith("?"):
@@ -257,7 +258,6 @@ def generar_frase_desarrollo(tema_nombre):
         complemento = random.choice(complementos)
         frase = f"{sujeto} {verbo} {complemento}."
     
-    # Humanizar: añadir intro o pregunta retórica
     if random.random() < 0.7:
         frase = humanizar_frase(frase)
     return frase
@@ -404,30 +404,13 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
         altura_bloque = total_lineas * (font_size * 1.3)
         y_inicio = 1920 - altura_bloque - 200
 
-        # Dibujar un fondo semitransparente para mejorar legibilidad
-        # (opcional, pero ayuda mucho en fondos claros)
-        # Calculamos el ancho máximo de línea
-        max_ancho = 0
-        for linea in lineas:
-            bbox = draw.textbbox((0, 0), linea, font=font)
-            ancho = bbox[2] - bbox[0]
-            if ancho > max_ancho:
-                max_ancho = ancho
-        # Dibujar rectángulo negro semitransparente detrás del texto
-        margen_x = 30
-        x0 = (1080 - max_ancho) // 2 - margen_x
-        y0 = y_inicio - 30
-        x1 = (1080 + max_ancho) // 2 + margen_x
-        y1 = y_inicio + altura_bloque + 30
-        draw.rectangle([x0, y0, x1, y1], fill=(0, 0, 0, 120))  # 120 de opacidad
-
-        # Dibujar cada línea con borde negro grueso
+        # Dibujar cada línea con borde negro grueso (sin fondo)
         y = y_inicio
         for linea in lineas:
             bbox = draw.textbbox((0, 0), linea, font=font)
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
-            # Borde negro más grueso (stroke_width=5)
+            # Borde negro grueso (stroke_width=5) y sombra ligera (opcional)
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
