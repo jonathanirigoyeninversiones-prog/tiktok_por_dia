@@ -40,10 +40,9 @@ jobs:
         run: |
           python por_dia.py --videos ${{ github.event.inputs.videos_por_dia }} --tema "${{ github.event.inputs.tema }}" --zip Videos-generados
 
-      - name: Subir videos y ZIP
+      - name: Subir videos generados
         uses: actions/upload-artifact@v4
         with:
           name: videos-generados
           path: |
-            videos/
-            *.zip
+            *.zip   # <--- SOLO EL ZIP
