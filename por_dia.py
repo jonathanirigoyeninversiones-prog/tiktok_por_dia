@@ -340,7 +340,7 @@ def obtener_imagenes_pexels(query, cantidad):
     headers = {"Authorization": CLAVE_PEXELS}
     params = {
         "query": query,
-        "per_page": max(cantidad, 5),  # pedir al menos 5
+        "per_page": max(cantidad, 5),
         "orientation": "portrait",
         "page": random.randint(1, 5)
     }
@@ -349,11 +349,9 @@ def obtener_imagenes_pexels(query, cantidad):
         if resp.status_code == 200:
             fotos = resp.json().get("photos", [])
             if fotos:
-                # Devolver hasta 'cantidad' imágenes
                 return [foto["src"]["large"] for foto in fotos[:cantidad]]
     except:
         pass
-    # Fallback: imagen por defecto
     return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
 def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
@@ -368,28 +366,23 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
 
     parrafos = dividir_en_parrafos(pregunta, desarrollo, num_parrafos)
 
-    # Obtener palabras clave para la búsqueda de imágenes
     palabras_clave = (pregunta + " " + " ".join(desarrollo)).split()[:6]
     query = " ".join(palabras_clave) if palabras_clave else "motivacion"
     query = re.sub(r'[^\w\s]', '', query)
 
-    # Obtener una imagen para cada párrafo
     imagenes_urls = obtener_imagenes_pexels(query, num_parrafos)
-    # Asegurar que tenemos al menos num_parrafos imágenes
     while len(imagenes_urls) < num_parrafos:
         imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
 
     clips = []
     for i, parrafo in enumerate(parrafos):
-        # Descargar la imagen correspondiente
         try:
             img_data = requests.get(imagenes_urls[i], timeout=10).content
             with open(f"temp_fondo_{i}.jpg", "wb") as f:
                 f.write(img_data)
             img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
         except:
-            # Si falla, usar imagen por defecto
-            img = Image.open("temp_fondo_default.jpg").convert("RGB") if os.path.exists("temp_fondo_default.jpg") else Image.new("RGB", (1080, 1920), color=(50, 50, 50))
+            img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
         
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
@@ -427,7 +420,6 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         clips.append(clip)
 
-        # Limpiar imagen de fondo temporal
         try:
             os.remove(f"temp_fondo_{i}.jpg")
         except:
@@ -443,7 +435,6 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {nombre}")
 
-    # Limpieza final
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
             try:
@@ -515,7 +506,8 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), "."))
+                    # 🔥 Añadir solo el nombre del archivo (sin ruta de carpetas)
+                    zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
     else:
