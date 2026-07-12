@@ -6,36 +6,43 @@ on:
       videos_por_dia:
         description: 'Número de videos por día (ej: 5)'
         required: true
-        default: '5'
+        default: 5
         type: number
+      tema:
+        description: 'Tema o "todo" para aleatorio'
+        required: false
+        default: 'todo'
+        type: string
   schedule:
     - cron: '0 10 * * 0'  # Todos los domingos a las 10 AM UTC (6 AM Venezuela)
 
 jobs:
   generar:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
-      
+
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      
+
       - name: Instalar dependencias
         run: |
-          pip install google-genai moviepy pillow requests
-      
+          pip install moviepy pillow requests
+
       - name: Ejecutar generador semanal
         env:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: |
-          echo "${{ github.event.inputs.videos_por_dia }}" | python por_dia.py
-      
-      - name: Subir videos generados
+          python por_dia.py --videos ${{ github.event.inputs.videos_por_dia }} --tema "${{ github.event.inputs.tema }}" --zip Videos-generados
+
+      - name: Subir videos y ZIP
         uses: actions/upload-artifact@v4
         with:
           name: videos-generados
-          path: videos/
+          path: |
+            videos/
+            *.zip
