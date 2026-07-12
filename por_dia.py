@@ -354,13 +354,13 @@ def obtener_imagenes_pexels(query, cantidad):
         pass
     return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
-def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
+def crear_video(pregunta, desarrollo, dia_semana, tema_nombre):
     num_parrafos = random.choice([5, 6, 7])
     duracion_total = random.uniform(70, 85)
     duracion_por_parrafo = duracion_total / num_parrafos
     duraciones = [duracion_por_parrafo] * num_parrafos
 
-    print(f"   🎬 Video {numero} ({dia_semana} - {tema_nombre}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
+    print(f"   🎬 Video {dia_semana} - {tema_nombre} - {num_parrafos} párrafos, {duracion_total:.1f}s")
     print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
     os.makedirs("videos", exist_ok=True)
 
@@ -427,13 +427,16 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
 
     video = concatenate_videoclips(clips, method="compose")
 
+    # 🔥 FORMATO DE NOMBRE: Dia-Tema-Fecha-Hora (sin número de video)
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
-    fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
-    nombre = f"videos/{dia_semana}-{tema_nombre}-{fecha_hora}-video-{numero:03d}.mp4"
+    fecha_hora = ahora.strftime("%d-%m-%Y-%H:%M:%S")  # Con dos puntos en la hora
+    nombre = f"{dia_semana}-{tema_nombre}-{fecha_hora}.mp4"
 
-    video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
-    print(f"   ✅ Video guardado: {nombre}")
+    # Guardar en la carpeta 'videos/'
+    ruta = os.path.join("videos", nombre)
+    video.write_videofile(ruta, fps=15, codec="libx264", audio=False)
+    print(f"   ✅ Video guardado: {ruta}")
 
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
@@ -496,7 +499,7 @@ if __name__ == "__main__":
 
         for i in range(videos_por_dia):
             pregunta, desarrollo = generar_texto_completo(tema_nombre)
-            crear_video(pregunta, desarrollo, dia_nombre, tema_nombre, i+1)
+            crear_video(pregunta, desarrollo, dia_nombre, tema_nombre)
             time.sleep(0.5)
 
     print("\n🎉 ¡Todos los videos generados!")
