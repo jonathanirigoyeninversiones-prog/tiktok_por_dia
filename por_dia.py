@@ -181,7 +181,6 @@ PREGUNTAS_RETORICAS = [
 ]
 
 def humanizar_frase(frase):
-    """Añade una muletilla o pregunta retórica para sonar más natural, respetando gramática."""
     if frase and frase[0].islower():
         frase = frase[0].upper() + frase[1:]
     if random.random() < 0.4:
@@ -335,7 +334,6 @@ def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
     return parrafos
 
 def obtener_imagenes_pexels(query, cantidad):
-    """Obtiene una lista de URLs de imágenes de Pexels para la consulta dada."""
     url = "https://api.pexels.com/v1/search"
     headers = {"Authorization": CLAVE_PEXELS}
     params = {
@@ -427,13 +425,13 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre):
 
     video = concatenate_videoclips(clips, method="compose")
 
-    # 🔥 FORMATO DE NOMBRE: Dia-Tema-Fecha-Hora (sin número de video)
+    # 🔥 NOMBRE VÁLIDO PARA GITHUB ACTIONS (sin : ni espacios)
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
-    fecha_hora = ahora.strftime("%d-%m-%Y-%H:%M:%S")  # Con dos puntos en la hora
-    nombre = f"{dia_semana}-{tema_nombre}-{fecha_hora}.mp4"
+    fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")  # guiones en lugar de dos puntos
+    tema_limpio = tema_nombre.replace(" ", "-")        # espacios a guiones
+    nombre = f"{dia_semana}-{tema_limpio}-{fecha_hora}.mp4"
 
-    # Guardar en la carpeta 'videos/'
     ruta = os.path.join("videos", nombre)
     video.write_videofile(ruta, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {ruta}")
@@ -509,7 +507,6 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    # 🔥 Añadir solo el nombre del archivo (sin ruta de carpetas)
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
