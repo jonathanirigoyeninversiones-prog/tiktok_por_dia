@@ -34,7 +34,7 @@ TEMAS_PREDEFINIDOS = [
     "Felicidad",
     "Proposito",
     "Optimismo",
-    "Paz",          # <--- CAMBIADO: antes era "PazInterior"
+    "Paz",
     "Actitud",
     "Crecimiento",
     "Cambio",
@@ -192,12 +192,12 @@ FRASES_POR_TEMA = {
         "La ilusión te mantiene joven y con ganas de vivir cada día.",
         "La certeza de que todo irá bien te da paz y tranquilidad."
     ],
-    "Paz": [  # <--- CAMBIADO: antes era "PazInterior"
+    "Paz": [
         "La paz interior te permite vivir con serenidad y equilibrio.",
         "La calma te ayuda a tomar decisiones sin dejarte llevar por el estrés.",
         "La tranquilidad llega cuando aprendes a soltar lo que no puedes controlar.",
         "La armonía te conecta con tu esencia y con el mundo que te rodea.",
-        "La tranquilidad te da la claridad mental para resolver cualquier problema.",  # <--- CAMBIADO: "sosiego" → "tranquilidad"
+        "La tranquilidad te da la claridad mental para resolver cualquier problema.",
         "La quietud te permite escuchar tu voz interior y actuar con sabiduría.",
         "La serenidad te envuelve cuando aceptas la vida tal como es.",
         "El equilibrio emocional es la clave para una vida plena y feliz.",
@@ -384,8 +384,8 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
     
     parrafos.extend(frases_seleccionadas)
     
-    # Último párrafo: cierre
-    parrafos.append("Te leo en los comentarios")
+    # Último párrafo: cierre (¡cambiado!)
+    parrafos.append("¿Qué piensas? Te leo en los comentarios")
     
     # Ajustar al número exacto de párrafos
     while len(parrafos) < num_parrafos:
