@@ -252,7 +252,6 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
-        # Determinar artículo correcto para temas no predefinidos
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
         if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "La"
@@ -261,7 +260,6 @@ def generar_frase_desarrollo(tema_nombre):
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "El"
         
-        # Plantillas coloquiales para temas no predefinidos
         patrones_coloquiales = [
             f"{articulo} {tema_nombre} te enseña a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
             f"Reflexionar sobre {articulo.lower()} {tema_nombre} te ayuda a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
@@ -277,7 +275,6 @@ def generar_frase_desarrollo(tema_nombre):
         sujeto = random.choice(sujetos)
         verbo = random.choice(verbos)
         complemento = random.choice(complementos)
-        # Plantillas coloquiales para temas predefinidos
         plantillas = [
             f"{sujeto} {verbo} {complemento}.",
             f"Es que {sujeto.lower()} {verbo} {complemento}.",
@@ -290,7 +287,6 @@ def generar_frase_desarrollo(tema_nombre):
         ]
         frase = random.choice(plantillas)
     
-    # Aplicar coloquialización adicional
     if random.random() < 0.7:
         frase = coloquializar_frase(frase)
     else:
@@ -530,7 +526,6 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    # 🔥 AÑADE SOLO EL NOMBRE DEL ARCHIVO (SIN RUTA)
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
