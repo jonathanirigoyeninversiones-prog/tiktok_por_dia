@@ -14,20 +14,18 @@ on:
         default: 'todo'
         type: string
   schedule:
-    - cron: '0 10 * * 0'
+    - cron: '0 10 * * 0'  # Todos los domingos a las 10 AM UTC
 
 jobs:
   generar:
     runs-on: ubuntu-latest
 
     steps:
-      # actions/checkout pasa de v4 a v5
       - name: Clonar repositorio
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      # actions/setup-python pasa de v5 a v6
       - name: Configurar Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -42,10 +40,9 @@ jobs:
         run: |
           python por_dia.py --videos ${{ github.event.inputs.videos_por_dia }} --tema "${{ github.event.inputs.tema }}" --zip Videos-generados
 
-      # actions/upload-artifact pasa de v4 a v5
       - name: Subir videos generados
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: videos-generados
           path: |
-            *.zip
+            *.zip   # <--- SOLO EL ZIP
