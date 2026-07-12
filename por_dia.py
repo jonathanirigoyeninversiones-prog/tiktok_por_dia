@@ -142,7 +142,7 @@ COMPLEMENTOS = {
 }
 
 # ============================================
-# 🗣️ FRASES COLOQUIALES (nuevas)
+# 🗣️ FRASES COLOQUIALES (corregidas gramaticalmente)
 # ============================================
 INTROS_COLOQUIALES = [
     "Mira,",
@@ -179,25 +179,34 @@ PREGUNTAS_RETORICAS_COLOQUIALES = [
 ]
 
 def coloquializar_frase(frase):
-    """Convierte una frase técnica en una más coloquial y natural."""
-    if frase and frase[0].islower():
+    """Convierte una frase en una más coloquial y natural, manteniendo coherencia."""
+    if not frase:
+        return frase
+    
+    # Asegurar mayúscula inicial
+    if frase[0].islower():
         frase = frase[0].upper() + frase[1:]
     
     # Añadir intro coloquial (con probabilidad)
-    if random.random() < 0.5:
+    if random.random() < 0.4:
         intro = random.choice(INTROS_COLOQUIALES)
-        if intro[-1] in [",", ":", ";"]:
-            frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
+        # Si la frase ya tiene signo de puntuación, no duplicamos
+        if frase[-1] in [".", "?", "!"]:
+            frase = frase[:-1] + ". " + intro + " " + frase[0].lower() + frase[1:]
         else:
-            frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
+            frase = intro + " " + frase
     
     # Añadir pregunta retórica coloquial (con probabilidad)
-    if random.random() < 0.35:
+    if random.random() < 0.3:
         pregunta = random.choice(PREGUNTAS_RETORICAS_COLOQUIALES)
         if frase[-1] in [".", "?", "!"]:
             frase = frase[:-1] + " " + pregunta
         else:
             frase = frase + " " + pregunta
+    
+    # Limpiar puntuación doble
+    frase = re.sub(r'[.!?]{2,}', '.', frase)
+    frase = re.sub(r'\s+', ' ', frase).strip()
     
     return frase
 
@@ -233,11 +242,11 @@ def generar_pregunta(tema_nombre):
     complemento = random.choice(COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS["Motivación"])).lower()
     inicio = random.choice(INICIOS_PREGUNTA)
     opciones = [
-        inicio + " " + sujeto + " " + verbo + " " + complemento + "?",
-        inicio + " " + sujeto + " " + verbo + " " + complemento + " sin miedo?",
-        inicio + " " + sujeto + " " + verbo + " " + complemento + " y alcanzar tus metas?",
-        inicio + " " + sujeto + " " + verbo + " " + complemento + " cuando todo parece difícil?",
-        inicio + " " + sujeto + " " + verbo + " " + complemento + " a pesar de los obstáculos?"
+        f"{inicio} {sujeto} {verbo} {complemento}?",
+        f"{inicio} {sujeto} {verbo} {complemento} sin miedo?",
+        f"{inicio} {sujeto} {verbo} {complemento} y alcanzar tus metas?",
+        f"{inicio} {sujeto} {verbo} {complemento} cuando todo parece difícil?",
+        f"{inicio} {sujeto} {verbo} {complemento} a pesar de los obstáculos?"
     ]
     pregunta = random.choice(opciones)
     if not pregunta.startswith("¿"):
@@ -252,6 +261,7 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
+        # Determinar artículo correcto
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
         if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "La"
@@ -260,6 +270,7 @@ def generar_frase_desarrollo(tema_nombre):
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "El"
         
+        # Plantillas con sentido completo
         patrones_coloquiales = [
             f"{articulo} {tema_nombre} te enseña a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
             f"Reflexionar sobre {articulo.lower()} {tema_nombre} te ayuda a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
@@ -275,6 +286,7 @@ def generar_frase_desarrollo(tema_nombre):
         sujeto = random.choice(sujetos)
         verbo = random.choice(verbos)
         complemento = random.choice(complementos)
+        # Plantillas con sentido completo
         plantillas = [
             f"{sujeto} {verbo} {complemento}.",
             f"Es que {sujeto.lower()} {verbo} {complemento}.",
@@ -287,7 +299,8 @@ def generar_frase_desarrollo(tema_nombre):
         ]
         frase = random.choice(plantillas)
     
-    if random.random() < 0.7:
+    # Aplicar coloquialización (pero sin romper la gramática)
+    if random.random() < 0.5:
         frase = coloquializar_frase(frase)
     else:
         if frase and frase[0].islower():
@@ -488,11 +501,13 @@ if __name__ == "__main__":
     videos_por_dia = args.videos
     tema_input = args.tema
 
+    # 🔥 El nombre del ZIP ahora es DD-MM-AAAA.zip
+    fecha_actual = datetime.now().strftime("%d-%m-%Y")
     if args.zip:
+        # Si el usuario pasa un nombre, lo usamos, sino usamos el formato DD-MM-AAAA
         nombre_zip = args.zip if args.zip.endswith(".zip") else args.zip + ".zip"
     else:
-        fecha_zip = datetime.now().strftime("%d-%m-%Y")
-        nombre_zip = f"Videos-{fecha_zip}.zip"
+        nombre_zip = f"{fecha_actual}.zip"
 
     print("🎬 ¡Generador de videos para toda la semana!")
     print("=" * 50)
@@ -526,6 +541,7 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
+                    # Los vídeos se añaden directamente en la raíz del ZIP
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
