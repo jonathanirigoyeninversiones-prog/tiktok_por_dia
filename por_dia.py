@@ -182,18 +182,15 @@ PREGUNTAS_RETORICAS = [
 
 def humanizar_frase(frase):
     """Añade una muletilla o pregunta retórica para sonar más natural, respetando gramática."""
-    # Asegurar mayúscula inicial
     if frase and frase[0].islower():
         frase = frase[0].upper() + frase[1:]
     if random.random() < 0.4:
         intro = random.choice(INTROS_HUMANAS)
-        # Si la intro ya termina en signo de puntuación, no añadir coma
         if intro[-1] in [",", ":", ";"]:
             frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
         else:
             frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
     if random.random() < 0.3:
-        # Añadir pregunta retórica al final, sin duplicar signos
         pregunta = random.choice(PREGUNTAS_RETORICAS)
         if frase[-1] in [".", "?", "!"]:
             frase = frase[:-1] + " " + pregunta
@@ -240,7 +237,6 @@ def generar_pregunta(tema_nombre):
         inicio + " " + sujeto + " " + verbo + " " + complemento + " a pesar de los obstáculos?"
     ]
     pregunta = random.choice(opciones)
-    # Asegurar signos de interrogación
     if not pregunta.startswith("¿"):
         pregunta = "¿" + pregunta
     if not pregunta.endswith("?"):
@@ -253,14 +249,11 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
-        # Determinar artículo correcto para temas no predefinidos
-        # Reglas de género: terminaciones típicas femeninas
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
         if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "La"
         else:
             articulo = "El"
-        # Excepciones específicas
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "El"
         patrones = [
@@ -277,11 +270,9 @@ def generar_frase_desarrollo(tema_nombre):
         complemento = random.choice(complementos)
         frase = f"{sujeto} {verbo} {complemento}."
     
-    # Humanizar (con probabilidad)
     if random.random() < 0.7:
         frase = humanizar_frase(frase)
     else:
-        # Asegurar mayúscula inicial incluso si no se humaniza
         if frase and frase[0].islower():
             frase = frase[0].upper() + frase[1:]
     return frase
@@ -296,36 +287,24 @@ def generar_texto_completo(tema_nombre):
     return pregunta, desarrollo
 
 def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
-    """
-    Divide el contenido en exactamente num_parrafos párrafos.
-    - El primer párrafo es siempre la pregunta.
-    - El último párrafo es siempre "Te leo en los comentarios".
-    - Los párrafos intermedios se rellenan con las oraciones de desarrollo,
-      distribuidas de manera equitativa.
-    """
-    # 1. Preparar la pregunta como un solo párrafo
     oraciones_pregunta = re.findall(r'[^.!?]+[.!?]', pregunta)
     if not oraciones_pregunta:
         oraciones_pregunta = [pregunta.strip()]
     parrafo_pregunta = " ".join(oraciones_pregunta)
     
-    # 2. Extraer oraciones del desarrollo
     texto_desarrollo = " ".join(desarrollo)
     oraciones = re.findall(r'[^.!?]+[.!?]', texto_desarrollo)
     oraciones = [o.strip() for o in oraciones if len(o.strip()) > 5]
     if not oraciones:
         oraciones = ["Sigue adelante con fe y determinación."]
     
-    # 3. Mezclar oraciones de desarrollo
     random.shuffle(oraciones)
     
-    # 4. Número de párrafos intermedios (total - 2: pregunta y cierre)
     num_intermedios = num_parrafos - 2
     if num_intermedios < 1:
         num_parrafos = 3
         num_intermedios = 1
     
-    # 5. Repartir oraciones entre los párrafos intermedios
     total_oraciones = len(oraciones)
     while total_oraciones < num_intermedios:
         oraciones.append("Sigue adelante con fe y determinación.")
@@ -342,11 +321,8 @@ def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
         indice = fin
     
     parrafos_intermedios = [" ".join(g) for g in grupos]
-    
-    # 6. Armar lista final: [pregunta] + intermedios + [cierre]
     parrafos = [parrafo_pregunta] + parrafos_intermedios + ["Te leo en los comentarios"]
     
-    # Ajustar por si sobra o falta algún párrafo
     if len(parrafos) > num_parrafos:
         parrafos = parrafos[:num_parrafos]
         parrafos[-1] = "Te leo en los comentarios"
@@ -357,6 +333,28 @@ def dividir_en_parrafos(pregunta, desarrollo, num_parrafos):
             parrafos.append("Te leo en los comentarios")
     
     return parrafos
+
+def obtener_imagenes_pexels(query, cantidad):
+    """Obtiene una lista de URLs de imágenes de Pexels para la consulta dada."""
+    url = "https://api.pexels.com/v1/search"
+    headers = {"Authorization": CLAVE_PEXELS}
+    params = {
+        "query": query,
+        "per_page": max(cantidad, 5),  # pedir al menos 5
+        "orientation": "portrait",
+        "page": random.randint(1, 5)
+    }
+    try:
+        resp = requests.get(url, headers=headers, params=params, timeout=10)
+        if resp.status_code == 200:
+            fotos = resp.json().get("photos", [])
+            if fotos:
+                # Devolver hasta 'cantidad' imágenes
+                return [foto["src"]["large"] for foto in fotos[:cantidad]]
+    except:
+        pass
+    # Fallback: imagen por defecto
+    return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
 def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
     num_parrafos = random.choice([5, 6, 7])
@@ -370,48 +368,38 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
 
     parrafos = dividir_en_parrafos(pregunta, desarrollo, num_parrafos)
 
-    palabras_clave = (pregunta + " " + " ".join(desarrollo)).split()[:4]
-    tema_imagen = " ".join(palabras_clave) if palabras_clave else "motivacion"
-    tema_imagen = re.sub(r'[^\w\s]', '', tema_imagen)
+    # Obtener palabras clave para la búsqueda de imágenes
+    palabras_clave = (pregunta + " " + " ".join(desarrollo)).split()[:6]
+    query = " ".join(palabras_clave) if palabras_clave else "motivacion"
+    query = re.sub(r'[^\w\s]', '', query)
 
-    url = "https://api.pexels.com/v1/search"
-    headers = {"Authorization": CLAVE_PEXELS}
-    params = {"query": tema_imagen, "per_page": 3, "orientation": "portrait", "page": random.randint(1, 5)}
-
-    imagen_url = None
-    try:
-        resp = requests.get(url, headers=headers, params=params, timeout=10)
-        if resp.status_code == 200:
-            fotos = resp.json().get("photos", [])
-            if fotos:
-                imagen_url = random.choice(fotos)["src"]["large"]
-    except:
-        pass
-
-    if not imagen_url:
-        imagen_url = "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"
-
-    try:
-        img_data = requests.get(imagen_url, timeout=10).content
-        with open("temp_fondo.jpg", "wb") as f:
-            f.write(img_data)
-    except:
-        return
+    # Obtener una imagen para cada párrafo
+    imagenes_urls = obtener_imagenes_pexels(query, num_parrafos)
+    # Asegurar que tenemos al menos num_parrafos imágenes
+    while len(imagenes_urls) < num_parrafos:
+        imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
 
     clips = []
     for i, parrafo in enumerate(parrafos):
-        img = Image.open("temp_fondo.jpg").convert("RGB")
+        # Descargar la imagen correspondiente
+        try:
+            img_data = requests.get(imagenes_urls[i], timeout=10).content
+            with open(f"temp_fondo_{i}.jpg", "wb") as f:
+                f.write(img_data)
+            img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
+        except:
+            # Si falla, usar imagen por defecto
+            img = Image.open("temp_fondo_default.jpg").convert("RGB") if os.path.exists("temp_fondo_default.jpg") else Image.new("RGB", (1080, 1920), color=(50, 50, 50))
+        
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
 
-        # Dividir el párrafo en líneas
         lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
         total_lineas = len(lineas)
         if total_lineas == 0:
             lineas = [" "]
             total_lineas = 1
 
-        # Calcular tamaño de fuente
         MARGEN_Y = 200
         font_size = int((1920 - 2 * MARGEN_Y) / (total_lineas * 1.4))
         font_size = max(30, min(font_size, 70))
@@ -424,23 +412,26 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
             except:
                 font = ImageFont.load_default()
 
-        # Calcular posición central inferior
         altura_bloque = total_lineas * (font_size * 1.3)
         y_inicio = 1920 - altura_bloque - 200
 
-        # Dibujar cada línea con borde negro grueso (stroke_width=5) - SIN FONDO
         y = y_inicio
         for linea in lineas:
             bbox = draw.textbbox((0, 0), linea, font=font)
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
-            # Borde negro grueso y texto blanco
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
         img.save(f"temp_texto_{i}.jpg", "JPEG")
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         clips.append(clip)
+
+        # Limpiar imagen de fondo temporal
+        try:
+            os.remove(f"temp_fondo_{i}.jpg")
+        except:
+            pass
 
     video = concatenate_videoclips(clips, method="compose")
 
@@ -452,7 +443,7 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre, numero):
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {nombre}")
 
-    # Limpieza
+    # Limpieza final
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
             try:
