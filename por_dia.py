@@ -49,10 +49,10 @@ TEMAS_PREDEFINIDOS = [
 # 🌍 GENERADOR UNIVERSAL (para cualquier tema)
 # ============================================
 SUJETOS_UNIVERSALES = [
-    "El tema", "La reflexión", "La vida", "El camino", "La experiencia",
-    "El corazón", "El alma", "La mente", "El ser", "La esencia",
-    "Cada día", "El momento", "La oportunidad", "El cambio", "La transformación",
-    "La fuerza interior", "La luz", "La esperanza", "El propósito", "La conexión"
+    "la vida", "el camino", "la experiencia", "el corazón", "el alma",
+    "la mente", "el ser", "la esencia", "cada día", "el momento",
+    "la oportunidad", "el cambio", "la transformación", "la fuerza interior",
+    "la luz", "la esperanza", "el propósito", "la conexión"
 ]
 
 VERBOS_UNIVERSALES = [
@@ -70,7 +70,7 @@ COMPLEMENTOS_UNIVERSALES = [
 ]
 
 # ============================================
-# 📝 LISTAS DE SUJETOS, VERBOS Y COMPLEMENTOS PARA LOS 20 TEMAS (CORREGIDAS)
+# 📝 LISTAS DE SUJETOS, VERBOS Y COMPLEMENTOS (con tildes y corregidas)
 # ============================================
 SUJETOS = {
     "Motivación": ["La motivación", "La energía", "El entusiasmo", "La pasión", "La fe", "El coraje", "La determinación", "La disciplina", "La resiliencia", "La voluntad", "El impulso", "La chispa", "La llama", "El vigor", "La convicción", "La firmeza", "La constancia", "La perseverancia", "La tenacidad", "La entereza"],
@@ -142,59 +142,63 @@ COMPLEMENTOS = {
 }
 
 # ============================================
-# 🗣️ FRASES PARA HUMANIZAR EL TEXTO (corregidas)
+# 🗣️ FRASES COLOQUIALES (nuevas)
 # ============================================
-INTROS_HUMANAS = [
+INTROS_COLOQUIALES = [
     "Mira,",
-    "La verdad es que",
-    "Piensa en esto:",
-    "No hay duda de que",
-    "A veces",
-    "Siempre he creído que",
-    "Es curioso, pero",
-    "Fíjate:",
+    "Es que",
+    "La cosa es que",
+    "A veces pasa que",
+    "Te digo algo,",
+    "Lo bueno es que",
+    "El tema es que",
+    "Fíjate que",
     "Resulta que",
+    "La verdad es que",
+    "O sea,",
+    "Bueno,",
+    "Piensa esto:",
+    "Imagínate que",
     "Lo cierto es que",
     "Sin duda,",
-    "Para ser sincero,",
-    "Hay que reconocer que",
-    "Te invito a reflexionar:",
-    "Imagina por un momento",
-    "No es casualidad que",
-    "Vamos a ver:",
-    "Vale la pena recordar que",
-    "Lo interesante es que",
-    "Por supuesto,"
+    "Hay que ver que",
+    "Vale,"
 ]
 
-PREGUNTAS_RETORICAS = [
-    "¿No te parece?",
-    "¿Verdad?",
-    "¿No crees?",
-    "¿Te suena familiar?",
-    "¿Sabes a lo que me refiero?",
-    "¿No es así?",
-    "¿Te das cuenta?",
-    "¿No te hace pensar?",
-    "¿Lo ves?",
-    "¿No es increíble?"
+PREGUNTAS_RETORICAS_COLOQUIALES = [
+    "¿sabes?",
+    "¿no te parece?",
+    "¿verdad?",
+    "¿te das cuenta?",
+    "¿no crees?",
+    "¿a que sí?",
+    "¿lo ves?",
+    "¿me entiendes?",
+    "¿no es así?",
+    "¿qué te parece?"
 ]
 
-def humanizar_frase(frase):
+def coloquializar_frase(frase):
+    """Convierte una frase técnica en una más coloquial y natural."""
     if frase and frase[0].islower():
         frase = frase[0].upper() + frase[1:]
-    if random.random() < 0.4:
-        intro = random.choice(INTROS_HUMANAS)
+    
+    # Añadir intro coloquial (con probabilidad)
+    if random.random() < 0.5:
+        intro = random.choice(INTROS_COLOQUIALES)
         if intro[-1] in [",", ":", ";"]:
             frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
         else:
             frase = f"{intro} {frase[0].lower() + frase[1:] if frase else frase}"
-    if random.random() < 0.3:
-        pregunta = random.choice(PREGUNTAS_RETORICAS)
+    
+    # Añadir pregunta retórica coloquial (con probabilidad)
+    if random.random() < 0.35:
+        pregunta = random.choice(PREGUNTAS_RETORICAS_COLOQUIALES)
         if frase[-1] in [".", "?", "!"]:
             frase = frase[:-1] + " " + pregunta
         else:
             frase = frase + " " + pregunta
+    
     return frase
 
 # ============================================
@@ -248,6 +252,7 @@ def generar_frase_desarrollo(tema_nombre):
     complementos = COMPLEMENTOS.get(tema_nombre, COMPLEMENTOS_UNIVERSALES)
     
     if tema_nombre not in SUJETOS:
+        # Determinar artículo correcto para temas no predefinidos
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
         if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "La"
@@ -255,25 +260,43 @@ def generar_frase_desarrollo(tema_nombre):
             articulo = "El"
         if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "El"
-        patrones = [
-            f"{articulo} {tema_nombre} {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Reflexionar sobre {articulo.lower()} {tema_nombre} {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Cada día es una oportunidad para transformar {articulo.lower()} {tema_nombre} en {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+        
+        # Plantillas coloquiales para temas no predefinidos
+        patrones_coloquiales = [
             f"{articulo} {tema_nombre} te enseña a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
-            f"Aceptar {articulo.lower()} {tema_nombre} es el primer paso para {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}."
+            f"Reflexionar sobre {articulo.lower()} {tema_nombre} te ayuda a {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"Cada día puedes usar {articulo.lower()} {tema_nombre} para {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"{articulo} {tema_nombre} está ahí para que {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"Aceptar {articulo.lower()} {tema_nombre} es el primer paso para {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"Cuando hablamos de {articulo.lower()} {tema_nombre}, hablamos de {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"{articulo} {tema_nombre} no es complicado, solo hay que {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}.",
+            f"Lo importante de {articulo.lower()} {tema_nombre} es que te permite {random.choice(VERBOS_UNIVERSALES)} {random.choice(COMPLEMENTOS_UNIVERSALES)}."
         ]
-        frase = random.choice(patrones)
+        frase = random.choice(patrones_coloquiales)
     else:
         sujeto = random.choice(sujetos)
         verbo = random.choice(verbos)
         complemento = random.choice(complementos)
-        frase = f"{sujeto} {verbo} {complemento}."
+        # Plantillas coloquiales para temas predefinidos
+        plantillas = [
+            f"{sujeto} {verbo} {complemento}.",
+            f"Es que {sujeto.lower()} {verbo} {complemento}.",
+            f"La verdad es que {sujeto.lower()} {verbo} {complemento}.",
+            f"Fíjate que {sujeto.lower()} {verbo} {complemento}.",
+            f"O sea, {sujeto.lower()} {verbo} {complemento}.",
+            f"Bueno, {sujeto.lower()} {verbo} {complemento}.",
+            f"Mira, {sujeto.lower()} {verbo} {complemento}.",
+            f"Piensa: {sujeto.lower()} {verbo} {complemento}."
+        ]
+        frase = random.choice(plantillas)
     
+    # Aplicar coloquialización adicional
     if random.random() < 0.7:
-        frase = humanizar_frase(frase)
+        frase = coloquializar_frase(frase)
     else:
         if frase and frase[0].islower():
             frase = frase[0].upper() + frase[1:]
+    
     return frase
 
 def generar_texto_completo(tema_nombre):
@@ -428,8 +451,8 @@ def crear_video(pregunta, desarrollo, dia_semana, tema_nombre):
     # 🔥 NOMBRE VÁLIDO PARA GITHUB ACTIONS (sin : ni espacios)
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
-    fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")  # guiones en lugar de dos puntos
-    tema_limpio = tema_nombre.replace(" ", "-")        # espacios a guiones
+    fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
+    tema_limpio = tema_nombre.replace(" ", "-")
     nombre = f"{dia_semana}-{tema_limpio}-{fecha_hora}.mp4"
 
     ruta = os.path.join("videos", nombre)
