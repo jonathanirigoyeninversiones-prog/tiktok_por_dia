@@ -14,7 +14,7 @@ on:
         default: 'todo'
         type: string
   schedule:
-    - cron: '0 10 * * 0'  # Todos los domingos a las 10 AM UTC
+    - cron: '0 10 * * 0'
 
 jobs:
   generar:
@@ -45,4 +45,4 @@ jobs:
         with:
           name: videos-generados
           path: |
-            *.zip   # <--- SOLO EL ZIP
+            Videos-generados.zip
