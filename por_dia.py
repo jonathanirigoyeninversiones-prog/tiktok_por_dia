@@ -45,43 +45,15 @@ TEMAS_PREDEFINIDOS = [
 ]
 
 # ============================================
-# 🌍 GENERADOR UNIVERSAL (para cualquier tema)
-# ============================================
-FRASES_UNIVERSALES = [
-    "A veces, lo más importante es aprender a {verbo} {complemento}.",
-    "Cuando piensas en {tema}, te das cuenta de que {verbo} {complemento}.",
-    "La clave está en {verbo} {complemento} con calma y sin prisas.",
-    "Si quieres avanzar, tienes que {verbo} {complemento}.",
-    "No olvides que {verbo} {complemento} es parte del camino.",
-    "Todos podemos {verbo} {complemento} si nos lo proponemos.",
-    "A veces, solo hace falta {verbo} {complemento} para sentirte mejor.",
-    "Recuerda que {verbo} {complemento} te ayuda a crecer.",
-    "Piensa en lo que significa {verbo} {complemento} en tu día a día.",
-    "Lo bonito de la vida es que siempre puedes {verbo} {complemento}."
-]
-
-VERBOS_UNIVERSALES = [
-    "cuidar", "escuchar", "valorar", "disfrutar", "confiar",
-    "agradecer", "sonreír", "abrazar", "perdonar", "aprender",
-    "compartir", "ayudar", "crecer", "soñar", "avanzar"
-]
-
-COMPLEMENTOS_UNIVERSALES = [
-    "tu bienestar", "tu paz interior", "a los que quieres", "el momento presente",
-    "tus logros", "tu camino", "las pequeñas cosas", "tus metas",
-    "tu salud mental", "tu felicidad", "tu esfuerzo", "tu familia"
-]
-
-# ============================================
-# 📝 FRASES CON SENTIDO PARA CADA TEMA (con sujeto + verbo + predicado)
+# 📝 FRASES PARA CADA TEMA (con sujeto + verbo + predicado, lenguaje normal)
 # ============================================
 FRASES_POR_TEMA = {
     "Motivacion": [
         "La motivación te da energía para empezar cada día.",
-        "Tu entusiasmo puede contagiar a las personas que te rodean.",
+        "Tu entusiasmo contagia a las personas que te rodean.",
         "La fe en ti mismo abre puertas que parecían cerradas.",
         "El coraje te ayuda a enfrentar los miedos más profundos.",
-        "La determinación te lleva a alcanzar metas que parecían lejanas.",
+        "La determinación te lleva a alcanzar metas lejanas.",
         "La disciplina convierte los sueños en hábitos diarios.",
         "La resiliencia te enseña a levantarte después de cada caída.",
         "La voluntad te permite seguir adelante cuando todo se complica.",
@@ -92,10 +64,10 @@ FRASES_POR_TEMA = {
         "La constancia construye el éxito día tras día.",
         "La perseverancia te acerca a tus metas aunque el camino sea largo.",
         "Los hábitos diarios moldean tu carácter y tu futuro.",
-        "La paciencia te ayuda a esperar el momento adecuado para cada cosa.",
-        "El esfuerzo constante vence cualquier obstáculo que aparezca.",
+        "La paciencia te ayuda a esperar el momento adecuado.",
+        "El esfuerzo constante vence cualquier obstáculo.",
         "La rutina bien llevada te da estabilidad y progreso.",
-        "La disciplina te mantiene enfocado en lo que realmente importa.",
+        "La disciplina te mantiene enfocado en lo que importa.",
         "La tenacidad te impide rendirte cuando las cosas se ponen difíciles.",
         "La resistencia te permite seguir avanzando sin desfallecer.",
         "La perseverancia es el secreto de todas las grandes historias."
@@ -319,207 +291,184 @@ FRASES_POR_TEMA = {
 }
 
 # ============================================
-# 📝 GENERACIÓN DE PREGUNTA Y DESARROLLO
+# FRASES GENÉRICAS PARA TEMAS NO PRE DEFINIDOS
 # ============================================
-def generar_pregunta(tema_nombre):
-    """Genera una pregunta clara y directa sobre el tema."""
-    preguntas_base = [
-        f"¿Alguna vez has reflexionado sobre la importancia de {tema_nombre.lower()} en tu vida?",
-        f"¿Qué significa para ti {tema_nombre.lower()} en tu día a día?",
-        f"¿Cómo aplicas {tema_nombre.lower()} en las situaciones más difíciles?",
-        f"¿Crees que {tema_nombre.lower()} puede cambiar tu forma de ver las cosas?",
-        f"¿Cuál es tu mayor aprendizaje sobre {tema_nombre.lower()} hasta ahora?",
-        f"¿Te has preguntado cómo {tema_nombre.lower()} influye en tus decisiones más importantes?",
-        f"¿Qué harías si te faltara {tema_nombre.lower()} en tu vida?",
-        f"¿Cuándo fue la última vez que practicaste {tema_nombre.lower()} de forma consciente?",
-        f"¿Cómo te sientes cuando hablas o piensas en {tema_nombre.lower()}?",
-        f"¿Qué consejo le darías a alguien sobre {tema_nombre.lower()} para empezar su camino?"
-    ]
-    return random.choice(preguntas_base)
+VERBOS_GENERICOS = [
+    "cuidar", "escuchar", "valorar", "disfrutar", "confiar",
+    "agradecer", "sonreír", "abrazar", "perdonar", "aprender",
+    "compartir", "ayudar", "crecer", "soñar", "avanzar"
+]
+COMPLEMENTOS_GENERICOS = [
+    "tu bienestar", "tu paz interior", "a los que quieres",
+    "el momento presente", "tus logros", "tu camino",
+    "las pequeñas cosas", "tus metas", "tu salud mental",
+    "tu felicidad", "tu esfuerzo", "tu familia"
+]
 
-def generar_frase_desarrollo(tema_nombre):
-    """Genera una frase de desarrollo con sujeto + verbo + predicado, específica para el tema."""
-    if tema_nombre in FRASES_POR_TEMA:
-        frases = FRASES_POR_TEMA[tema_nombre]
-        frase = random.choice(frases)
-    else:
-        # Para temas no predefinidos, usamos plantillas universales con estructura clara
+def frases_genericas_para_tema(tema):
+    """Genera frases genéricas para un tema que no está en la lista."""
+    frases = []
+    for _ in range(10):
+        verbo = random.choice(VERBOS_GENERICOS)
+        complemento = random.choice(COMPLEMENTOS_GENERICOS)
+        # Determinar artículo
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
-        if tema_nombre.lower().endswith(femeninas) and tema_nombre.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
+        if tema.lower().endswith(femeninas) and tema.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "la"
         else:
             articulo = "el"
-        if tema_nombre.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
+        if tema.lower() in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "el"
-        
-        verbo = random.choice(VERBOS_UNIVERSALES)
-        complemento = random.choice(COMPLEMENTOS_UNIVERSALES)
-        
-        plantilla = random.choice(FRASES_UNIVERSALES)
-        frase = plantilla.format(
-            verbo=verbo,
-            complemento=complemento,
-            tema=articulo + " " + tema_nombre
-        )
-        # Asegurar mayúscula inicial y punto final
-        frase = frase[0].upper() + frase[1:]
-        if frase[-1] not in [".", "!", "?"]:
-            frase += "."
-    
-    # Añadir un toque coloquial (a veces) pero sin romper la estructura
-    if random.random() < 0.2:
-        intro = random.choice(["Mira, ", "O sea, ", "Fíjate, ", "Es que "])
-        frase = intro + frase[0].lower() + frase[1:]
-    
-    # Añadir pregunta retórica al final (a veces) pero sin romper la estructura
-    if random.random() < 0.15:
-        retorica = random.choice([" ¿no te parece?", " ¿verdad?", " ¿a que sí?"])
-        frase = frase.rstrip(".!?") + retorica + "."
-    
-    return frase
+        plantilla = random.choice([
+            f"{articulo.title()} {tema} te enseña a {verbo} {complemento}.",
+            f"Cuando piensas en {articulo} {tema}, te das cuenta de que {verbo} {complemento}.",
+            f"La clave de {articulo} {tema} está en {verbo} {complemento}.",
+            f"Si quieres avanzar con {articulo} {tema}, tienes que {verbo} {complemento}.",
+            f"No olvides que {verbo} {complemento} es parte de {articulo} {tema}.",
+            f"Todos podemos {verbo} {complemento} si nos lo proponemos con {articulo} {tema}.",
+            f"A veces, solo hace falta {verbo} {complemento} para entender {articulo} {tema}.",
+            f"Recuerda que {verbo} {complemento} te acerca a {articulo} {tema}.",
+            f"Piensa en lo que significa {verbo} {complemento} en {articulo} {tema} diario.",
+            f"Lo bonito de {articulo} {tema} es que siempre puedes {verbo} {complemento}."
+        ])
+        frases.append(plantilla)
+    return frases
 
-def generar_texto_completo(tema_nombre):
-    """Genera el texto completo: pregunta + 6-8 frases de desarrollo (sin mezclar)."""
-    pregunta = generar_pregunta(tema_nombre)
-    
-    # Generar entre 6 y 8 frases de desarrollo
-    num_frases = random.choice([6, 7, 8])
-    frases = []
-    for _ in range(num_frases):
-        frases.append(generar_frase_desarrollo(tema_nombre))
-    
-    # No mezclar las frases para mantener orden lógico
-    # (pero podríamos ordenarlas de alguna manera si quisiéramos)
-    # En este caso, las dejamos en el orden en que se generaron
-    # para que el flujo sea más natural.
-    
-    # Devolver la pregunta y las frases por separado
-    return pregunta, frases
+def obtener_frases_para_tema(tema):
+    """Devuelve una lista de frases para el tema, ya sea de la lista o generadas."""
+    if tema in FRASES_POR_TEMA:
+        return FRASES_POR_TEMA[tema]
+    else:
+        return frases_genericas_para_tema(tema)
 
-def dividir_en_parrafos(pregunta, frases_desarrollo, num_partes):
-    """
-    Divide el contenido en exactamente num_partes párrafos.
-    - El primer párrafo es siempre la pregunta.
-    - Los párrafos intermedios son las frases de desarrollo.
-    - El último párrafo es "Te leo en los comentarios".
-    """
-    # 1. Preparar la pregunta como un solo párrafo
-    parrafo_pregunta = pregunta.strip()
+# ============================================
+# GENERACIÓN DE PREGUNTA
+# ============================================
+def generar_pregunta(tema):
+    """Genera una pregunta sencilla sobre el tema."""
+    preguntas = [
+        f"¿Alguna vez has reflexionado sobre la importancia de {tema.lower()} en tu vida?",
+        f"¿Qué significa para ti {tema.lower()} en tu día a día?",
+        f"¿Cómo aplicas {tema.lower()} en las situaciones más difíciles?",
+        f"¿Crees que {tema.lower()} puede cambiar tu forma de ver las cosas?",
+        f"¿Cuál es tu mayor aprendizaje sobre {tema.lower()} hasta ahora?",
+        f"¿Te has preguntado cómo {tema.lower()} influye en tus decisiones más importantes?",
+        f"¿Qué harías si te faltara {tema.lower()} en tu vida?",
+        f"¿Cuándo fue la última vez que practicaste {tema.lower()} de forma consciente?",
+        f"¿Cómo te sientes cuando hablas o piensas en {tema.lower()}?",
+        f"¿Qué consejo le darías a alguien sobre {tema.lower()} para empezar su camino?"
+    ]
+    return random.choice(preguntas)
+
+# ============================================
+# DIVISIÓN EN PÁRRAFOS
+# ============================================
+def dividir_en_parrafos(pregunta, frases, num_parrafos):
+    """Crea los párrafos: pregunta, frases intermedias, y cierre."""
+    # Párrafo 1: la pregunta
+    parrafos = [pregunta]
     
-    # 2. Las frases de desarrollo ya están en una lista
-    # Si hay más frases que párrafos intermedios, agrupamos algunas
-    num_intermedios = num_partes - 2  # Restamos pregunta y cierre
-    
+    # Párrafos intermedios: las frases (entre 4 y 6 frases)
+    num_intermedios = num_parrafos - 2  # restamos pregunta y cierre
     if num_intermedios < 1:
-        num_partes = 3  # Forzar al menos 3 párrafos
         num_intermedios = 1
     
-    # Si tenemos más frases que párrafos intermedios, agrupamos varias en un mismo párrafo
-    # Si tenemos menos, rellenamos con frases genéricas
-    total_frases = len(frases_desarrollo)
-    
-    # Asegurar que tengamos al menos num_intermedios frases
-    while len(frases_desarrollo) < num_intermedios:
-        frases_desarrollo.append("Sigue adelante con fe y determinación.")
-    
-    # Dividir las frases en grupos para cada párrafo intermedio
-    grupos = []
-    if total_frases >= num_intermedios:
-        # Repartir equitativamente
-        frases_por_parrafo = total_frases // num_intermedios
-        resto = total_frases % num_intermedios
-        indice = 0
-        for i in range(num_intermedios):
-            extra = 1 if i < resto else 0
-            fin = indice + frases_por_parrafo + extra
-            grupos.append(frases_desarrollo[indice:fin])
-            indice = fin
+    # Elegir un subconjunto de frases (si hay más, seleccionamos aleatoriamente)
+    if len(frases) > num_intermedios:
+        frases_seleccionadas = random.sample(frases, num_intermedios)
     else:
-        # Si hay menos frases que párrafos, cada grupo tendrá una frase y repetimos si es necesario
-        for i in range(num_intermedios):
-            if i < total_frases:
-                grupos.append([frases_desarrollo[i]])
-            else:
-                # Repetir una frase existente o usar una genérica
-                grupos.append(["Sigue adelante con fe y determinación."])
+        frases_seleccionadas = frases.copy()
+        # Si faltan, rellenamos con frases genéricas
+        while len(frases_seleccionadas) < num_intermedios:
+            frases_seleccionadas.append("Sigue adelante con fe y determinación.")
     
-    # Unir cada grupo en un párrafo
-    parrafos_intermedios = []
-    for grupo in grupos:
-        parrafo = " ".join(grupo)
-        # Asegurar que termine con punto
-        if parrafo and parrafo[-1] not in [".", "!", "?"]:
-            parrafo += "."
-        parrafos_intermedios.append(parrafo)
+    parrafos.extend(frases_seleccionadas)
     
-    # 3. Armar la lista final: [pregunta] + intermedios + [cierre]
-    parrafos = [parrafo_pregunta] + parrafos_intermedios + ["Te leo en los comentarios"]
+    # Último párrafo: cierre
+    parrafos.append("Te leo en los comentarios")
     
     # Ajustar al número exacto de párrafos
-    if len(parrafos) > num_partes:
-        parrafos = parrafos[:num_partes]
-        parrafos[-1] = "Te leo en los comentarios"
-    elif len(parrafos) < num_partes:
-        # Si faltan párrafos, añadir frases genéricas antes del cierre
-        while len(parrafos) < num_partes - 1:
-            parrafos.insert(-1, "Sigue adelante con fe y determinación.")
-        if len(parrafos) < num_partes:
-            parrafos.append("Te leo en los comentarios")
+    while len(parrafos) < num_parrafos:
+        parrafos.insert(-1, "Sigue adelante con fe y determinación.")
+    while len(parrafos) > num_parrafos:
+        parrafos.pop(-2)
     
     return parrafos
 
-def crear_video(pregunta, frases_desarrollo, dia_semana, tema_nombre, numero):
-    num_parrafos = random.choice([6, 7, 8])
-    duracion_total = random.uniform(70, 85)
-    duracion_por_parrafo = duracion_total / num_parrafos
-    duraciones = [duracion_por_parrafo] * num_parrafos
-
-    print(f"   🎬 Video {numero} ({dia_semana} - {tema_nombre}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
-    print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
-    os.makedirs("videos", exist_ok=True)
-
-    # Dividir en párrafos (la pregunta al inicio, el cierre al final)
-    parrafos = dividir_en_parrafos(pregunta, frases_desarrollo, num_parrafos)
-
-    # Obtener imagen de fondo
-    texto_completo = pregunta + " " + " ".join(frases_desarrollo)
-    palabras_clave = texto_completo.split()[:4]
-    tema_imagen = " ".join(palabras_clave) if palabras_clave else "motivacion"
-    tema_imagen = re.sub(r'[^\w\s]', '', tema_imagen)
-
+# ============================================
+# OBTENER IMÁGENES DE PEXELS
+# ============================================
+def obtener_imagenes(query, cantidad):
+    """Busca imágenes en Pexels y devuelve una lista de URLs."""
     url = "https://api.pexels.com/v1/search"
     headers = {"Authorization": CLAVE_PEXELS}
-    params = {"query": tema_imagen, "per_page": 3, "orientation": "portrait", "page": random.randint(1, 5)}
-
-    imagen_url = None
+    params = {
+        "query": query,
+        "per_page": max(cantidad, 5),
+        "orientation": "portrait",
+        "page": random.randint(1, 5)
+    }
     try:
         resp = requests.get(url, headers=headers, params=params, timeout=10)
         if resp.status_code == 200:
             fotos = resp.json().get("photos", [])
             if fotos:
-                imagen_url = random.choice(fotos)["src"]["large"]
+                return [foto["src"]["large"] for foto in fotos[:cantidad]]
     except:
         pass
+    # Imagen por defecto si falla
+    return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
-    if not imagen_url:
-        imagen_url = "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"
+# ============================================
+# CREAR VÍDEO
+# ============================================
+def crear_video(pregunta, frases, dia_semana, tema, numero):
+    # Número de párrafos: entre 6 y 8
+    num_parrafos = random.choice([6, 7, 8])
+    duracion_total = random.uniform(70, 85)
+    duracion_por_parrafo = duracion_total / num_parrafos
+    duraciones = [duracion_por_parrafo] * num_parrafos
 
-    try:
-        img_data = requests.get(imagen_url, timeout=10).content
-        with open("temp_fondo.jpg", "wb") as f:
-            f.write(img_data)
-    except:
-        return
+    print(f"   🎬 Video {numero} ({dia_semana} - {tema}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
+    print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
+    os.makedirs("videos", exist_ok=True)
+
+    # Dividir en párrafos
+    parrafos = dividir_en_parrafos(pregunta, frases, num_parrafos)
+
+    # Obtener palabras clave para buscar imágenes
+    texto_completo = pregunta + " " + " ".join(frases)
+    palabras_clave = texto_completo.split()[:6]
+    query = " ".join(palabras_clave) if palabras_clave else "motivacion"
+    query = re.sub(r'[^\w\s]', '', query)
+
+    # Obtener una imagen para cada párrafo
+    imagenes_urls = obtener_imagenes(query, num_parrafos)
+    while len(imagenes_urls) < num_parrafos:
+        imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
 
     clips = []
     for i, parrafo in enumerate(parrafos):
-        img = Image.open("temp_fondo.jpg").convert("RGB")
+        # Descargar imagen correspondiente
+        try:
+            img_data = requests.get(imagenes_urls[i], timeout=10).content
+            with open(f"temp_fondo_{i}.jpg", "wb") as f:
+                f.write(img_data)
+            img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
+        except:
+            img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
+        
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
 
+        # Dividir el texto en líneas
         lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
         total_lineas = len(lineas)
+        if total_lineas == 0:
+            lineas = [" "]
+            total_lineas = 1
 
+        # Calcular tamaño de fuente
         MARGEN_Y = 200
         font_size = int((1920 - 2 * MARGEN_Y) / (total_lineas * 1.4))
         font_size = max(30, min(font_size, 70))
@@ -547,17 +496,24 @@ def crear_video(pregunta, frases_desarrollo, dia_semana, tema_nombre, numero):
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         clips.append(clip)
 
+        # Limpiar imagen de fondo temporal
+        try:
+            os.remove(f"temp_fondo_{i}.jpg")
+        except:
+            pass
+
     video = concatenate_videoclips(clips, method="compose")
 
+    # Nombre del video
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
     fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
-    nombre = f"videos/{dia_semana}-{tema_nombre}-{fecha_hora}-video-{numero:03d}.mp4"
+    nombre = f"videos/{dia_semana}-{tema}-{fecha_hora}-video-{numero:03d}.mp4"
 
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {nombre}")
 
-    # Limpieza de temporales
+    # Limpiar archivos temporales
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
             try:
@@ -566,72 +522,75 @@ def crear_video(pregunta, frases_desarrollo, dia_semana, tema_nombre, numero):
                 pass
 
 # ============================================
-# 🎯 SELECCIÓN DE TEMAS
+# SELECCIÓN DE TEMAS
 # ============================================
-def seleccionar_temas(opcion, videos_por_dia):
+def seleccionar_temas(opcion):
     if opcion.lower() in ["todo", "aleatorio", "azar", "random"]:
-        temas_seleccionados = random.sample(TEMAS_PREDEFINIDOS, 7)
-        print(f"📌 Temas seleccionados: {', '.join(temas_seleccionados)}")
-        return {i: tema for i, tema in enumerate(temas_seleccionados)}
+        temas = random.sample(TEMAS_PREDEFINIDOS, 7)
+        print(f"📌 Temas seleccionados: {', '.join(temas)}")
+        return temas
     else:
         print(f"📌 Usando el tema: {opcion}")
-        return {i: opcion for i in range(7)}
+        return [opcion] * 7
 
 # ============================================
-# 🚀 EJECUCIÓN PRINCIPAL
+# EJECUCIÓN PRINCIPAL
 # ============================================
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Generador de videos semanales")
-    parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
-    parser.add_argument("--tema", type=str, default="todo", help="Tema o 'todo' para aleatorio")
-    parser.add_argument("--zip", type=str, help="Nombre del archivo ZIP (sin extensión o con .zip)")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--videos", type=int, default=5, help="Videos por día")
+    parser.add_argument("--tema", type=str, default="todo", help="Tema o 'todo'")
     parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
     args = parser.parse_args()
 
     videos_por_dia = args.videos
     tema_input = args.tema
 
-    # ZIP con nombre fijo: videos-generados.zip
-    if args.zip:
-        nombre_zip = args.zip if args.zip.endswith(".zip") else args.zip + ".zip"
-    else:
-        nombre_zip = "videos-generados.zip"
-
     print("🎬 ¡Generador de videos para toda la semana!")
     print("=" * 50)
     print(f"📝 Videos por día: {videos_por_dia}")
     print(f"🎯 Temática: {tema_input}")
-    print(f"📦 ZIP: {nombre_zip}")
     print("=" * 50)
 
-    TEMAS = seleccionar_temas(tema_input, videos_por_dia)
+    # Seleccionar temas para los 7 días
+    temas_semana = seleccionar_temas(tema_input)
 
-    DIAS_SEMANA = {0: "Lunes", 1: "Martes", 2: "Miércoles", 3: "Jueves", 4: "Viernes", 5: "Sábado", 6: "Domingo"}
+    DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 
     print(f"\n📝 Generando {videos_por_dia} videos por cada día de la semana")
     print(f"📊 Total: {videos_por_dia * 7} videos")
     print("=" * 50)
 
-    for dia, tema_nombre in TEMAS.items():
-        dia_nombre = DIAS_SEMANA.get(dia, "Día")
-        print(f"\n📅 Procesando: {dia_nombre} - {tema_nombre}")
+    for dia_idx, tema in enumerate(temas_semana):
+        dia_nombre = DIAS_SEMANA[dia_idx]
+        print(f"\n📅 Procesando: {dia_nombre} - {tema}")
         print(f"   📝 Generando {videos_por_dia} videos...")
 
+        # Obtener frases para el tema
+        frases_tema = obtener_frases_para_tema(tema)
+
         for i in range(videos_por_dia):
-            pregunta, frases = generar_texto_completo(tema_nombre)
-            crear_video(pregunta, frases, dia_nombre, tema_nombre, i+1)
+            pregunta = generar_pregunta(tema)
+            # Elegir entre 6 y 8 frases para el texto completo (pero luego se ajustan en los párrafos)
+            num_frases = random.choice([6, 7, 8])
+            frases_usar = random.sample(frases_tema, min(num_frases, len(frases_tema)))
+            # Asegurar que haya al menos 6 frases
+            while len(frases_usar) < 6:
+                frases_usar.append("Sigue adelante con fe y determinación.")
+            crear_video(pregunta, frases_usar, dia_nombre, tema, i+1)
             time.sleep(0.5)
 
     print("\n🎉 ¡Todos los videos generados!")
 
+    # Crear ZIP
     if not args.no_zip:
+        nombre_zip = "videos-generados.zip"
         print(f"📦 Creando ZIP: {nombre_zip} ...")
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    # 🔥 Añadir la carpeta "videos/" dentro del ZIP
                     zipf.write(os.path.join(root, file), arcname=os.path.join("videos", file))
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
