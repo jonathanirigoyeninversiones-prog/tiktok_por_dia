@@ -10,7 +10,7 @@ import zipfile
 import time
 from datetime import datetime, timezone, timedelta
 from moviepy.editor import ImageClip, concatenate_videoclips
-from moviepy.video.fx import slide_in, fadein
+from moviepy.video.fx import slide_in
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # ============================================
@@ -371,4 +371,249 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
         num_intermedios = 1
     
     if len(frases) > num_intermedios:
- 
+        seleccionadas = random.sample(frases, num_intermedios)
+    else:
+        seleccionadas = frases.copy()
+        while len(seleccionadas) < num_intermedios:
+            seleccionadas.append("Sigue adelante con fe y determinación.")
+    
+    parrafos.extend(seleccionadas)
+    parrafos.append("Déjame tu opinión abajo")
+    
+    while len(parrafos) < num_parrafos:
+        parrafos.insert(-1, "Sigue adelante con fe y determinación.")
+    while len(parrafos) > num_parrafos:
+        parrafos.pop(-2)
+    
+    return parrafos
+
+# ============================================
+# OBTENER IMÁGENES DE PEXELS
+# ============================================
+def obtener_imagenes(query, cantidad):
+    url = "https://api.pexels.com/v1/search"
+    headers = {"Authorization": CLAVE_PEXELS}
+    params = {
+        "query": query,
+        "per_page": max(cantidad, 5),
+        "orientation": "portrait",
+        "page": random.randint(1, 5)
+    }
+    try:
+        resp = requests.get(url, headers=headers, params=params, timeout=10)
+        if resp.status_code == 200:
+            fotos = resp.json().get("photos", [])
+            if fotos:
+                return [foto["src"]["large"] for foto in fotos[:cantidad]]
+    except:
+        pass
+    return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
+
+# ============================================
+# CREAR VÍDEO (con borde grueso, sombra, animación aleatoria y firma dorada)
+# ============================================
+def crear_video(tema, dia_semana, numero):
+    num_parrafos = random.choice([6, 7, 8])
+    duracion_total = random.uniform(70, 85)
+    duracion_por_parrafo = duracion_total / num_parrafos
+    duraciones = [duracion_por_parrafo] * num_parrafos
+
+    print(f"   🎬 Video {numero} ({dia_semana} - {tema}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
+    print(f"   ⏱️  Cada párrafo: {duracion_por_parrafo:.1f}s")
+    os.makedirs("videos", exist_ok=True)
+
+    pregunta = generar_pregunta(tema)
+    frases_tema = obtener_frases_para_tema(tema)
+    frases_usar = random.sample(frases_tema, min(8, len(frases_tema)))
+    while len(frases_usar) < 6:
+        frases_usar.append("Sigue adelante con fe y determinación.")
+    
+    parrafos = dividir_en_parrafos(pregunta, frases_usar, num_parrafos)
+
+    query = tema.lower()
+    imagenes_urls = obtener_imagenes(query, num_parrafos)
+    while len(imagenes_urls) < num_parrafos:
+        imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
+
+    clips = []
+    for i, parrafo in enumerate(parrafos):
+        try:
+            img_data = requests.get(imagenes_urls[i], timeout=10).content
+            with open(f"temp_fondo_{i}.jpg", "wb") as f:
+                f.write(img_data)
+            img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
+        except:
+            img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
+        
+        # Desenfoque suave (radius=2)
+        img = img.filter(ImageFilter.GaussianBlur(radius=2))
+        img = img.resize((1080, 1920))
+        draw = ImageDraw.Draw(img)
+
+        # Dividir el texto en líneas
+        lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
+        total_lineas = len(lineas)
+        if total_lineas == 0:
+            lineas = [" "]
+            total_lineas = 1
+
+        MARGEN_Y = 200
+        font_size = int((1920 - 2 * MARGEN_Y) / (total_lineas * 1.4))
+        font_size = max(30, min(font_size, 70))
+
+        try:
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
+        except:
+            try:
+                font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", font_size)
+            except:
+                font = ImageFont.load_default()
+
+        altura_bloque = total_lineas * (font_size * 1.3)
+        y_inicio = 1920 - altura_bloque - 200
+
+        # ---------- DIBUJAR TEXTO CON SOMBRA Y BORDE GRUESO ----------
+        y = y_inicio
+        for linea in lineas:
+            # Obtener coordenadas para centrar
+            bbox = draw.textbbox((0, 0), linea, font=font)
+            ancho_linea = bbox[2] - bbox[0]
+            x = (1080 - ancho_linea) // 2
+
+            # 1. SOMBRA (texto en negro con opacidad, desplazado 3px)
+            draw.text((x+3, y+3), linea, font=font, fill=(0, 0, 0, 150), stroke_width=0)
+            # 2. TEXTO PRINCIPAL (blanco con borde grueso)
+            draw.text((x, y), linea, font=font, fill='white', stroke_width=7, stroke_fill='black')
+            y += font_size * 1.3
+
+        # ---------- FIRMA DORADA MÁS GRANDE ----------
+        firma = "@jonathan_irigoyen"
+        try:
+            font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+        except:
+            try:
+                font_firma = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 30)
+            except:
+                font_firma = ImageFont.load_default()
+        
+        bbox_firma = draw.textbbox((0, 0), firma, font=font_firma)
+        ancho_firma = bbox_firma[2] - bbox_firma[0]
+        alto_firma = bbox_firma[3] - bbox_firma[1]
+        x_firma = 1080 - ancho_firma - 30
+        y_firma = 1920 - alto_firma - 30
+
+        # Sombra de la firma
+        draw.text((x_firma+3, y_firma+3), firma, font=font_firma, fill=(0, 0, 0, 150), stroke_width=0)
+        # Texto dorado con borde
+        draw.text((x_firma, y_firma), firma, font=font_firma, fill='#DAA520', stroke_width=4, stroke_fill='black')
+
+        # Guardar imagen
+        img.save(f"temp_texto_{i}.jpg", "JPEG")
+        
+        # Crear clip base
+        clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
+        
+        # ---------- ANIMACIÓN DE ENTRADA ALEATORIA ----------
+        # Elegir un efecto aleatorio para este párrafo
+        efecto = random.choice(['slide_bottom', 'slide_left', 'zoom', 'fade'])
+        
+        if efecto == 'slide_bottom':
+            clip = clip.fx(slide_in, duration=0.5, side='bottom')
+        elif efecto == 'slide_left':
+            clip = clip.fx(slide_in, duration=0.5, side='left')
+        elif efecto == 'zoom':
+            clip = clip.resize(lambda t: 1 + 0.1 * (1 - t/0.5) if t < 0.5 else 1).set_duration(duraciones[i])
+        else:  # 'fade'
+            clip = clip.fadein(0.5)
+        
+        # Añadir un pequeño fade out al final de cada clip (para transición suave)
+        clip = clip.fadeout(0.2)
+        
+        clips.append(clip)
+
+        try:
+            os.remove(f"temp_fondo_{i}.jpg")
+        except:
+            pass
+
+    # Concatenar todos los clips (ya con sus animaciones)
+    video = concatenate_videoclips(clips, method="compose")
+
+    # Guardar video
+    tz_venezuela = timezone(timedelta(hours=-4))
+    ahora = datetime.now(tz_venezuela)
+    fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
+    nombre = f"videos/{dia_semana}-{tema}-{fecha_hora}-video-{numero:03d}.mp4"
+    video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
+    print(f"   ✅ Video guardado: {nombre}")
+
+    # Limpiar archivos temporales
+    for f in os.listdir("."):
+        if f.startswith("temp_") and f.endswith(".jpg"):
+            try:
+                os.remove(f)
+            except:
+                pass
+
+# ============================================
+# SELECCIÓN DE TEMAS PARA LA SEMANA (CORREGIDA)
+# ============================================
+def seleccionar_temas(opcion):
+    opcion_limpia = opcion.strip().lower()
+    if any(palabra in opcion_limpia for palabra in ["todo", "aleatorio", "random", "azar"]):
+        temas = random.sample(TEMAS_PREDEFINIDOS, 7)
+        print(f"📌 Temas seleccionados (aleatorios): {', '.join(temas)}")
+        return temas
+    else:
+        print(f"📌 Usando el tema: {opcion} (todos los días)")
+        return [opcion] * 7
+
+# ============================================
+# EJECUCIÓN PRINCIPAL
+# ============================================
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generador de videos para toda la semana")
+    parser.add_argument("--videos", type=int, default=5, help="Número de videos por día (por defecto: 5)")
+    parser.add_argument("--tema", type=str, default="Motivacion", help="Tema o 'todo' para aleatorio (por defecto: Motivacion)")
+    parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
+    args = parser.parse_args()
+
+    videos_por_dia = args.videos
+    tema_input = args.tema
+
+    print("🎬 ¡Generador de videos para toda la semana!")
+    print("=" * 50)
+    print(f"📝 Videos por día: {videos_por_dia} (por defecto: 5)")
+    print(f"🎯 Temática: {tema_input} (escribe 'todo' para aleatorio)")
+    print("=" * 50)
+
+    temas_semana = seleccionar_temas(tema_input)
+
+    DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+
+    print(f"\n📝 Generando {videos_por_dia} videos por cada día de la semana")
+    print(f"📊 Total: {videos_por_dia * 7} videos")
+    print("=" * 50)
+
+    for dia_idx, tema in enumerate(temas_semana):
+        dia_nombre = DIAS_SEMANA[dia_idx]
+        print(f"\n📅 Procesando: {dia_nombre} - {tema}")
+        print(f"   📝 Generando {videos_por_dia} videos...")
+
+        for i in range(videos_por_dia):
+            crear_video(tema, dia_nombre, i+1)
+            time.sleep(0.5)
+
+    print("\n🎉 ¡Todos los videos generados!")
+
+    if not args.no_zip:
+        nombre_zip = "videos-generados.zip"
+        print(f"📦 Creando ZIP: {nombre_zip} ...")
+        with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, dirs, files in os.walk("videos"):
+                for file in files:
+                    zipf.write(os.path.join(root, file), arcname=file)
+        print(f"✅ ZIP creado: {nombre_zip}")
+        print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
+    else:
+        print("⏭️  No se creó ZIP (opción --no-zip activada).")
