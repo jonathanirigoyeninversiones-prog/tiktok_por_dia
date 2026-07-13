@@ -10,7 +10,6 @@ import zipfile
 import time
 from datetime import datetime, timezone, timedelta
 from moviepy.editor import ImageClip, concatenate_videoclips
-from moviepy.video.fx import slide_in
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # ============================================
@@ -22,10 +21,6 @@ if not CLAVE_PEXELS:
     print("ERROR: Falta la clave de Pexels.")
     print("Asegúrate de configurar PEXELS_API_KEY como secreto en GitHub.")
     sys.exit(1)
-
-# Carpeta donde se guardarán las imágenes descargadas localmente
-IMAGENES_DIR = "imagenes"
-IMAGENES_POR_TEMA = 8  # Número de imágenes a descargar por tema (ajústalo)
 
 # ============================================
 # LISTA DE TEMAS PREDEFINIDOS (20)
@@ -392,77 +387,26 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
     return parrafos
 
 # ============================================
-# SISTEMA DE IMÁGENES LOCALES
+# OBTENER IMÁGENES DE PEXELS
 # ============================================
-def asegurar_imagenes_locales():
-    """Verifica si las imágenes locales existen y las descarga si es necesario."""
-    print("\n📥 Verificando imágenes locales...")
-    os.makedirs(IMAGENES_DIR, exist_ok=True)
-    
-    for tema in TEMAS_PREDEFINIDOS:
-        carpeta_tema = os.path.join(IMAGENES_DIR, tema)
-        os.makedirs(carpeta_tema, exist_ok=True)
-        
-        # Contar imágenes existentes
-        imagenes_existentes = [f for f in os.listdir(carpeta_tema) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-        if len(imagenes_existentes) >= IMAGENES_POR_TEMA:
-            print(f"   ✅ Imágenes para '{tema}' ya existen ({len(imagenes_existentes)} archivos).")
-            continue
-        
-        print(f"   📥 Descargando imágenes para '{tema}'...")
-        # Descargar imágenes faltantes
-        descargar_imagenes_para_tema(tema, IMAGENES_POR_TEMA - len(imagenes_existentes))
-        print(f"   ✅ Imágenes descargadas para '{tema}'.")
-
-def descargar_imagenes_para_tema(tema, cantidad):
-    """Descarga imágenes de Pexels para un tema específico."""
-    if cantidad <= 0:
-        return
-    
+def obtener_imagenes(query, cantidad):
     url = "https://api.pexels.com/v1/search"
     headers = {"Authorization": CLAVE_PEXELS}
     params = {
-        "query": tema.lower(),
-        "per_page": min(cantidad, 80),
+        "query": query,
+        "per_page": max(cantidad, 5),
         "orientation": "portrait",
         "page": random.randint(1, 5)
     }
-    
     try:
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
+        resp = requests.get(url, headers=headers, params=params, timeout=10)
         if resp.status_code == 200:
             fotos = resp.json().get("photos", [])
             if fotos:
-                carpeta_tema = os.path.join(IMAGENES_DIR, tema)
-                os.makedirs(carpeta_tema, exist_ok=True)
-                
-                for i, foto in enumerate(fotos[:cantidad]):
-                    try:
-                        img_url = foto["src"]["large"]
-                        img_data = requests.get(img_url, timeout=15).content
-                        nombre = f"img_{i+1:03d}.jpg"
-                        ruta = os.path.join(carpeta_tema, nombre)
-                        with open(ruta, "wb") as f:
-                            f.write(img_data)
-                    except Exception as e:
-                        print(f"   ⚠️ Error descargando imagen {i+1}: {e}")
-                return
-        print(f"   ⚠️ No se pudieron descargar imágenes para '{tema}'. Usando imagen por defecto.")
-    except Exception as e:
-        print(f"   ⚠️ Error descargando imágenes para '{tema}': {e}")
-
-def obtener_imagen_local(tema):
-    """Obtiene una imagen local aleatoria para el tema."""
-    carpeta_tema = os.path.join(IMAGENES_DIR, tema)
-    if not os.path.exists(carpeta_tema):
-        return None
-    
-    imagenes = [f for f in os.listdir(carpeta_tema) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-    if not imagenes:
-        return None
-    
-    elegida = random.choice(imagenes)
-    return os.path.join(carpeta_tema, elegida)
+                return [foto["src"]["large"] for foto in fotos[:cantidad]]
+    except:
+        pass
+    return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
 # ============================================
 # CREAR VÍDEO (con borde grueso, sombra, animación aleatoria y firma dorada)
@@ -485,17 +429,19 @@ def crear_video(tema, dia_semana, numero):
     
     parrafos = dividir_en_parrafos(pregunta, frases_usar, num_parrafos)
 
-    # Obtener imágenes locales
+    query = tema.lower()
+    imagenes_urls = obtener_imagenes(query, num_parrafos)
+    while len(imagenes_urls) < num_parrafos:
+        imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
+
     clips = []
     for i, parrafo in enumerate(parrafos):
-        # Buscar imagen local
-        ruta_local = obtener_imagen_local(tema)
-        if ruta_local and os.path.exists(ruta_local):
-            try:
-                img = Image.open(ruta_local).convert("RGB")
-            except:
-                img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
-        else:
+        try:
+            img_data = requests.get(imagenes_urls[i], timeout=10).content
+            with open(f"temp_fondo_{i}.jpg", "wb") as f:
+                f.write(img_data)
+            img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
+        except:
             img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
         
         # Desenfoque suave (radius=2)
@@ -566,14 +512,34 @@ def crear_video(tema, dia_semana, numero):
         # Crear clip base
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         
-        # ---------- ANIMACIÓN DE ENTRADA ALEATORIA ----------
-        # Elegir un efecto aleatorio para este párrafo
-        efecto = random.choice(['slide_bottom', 'slide_left', 'fade'])
+        # ---------- ANIMACIÓN DE ENTRADA ALEATORIA (compatible con moviepy 1.0.3) ----------
+        efecto = random.choice(['slide_bottom', 'slide_left', 'zoom', 'fade'])
         
         if efecto == 'slide_bottom':
-            clip = clip.fx(slide_in, duration=0.5, side='bottom')
+            # Deslizamiento desde abajo (usando set_position)
+            def pos_bottom(t):
+                if t < 0.5:
+                    return ('center', 1920 - (1920 - 0) * (t / 0.5))
+                else:
+                    return ('center', 0)
+            clip = clip.set_position(pos_bottom)
+            clip = clip.fadein(0.3)
         elif efecto == 'slide_left':
-            clip = clip.fx(slide_in, duration=0.5, side='left')
+            # Deslizamiento desde la izquierda
+            def pos_left(t):
+                if t < 0.5:
+                    return (-1080 + 1080 * (t / 0.5), 'center')
+                else:
+                    return (0, 'center')
+            clip = clip.set_position(pos_left)
+            clip = clip.fadein(0.3)
+        elif efecto == 'zoom':
+            # Zoom in (sin usar ANTIALIAS, con resize)
+            def make_frame(t):
+                # Esta función no se usa directamente, pero resize con lambda es compatible
+                return clip.get_frame(t)
+            clip = clip.resize(lambda t: 1 + 0.2 * (1 - min(1, t/0.5)) if t < 0.5 else 1)
+            clip = clip.fadein(0.3)
         else:  # 'fade'
             clip = clip.fadein(0.5)
         
@@ -581,6 +547,11 @@ def crear_video(tema, dia_semana, numero):
         clip = clip.fadeout(0.2)
         
         clips.append(clip)
+
+        try:
+            os.remove(f"temp_fondo_{i}.jpg")
+        except:
+            pass
 
     # Concatenar todos los clips (ya con sus animaciones)
     video = concatenate_videoclips(clips, method="compose")
@@ -632,9 +603,6 @@ if __name__ == "__main__":
     print(f"📝 Videos por día: {videos_por_dia} (por defecto: 5)")
     print(f"🎯 Temática: {tema_input} (escribe 'todo' para aleatorio)")
     print("=" * 50)
-
-    # Asegurar que las imágenes locales estén descargadas
-    asegurar_imagenes_locales()
 
     temas_semana = seleccionar_temas(tema_input)
 
