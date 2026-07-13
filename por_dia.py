@@ -10,7 +10,7 @@ import zipfile
 import time
 from datetime import datetime, timezone, timedelta
 from moviepy.editor import ImageClip, concatenate_videoclips
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter  # <-- ImageFilter para desenfoque
 
 # ============================================
 # CONFIGURACIÓN
@@ -409,7 +409,7 @@ def obtener_imagenes(query, cantidad):
     return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
 # ============================================
-# CREAR VÍDEO
+# CREAR VÍDEO (con desenfoque y firma abajo a la derecha)
 # ============================================
 def crear_video(tema, dia_semana, numero):
     num_parrafos = random.choice([6, 7, 8])
@@ -445,6 +445,9 @@ def crear_video(tema, dia_semana, numero):
         except:
             img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
         
+        # 🔥 APLICAR DESENFOQUE A TODA LA IMAGEN
+        img = img.filter(ImageFilter.GaussianBlur(radius=15))
+        
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
 
@@ -478,17 +481,23 @@ def crear_video(tema, dia_semana, numero):
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
-        # FIRMA (esquina superior izquierda)
+        # 🔥 FIRMA EN ESQUINA INFERIOR DERECHA (debajo del párrafo)
         firma = "@jonathan_irigoyen"
         try:
-            font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+            font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 25)
         except:
             try:
-                font_firma = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 30)
+                font_firma = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 25)
             except:
                 font_firma = ImageFont.load_default()
-        margen = 20
-        draw.text((margen, margen), firma, font=font_firma, fill='white', stroke_width=2, stroke_fill='black')
+        
+        # Posición: abajo a la derecha, con margen de 30px
+        bbox_firma = draw.textbbox((0, 0), firma, font=font_firma)
+        ancho_firma = bbox_firma[2] - bbox_firma[0]
+        alto_firma = bbox_firma[3] - bbox_firma[1]
+        x_firma = 1080 - ancho_firma - 30
+        y_firma = 1920 - alto_firma - 30
+        draw.text((x_firma, y_firma), firma, font=font_firma, fill='white', stroke_width=2, stroke_fill='black')
 
         # Guardar y crear clip
         img.save(f"temp_texto_{i}.jpg", "JPEG")
@@ -522,12 +531,13 @@ def crear_video(tema, dia_semana, numero):
 # SELECCIÓN DE TEMAS PARA LA SEMANA
 # ============================================
 def seleccionar_temas(opcion):
+    # 🔥 Si la opción es "todo", "aleatorio", "random" o "azar", elegimos 7 temas aleatorios
     if opcion.lower() in ["todo", "aleatorio", "azar", "random"]:
         temas = random.sample(TEMAS_PREDEFINIDOS, 7)
-        print(f"📌 Temas seleccionados: {', '.join(temas)}")
+        print(f"📌 Temas seleccionados (aleatorios): {', '.join(temas)}")
         return temas
     else:
-        print(f"📌 Usando el tema: {opcion}")
+        print(f"📌 Usando el tema: {opcion} (todos los días)")
         return [opcion] * 7
 
 # ============================================
@@ -576,7 +586,6 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    # Los vídeos van directamente en la raíz del ZIP
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
