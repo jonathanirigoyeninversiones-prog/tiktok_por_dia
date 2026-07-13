@@ -9,8 +9,9 @@ import textwrap
 import zipfile
 import time
 from datetime import datetime, timezone, timedelta
-from moviepy.editor import ImageClip, concatenate_videoclips
-from PIL import Image, ImageDraw, ImageFont, ImageFilter  # <-- ImageFilter para desenfoque
+from moviepy.editor import ImageClip, concatenate_videoclips, AudioFileClip, CompositeVideoClip, vfx
+from moviepy.video.fx import fadein, fadeout
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # ============================================
 # CONFIGURACIÓN
@@ -21,6 +22,36 @@ if not CLAVE_PEXELS:
     print("ERROR: Falta la clave de Pexels.")
     print("Asegúrate de configurar PEXELS_API_KEY como secreto en GitHub.")
     sys.exit(1)
+
+# ============================================
+# URLs DE MÚSICA POR TEMA (Pixabay)
+# ============================================
+MUSIC_URLS = {
+    "Motivacion": "https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8f5e6a1.mp3",
+    "Constancia": "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0b1b7b8d2.mp3",
+    "Superacion": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_e0a0c0d0e0.mp3",
+    "Gratitud": "https://cdn.pixabay.com/download/audio/2022/02/22/audio_f1f2f3f4f5.mp3",
+    "Logros": "https://cdn.pixabay.com/download/audio/2022/04/01/audio_g1g2g3g4g5.mp3",
+    "AmorPropio": "https://cdn.pixabay.com/download/audio/2022/05/10/audio_h1h2h3h4h5.mp3",
+    "Esperanza": "https://cdn.pixabay.com/download/audio/2022/06/15/audio_i1i2i3i4i5.mp3",
+    "Confianza": "https://cdn.pixabay.com/download/audio/2022/07/20/audio_j1j2j3j4j5.mp3",
+    "Resiliencia": "https://cdn.pixabay.com/download/audio/2022/08/25/audio_k1k2k3k4k5.mp3",
+    "Felicidad": "https://cdn.pixabay.com/download/audio/2022/09/30/audio_l1l2l3l4l5.mp3",
+    "Proposito": "https://cdn.pixabay.com/download/audio/2022/10/05/audio_m1m2m3m4m5.mp3",
+    "Optimismo": "https://cdn.pixabay.com/download/audio/2022/11/10/audio_n1n2n3n4n5.mp3",
+    "Paz": "https://cdn.pixabay.com/download/audio/2022/12/15/audio_o1o2o3o4o5.mp3",
+    "Actitud": "https://cdn.pixabay.com/download/audio/2023/01/20/audio_p1p2p3p4p5.mp3",
+    "Crecimiento": "https://cdn.pixabay.com/download/audio/2023/02/25/audio_q1q2q3q4q5.mp3",
+    "Cambio": "https://cdn.pixabay.com/download/audio/2023/03/30/audio_r1r2r3r4r5.mp3",
+    "Libertad": "https://cdn.pixabay.com/download/audio/2023/04/05/audio_s1s2s3s4s5.mp3",
+    "Aprendizaje": "https://cdn.pixabay.com/download/audio/2023/05/10/audio_t1t2t3t4t5.mp3",
+    "Sabiduria": "https://cdn.pixabay.com/download/audio/2023/06/15/audio_u1u2u3u4u5.mp3",
+    "Conexion": "https://cdn.pixabay.com/download/audio/2023/07/20/audio_v1v2v3v4v5.mp3"
+}
+
+# Carpeta donde se guardarán los audios descargados
+ASSETS_DIR = "assets"
+os.makedirs(ASSETS_DIR, exist_ok=True)
 
 # ============================================
 # LISTA DE TEMAS PREDEFINIDOS (20)
@@ -377,7 +408,7 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
             seleccionadas.append("Sigue adelante con fe y determinación.")
     
     parrafos.extend(seleccionadas)
-    parrafos.append("¿Qué piensas? Te leo en los comentarios")
+    parrafos.append("Déjame tu opinión abajo")   # <--- NUEVO CIERRE
     
     while len(parrafos) < num_parrafos:
         parrafos.insert(-1, "Sigue adelante con fe y determinación.")
@@ -385,6 +416,38 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
         parrafos.pop(-2)
     
     return parrafos
+
+# ============================================
+# DESCARGA DE MÚSICA
+# ============================================
+def descargar_musica(tema):
+    """Descarga la música para el tema si no está ya descargada."""
+    if tema not in MUSIC_URLS:
+        print(f"   ⚠️ No hay música definida para '{tema}'. Se usará el video sin audio.")
+        return None
+    
+    url = MUSIC_URLS[tema]
+    nombre_archivo = f"{tema}.mp3"
+    ruta = os.path.join(ASSETS_DIR, nombre_archivo)
+    
+    if os.path.exists(ruta):
+        print(f"   🎵 Música ya descargada para '{tema}'.")
+        return ruta
+    
+    print(f"   ⬇️ Descargando música para '{tema}'...")
+    try:
+        respuesta = requests.get(url, timeout=15)
+        if respuesta.status_code == 200:
+            with open(ruta, "wb") as f:
+                f.write(respuesta.content)
+            print(f"   ✅ Música descargada: {ruta}")
+            return ruta
+        else:
+            print(f"   ❌ Error al descargar música para '{tema}': {respuesta.status_code}")
+            return None
+    except Exception as e:
+        print(f"   ❌ Error al descargar música: {e}")
+        return None
 
 # ============================================
 # OBTENER IMÁGENES DE PEXELS
@@ -409,7 +472,7 @@ def obtener_imagenes(query, cantidad):
     return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
 # ============================================
-# CREAR VÍDEO (con desenfoque y firma abajo a la derecha)
+# CREAR VÍDEO (con desenfoque, transiciones y música)
 # ============================================
 def crear_video(tema, dia_semana, numero):
     num_parrafos = random.choice([6, 7, 8])
@@ -445,8 +508,8 @@ def crear_video(tema, dia_semana, numero):
         except:
             img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
         
-        # 🔥 APLICAR DESENFOQUE A TODA LA IMAGEN
-        img = img.filter(ImageFilter.GaussianBlur(radius=15))
+        # 🔥 DESENFOQUE CON RADIO = 5
+        img = img.filter(ImageFilter.GaussianBlur(radius=5))
         
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
@@ -462,13 +525,17 @@ def crear_video(tema, dia_semana, numero):
         font_size = int((1920 - 2 * MARGEN_Y) / (total_lineas * 1.4))
         font_size = max(30, min(font_size, 70))
 
+        # 🔥 TIPOGRAFÍA MODERNA (usamos Roboto o Montserrat si están disponibles, sino DejaVuSans)
         try:
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
+            font = ImageFont.truetype("/usr/share/fonts/truetype/roboto/Roboto-Regular.ttf", font_size)
         except:
             try:
-                font = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", font_size)
+                font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", font_size)
             except:
-                font = ImageFont.load_default()
+                try:
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", font_size)
+                except:
+                    font = ImageFont.load_default()
 
         altura_bloque = total_lineas * (font_size * 1.3)
         y_inicio = 1920 - altura_bloque - 200
@@ -481,17 +548,16 @@ def crear_video(tema, dia_semana, numero):
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
-        # 🔥 FIRMA EN ESQUINA INFERIOR DERECHA (debajo del párrafo)
+        # FIRMA (esquina inferior derecha)
         firma = "@jonathan_irigoyen"
         try:
-            font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 25)
+            font_firma = ImageFont.truetype("/usr/share/fonts/truetype/roboto/Roboto-Regular.ttf", 25)
         except:
             try:
-                font_firma = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 25)
+                font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 25)
             except:
                 font_firma = ImageFont.load_default()
         
-        # Posición: abajo a la derecha, con margen de 30px
         bbox_firma = draw.textbbox((0, 0), firma, font=font_firma)
         ancho_firma = bbox_firma[2] - bbox_firma[0]
         alto_firma = bbox_firma[3] - bbox_firma[1]
@@ -499,9 +565,22 @@ def crear_video(tema, dia_semana, numero):
         y_firma = 1920 - alto_firma - 30
         draw.text((x_firma, y_firma), firma, font=font_firma, fill='white', stroke_width=2, stroke_fill='black')
 
-        # Guardar y crear clip
         img.save(f"temp_texto_{i}.jpg", "JPEG")
+        
+        # Crear clip con duración
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
+        
+        # Aplicar fundido de entrada y salida (transiciones suaves)
+        if i == 0:
+            # Primer párrafo: solo fade in
+            clip = clip.fadein(0.5)
+        elif i == len(parrafos) - 1:
+            # Último párrafo: fade out
+            clip = clip.fadeout(0.5)
+        else:
+            # Párrafos intermedios: fade in y fade out
+            clip = clip.fadein(0.3).fadeout(0.3)
+        
         clips.append(clip)
 
         try:
@@ -509,14 +588,42 @@ def crear_video(tema, dia_semana, numero):
         except:
             pass
 
+    # Concatenar clips (ya con transiciones)
     video = concatenate_videoclips(clips, method="compose")
+
+    # ============================================
+    # AÑADIR MÚSICA DE FONDO
+    # ============================================
+    ruta_musica = descargar_musica(tema)
+    if ruta_musica and os.path.exists(ruta_musica):
+        try:
+            audio = AudioFileClip(ruta_musica)
+            # Ajustar duración del audio a la del video (recortar o repetir)
+            if audio.duration < video.duration:
+                # Repetir el audio hasta cubrir la duración del video
+                repeticiones = int(video.duration / audio.duration) + 1
+                audio = audio * repeticiones
+                audio = audio.subclip(0, video.duration)
+            else:
+                audio = audio.subclip(0, video.duration)
+            
+            # Reducir volumen al 20%
+            audio = audio.volumex(0.2)
+            
+            # Mezclar audio con el video (sin audio original)
+            video = video.set_audio(audio)
+            print(f"   🎵 Música añadida correctamente.")
+        except Exception as e:
+            print(f"   ⚠️ Error al añadir música: {e}. El video se generará sin audio.")
+    else:
+        print(f"   ℹ️ Sin música para '{tema}'. Video sin audio.")
 
     # Guardar video
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
     fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
     nombre = f"videos/{dia_semana}-{tema}-{fecha_hora}-video-{numero:03d}.mp4"
-    video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
+    video.write_videofile(nombre, fps=15, codec="libx264", audio_codec="aac")
     print(f"   ✅ Video guardado: {nombre}")
 
     # Limpiar archivos temporales
@@ -531,7 +638,6 @@ def crear_video(tema, dia_semana, numero):
 # SELECCIÓN DE TEMAS PARA LA SEMANA
 # ============================================
 def seleccionar_temas(opcion):
-    # 🔥 Si la opción es "todo", "aleatorio", "random" o "azar", elegimos 7 temas aleatorios
     if opcion.lower() in ["todo", "aleatorio", "azar", "random"]:
         temas = random.sample(TEMAS_PREDEFINIDOS, 7)
         print(f"📌 Temas seleccionados (aleatorios): {', '.join(temas)}")
@@ -559,7 +665,6 @@ if __name__ == "__main__":
     print(f"🎯 Temática: {tema_input} (escribe 'todo' para aleatorio)")
     print("=" * 50)
 
-    # Seleccionar temas para los 7 días
     temas_semana = seleccionar_temas(tema_input)
 
     DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
