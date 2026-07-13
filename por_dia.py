@@ -535,8 +535,8 @@ def seleccionar_temas(opcion):
 # ============================================
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generador de videos para toda la semana")
-    parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
-    parser.add_argument("--tema", type=str, default="todo", help="Tema o 'todo' para aleatorio")
+    parser.add_argument("--videos", type=int, default=5, help="Número de videos por día (por defecto: 5)")
+    parser.add_argument("--tema", type=str, default="Motivacion", help="Tema o 'todo' para aleatorio (por defecto: Motivacion)")
     parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
     args = parser.parse_args()
 
@@ -545,8 +545,8 @@ if __name__ == "__main__":
 
     print("🎬 ¡Generador de videos para toda la semana!")
     print("=" * 50)
-    print(f"📝 Videos por día: {videos_por_dia}")
-    print(f"🎯 Temática: {tema_input}")
+    print(f"📝 Videos por día: {videos_por_dia} (por defecto: 5)")
+    print(f"🎯 Temática: {tema_input} (escribe 'todo' para aleatorio)")
     print("=" * 50)
 
     # Seleccionar temas para los 7 días
@@ -576,7 +576,7 @@ if __name__ == "__main__":
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk("videos"):
                 for file in files:
-                    # 🔥 CAMBIO AQUÍ: los vídeos van directamente en la raíz del ZIP
+                    # Los vídeos van directamente en la raíz del ZIP
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
         print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
