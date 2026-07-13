@@ -377,7 +377,7 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
             seleccionadas.append("Sigue adelante con fe y determinación.")
     
     parrafos.extend(seleccionadas)
-    parrafos.append("¿Qué piensas? Te leo en los comentarios")
+    parrafos.append("Déjame tu opinión abajo")
     
     while len(parrafos) < num_parrafos:
         parrafos.insert(-1, "Sigue adelante con fe y determinación.")
@@ -436,7 +436,6 @@ def crear_video(tema, dia_semana, numero):
 
     clips = []
     for i, parrafo in enumerate(parrafos):
-        # Descargar imagen
         try:
             img_data = requests.get(imagenes_urls[i], timeout=10).content
             with open(f"temp_fondo_{i}.jpg", "wb") as f:
@@ -445,13 +444,12 @@ def crear_video(tema, dia_semana, numero):
         except:
             img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
         
-        # 🔥 DESENFOQUE SUAVE (radius=2) - se ve más real
+        # Desenfoque suave (radius=2)
         img = img.filter(ImageFilter.GaussianBlur(radius=2))
         
         img = img.resize((1080, 1920))
         draw = ImageDraw.Draw(img)
 
-        # Dibujar texto principal
         lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
         total_lineas = len(lineas)
         if total_lineas == 0:
@@ -481,7 +479,6 @@ def crear_video(tema, dia_semana, numero):
             draw.text((x, y), linea, font=font, fill='white', stroke_width=5, stroke_fill='black')
             y += font_size * 1.3
 
-        # FIRMA EN ESQUINA INFERIOR DERECHA
         firma = "@jonathan_irigoyen"
         try:
             font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 25)
@@ -509,7 +506,6 @@ def crear_video(tema, dia_semana, numero):
 
     video = concatenate_videoclips(clips, method="compose")
 
-    # Guardar video
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
     fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
@@ -517,7 +513,6 @@ def crear_video(tema, dia_semana, numero):
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {nombre}")
 
-    # Limpiar archivos temporales
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
             try:
@@ -526,10 +521,14 @@ def crear_video(tema, dia_semana, numero):
                 pass
 
 # ============================================
-# SELECCIÓN DE TEMAS PARA LA SEMANA
+# SELECCIÓN DE TEMAS PARA LA SEMANA (CORREGIDA)
 # ============================================
 def seleccionar_temas(opcion):
-    if opcion.lower() in ["todo", "aleatorio", "azar", "random"]:
+    # Normalizar: eliminar espacios, convertir a minúsculas
+    opcion_limpia = opcion.strip().lower()
+    
+    # Detectar cualquier variante de "todo", "aleatorio", "random", "azar"
+    if any(palabra in opcion_limpia for palabra in ["todo", "aleatorio", "random", "azar"]):
         temas = random.sample(TEMAS_PREDEFINIDOS, 7)
         print(f"📌 Temas seleccionados (aleatorios): {', '.join(temas)}")
         return temas
