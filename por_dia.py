@@ -10,6 +10,7 @@ import zipfile
 import time
 from datetime import datetime, timezone, timedelta
 from moviepy.editor import ImageClip, concatenate_videoclips
+from moviepy.video.fx import slide_in
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # ============================================
@@ -21,6 +22,10 @@ if not CLAVE_PEXELS:
     print("ERROR: Falta la clave de Pexels.")
     print("Asegúrate de configurar PEXELS_API_KEY como secreto en GitHub.")
     sys.exit(1)
+
+# Carpeta donde se guardarán las imágenes descargadas localmente
+IMAGENES_DIR = "imagenes"
+IMAGENES_POR_TEMA = 8  # Número de imágenes a descargar por tema (ajústalo)
 
 # ============================================
 # LISTA DE TEMAS PREDEFINIDOS (20)
@@ -387,63 +392,80 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
     return parrafos
 
 # ============================================
-# OBTENER IMÁGENES DE PEXELS (con caché local)
+# SISTEMA DE IMÁGENES LOCALES
 # ============================================
-CACHE_DIR = "imagenes_cache"
-
 def asegurar_imagenes_locales():
-    """Descarga imágenes locales para cada tema si no existen."""
-    os.makedirs(CACHE_DIR, exist_ok=True)
+    """Verifica si las imágenes locales existen y las descarga si es necesario."""
+    print("\n📥 Verificando imágenes locales...")
+    os.makedirs(IMAGENES_DIR, exist_ok=True)
+    
     for tema in TEMAS_PREDEFINIDOS:
-        tema_dir = os.path.join(CACHE_DIR, tema)
-        os.makedirs(tema_dir, exist_ok=True)
-        # Verificar cuántas imágenes hay
-        archivos = [f for f in os.listdir(tema_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
-        if len(archivos) < 5:  # Si hay menos de 5, descargar algunas
-            print(f"   📥 Descargando imágenes para '{tema}'...")
-            query = tema.lower()
-            urls = obtener_imagenes(query, 8)  # Descargar 8 imágenes
-            for i, url in enumerate(urls):
-                try:
-                    img_data = requests.get(url, timeout=10).content
-                    with open(os.path.join(tema_dir, f"img_{i:03d}.jpg"), "wb") as f:
-                        f.write(img_data)
-                except:
-                    pass
-            print(f"   ✅ Imágenes descargadas para '{tema}'.")
+        carpeta_tema = os.path.join(IMAGENES_DIR, tema)
+        os.makedirs(carpeta_tema, exist_ok=True)
+        
+        # Contar imágenes existentes
+        imagenes_existentes = [f for f in os.listdir(carpeta_tema) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+        if len(imagenes_existentes) >= IMAGENES_POR_TEMA:
+            print(f"   ✅ Imágenes para '{tema}' ya existen ({len(imagenes_existentes)} archivos).")
+            continue
+        
+        print(f"   📥 Descargando imágenes para '{tema}'...")
+        # Descargar imágenes faltantes
+        descargar_imagenes_para_tema(tema, IMAGENES_POR_TEMA - len(imagenes_existentes))
+        print(f"   ✅ Imágenes descargadas para '{tema}'.")
 
-def obtener_imagen_local(tema):
-    """Devuelve la ruta de una imagen aleatoria para el tema desde la caché local."""
-    tema_dir = os.path.join(CACHE_DIR, tema)
-    if os.path.exists(tema_dir):
-        archivos = [f for f in os.listdir(tema_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
-        if archivos:
-            return os.path.join(tema_dir, random.choice(archivos))
-    # Si no hay imágenes locales, descargar una temporal (fallback)
-    return None
-
-def obtener_imagenes(query, cantidad):
-    """Busca imágenes en Pexels y devuelve una lista de URLs."""
+def descargar_imagenes_para_tema(tema, cantidad):
+    """Descarga imágenes de Pexels para un tema específico."""
+    if cantidad <= 0:
+        return
+    
     url = "https://api.pexels.com/v1/search"
     headers = {"Authorization": CLAVE_PEXELS}
     params = {
-        "query": query,
-        "per_page": max(cantidad, 5),
+        "query": tema.lower(),
+        "per_page": min(cantidad, 80),
         "orientation": "portrait",
         "page": random.randint(1, 5)
     }
+    
     try:
-        resp = requests.get(url, headers=headers, params=params, timeout=10)
+        resp = requests.get(url, headers=headers, params=params, timeout=15)
         if resp.status_code == 200:
             fotos = resp.json().get("photos", [])
             if fotos:
-                return [foto["src"]["large"] for foto in fotos[:cantidad]]
-    except:
-        pass
-    return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
+                carpeta_tema = os.path.join(IMAGENES_DIR, tema)
+                os.makedirs(carpeta_tema, exist_ok=True)
+                
+                for i, foto in enumerate(fotos[:cantidad]):
+                    try:
+                        img_url = foto["src"]["large"]
+                        img_data = requests.get(img_url, timeout=15).content
+                        nombre = f"img_{i+1:03d}.jpg"
+                        ruta = os.path.join(carpeta_tema, nombre)
+                        with open(ruta, "wb") as f:
+                            f.write(img_data)
+                    except Exception as e:
+                        print(f"   ⚠️ Error descargando imagen {i+1}: {e}")
+                return
+        print(f"   ⚠️ No se pudieron descargar imágenes para '{tema}'. Usando imagen por defecto.")
+    except Exception as e:
+        print(f"   ⚠️ Error descargando imágenes para '{tema}': {e}")
+
+def obtener_imagen_local(tema):
+    """Obtiene una imagen local aleatoria para el tema."""
+    carpeta_tema = os.path.join(IMAGENES_DIR, tema)
+    if not os.path.exists(carpeta_tema):
+        return None
+    
+    imagenes = [f for f in os.listdir(carpeta_tema) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+    if not imagenes:
+        return None
+    
+    elegida = random.choice(imagenes)
+    return os.path.join(carpeta_tema, elegida)
 
 # ============================================
-# CREAR VÍDEO (con borde grueso, sombra, animación manual y firma dorada)
+# CREAR VÍDEO (con borde grueso, sombra, animación aleatoria y firma dorada)
 # ============================================
 def crear_video(tema, dia_semana, numero):
     num_parrafos = random.choice([6, 7, 8])
@@ -463,9 +485,10 @@ def crear_video(tema, dia_semana, numero):
     
     parrafos = dividir_en_parrafos(pregunta, frases_usar, num_parrafos)
 
+    # Obtener imágenes locales
     clips = []
     for i, parrafo in enumerate(parrafos):
-        # Intentar obtener imagen local, si no, descargar de Internet
+        # Buscar imagen local
         ruta_local = obtener_imagen_local(tema)
         if ruta_local and os.path.exists(ruta_local):
             try:
@@ -473,19 +496,7 @@ def crear_video(tema, dia_semana, numero):
             except:
                 img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
         else:
-            # Fallback: descargar de Internet
-            query = tema.lower()
-            imagenes_urls = obtener_imagenes(query, 1)
-            if imagenes_urls:
-                try:
-                    img_data = requests.get(imagenes_urls[0], timeout=10).content
-                    with open(f"temp_fondo_{i}.jpg", "wb") as f:
-                        f.write(img_data)
-                    img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
-                except:
-                    img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
-            else:
-                img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
+            img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
         
         # Desenfoque suave (radius=2)
         img = img.filter(ImageFilter.GaussianBlur(radius=2))
@@ -517,6 +528,7 @@ def crear_video(tema, dia_semana, numero):
         # ---------- DIBUJAR TEXTO CON SOMBRA Y BORDE GRUESO ----------
         y = y_inicio
         for linea in lineas:
+            # Obtener coordenadas para centrar
             bbox = draw.textbbox((0, 0), linea, font=font)
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
@@ -527,7 +539,7 @@ def crear_video(tema, dia_semana, numero):
             draw.text((x, y), linea, font=font, fill='white', stroke_width=7, stroke_fill='black')
             y += font_size * 1.3
 
-        # ---------- FIRMA DORADA ----------
+        # ---------- FIRMA DORADA MÁS GRANDE ----------
         firma = "@jonathan_irigoyen"
         try:
             font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
@@ -543,45 +555,34 @@ def crear_video(tema, dia_semana, numero):
         x_firma = 1080 - ancho_firma - 30
         y_firma = 1920 - alto_firma - 30
 
+        # Sombra de la firma
         draw.text((x_firma+3, y_firma+3), firma, font=font_firma, fill=(0, 0, 0, 150), stroke_width=0)
+        # Texto dorado con borde
         draw.text((x_firma, y_firma), firma, font=font_firma, fill='#DAA520', stroke_width=4, stroke_fill='black')
 
+        # Guardar imagen
         img.save(f"temp_texto_{i}.jpg", "JPEG")
         
         # Crear clip base
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         
-        # ---------- ANIMACIÓN DE ENTRADA ALEATORIA (manual) ----------
-        efecto = random.choice(['slide_bottom', 'slide_left', 'zoom', 'fade'])
+        # ---------- ANIMACIÓN DE ENTRADA ALEATORIA ----------
+        # Elegir un efecto aleatorio para este párrafo
+        efecto = random.choice(['slide_bottom', 'slide_left', 'fade'])
         
         if efecto == 'slide_bottom':
-            def make_frame(t):
-                # Desplazamiento desde abajo (posición y = -altura + t * (altura_total / duracion))
-                progress = min(1, t / 0.5)  # 0.5 segundos para deslizar
-                y_offset = int((1 - progress) * 1920)
-                # Usamos el clip original pero con la posición modificada
-                # (implementación simple con resize y recorte)
-                return clip.get_frame(t)
-            # Simplificamos: usamos un clip con posición dinámica
-            clip = clip.set_position(lambda t: (0, int((1 - min(1, t/0.5)) * 1920)))
+            clip = clip.fx(slide_in, duration=0.5, side='bottom')
         elif efecto == 'slide_left':
-            clip = clip.set_position(lambda t: (int((1 - min(1, t/0.5)) * 1080), 0))
-        elif efecto == 'zoom':
-            clip = clip.resize(lambda t: 1 + 0.1 * (1 - min(1, t/0.5))).set_duration(duraciones[i])
+            clip = clip.fx(slide_in, duration=0.5, side='left')
         else:  # 'fade'
             clip = clip.fadein(0.5)
         
-        # Fade out suave al final
+        # Añadir un pequeño fade out al final de cada clip (para transición suave)
         clip = clip.fadeout(0.2)
+        
         clips.append(clip)
 
-        # Limpiar archivos temporales
-        try:
-            os.remove(f"temp_fondo_{i}.jpg")
-        except:
-            pass
-
-    # Concatenar clips
+    # Concatenar todos los clips (ya con sus animaciones)
     video = concatenate_videoclips(clips, method="compose")
 
     # Guardar video
@@ -601,7 +602,7 @@ def crear_video(tema, dia_semana, numero):
                 pass
 
 # ============================================
-# SELECCIÓN DE TEMAS PARA LA SEMANA
+# SELECCIÓN DE TEMAS PARA LA SEMANA (CORREGIDA)
 # ============================================
 def seleccionar_temas(opcion):
     opcion_limpia = opcion.strip().lower()
@@ -632,8 +633,7 @@ if __name__ == "__main__":
     print(f"🎯 Temática: {tema_input} (escribe 'todo' para aleatorio)")
     print("=" * 50)
 
-    # Asegurar imágenes locales (descarga si es necesario)
-    print("📥 Verificando imágenes locales...")
+    # Asegurar que las imágenes locales estén descargadas
     asegurar_imagenes_locales()
 
     temas_semana = seleccionar_temas(tema_input)
