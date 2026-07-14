@@ -23,20 +23,20 @@ if not CLAVE_PEXELS:
     sys.exit(1)
 
 # ============================================
-# LISTA DE TEMAS PREDEFINIDOS (20)
+# LISTA DE TEMAS PREDEFINIDOS (20) CON TILDES Y ESPACIOS
 # ============================================
 TEMAS_PREDEFINIDOS = [
-    "Motivacion",
+    "Motivación",
     "Constancia",
-    "Superacion",
+    "Superación",
     "Gratitud",
     "Logros",
-    "AmorPropio",
+    "Amor Propio",
     "Esperanza",
     "Confianza",
     "Resiliencia",
     "Felicidad",
-    "Proposito",
+    "Propósito",
     "Optimismo",
     "Paz",
     "Actitud",
@@ -44,15 +44,15 @@ TEMAS_PREDEFINIDOS = [
     "Cambio",
     "Libertad",
     "Aprendizaje",
-    "Sabiduria",
-    "Conexion"
+    "Sabiduría",
+    "Conexión"
 ]
 
 # ============================================
-# FRASES PARA CADA TEMA (20 temas)
+# FRASES PARA CADA TEMA (con las claves actualizadas)
 # ============================================
 FRASES_POR_TEMA = {
-    "Motivacion": [
+    "Motivación": [
         "La motivación te da energía para empezar cada día.",
         "Tu entusiasmo contagia a las personas que te rodean.",
         "La fe en ti mismo abre puertas que parecían cerradas.",
@@ -76,7 +76,7 @@ FRASES_POR_TEMA = {
         "La resistencia te permite seguir avanzando sin desfallecer.",
         "La perseverancia es el secreto de todas las grandes historias."
     ],
-    "Superacion": [
+    "Superación": [
         "Superarse es salir de tu zona de confort y crecer.",
         "Los errores te enseñan lecciones que ningún libro puede dar.",
         "Cada desafío te vuelve más fuerte y más sabio.",
@@ -112,7 +112,7 @@ FRASES_POR_TEMA = {
         "Los avances, aunque lentos, siempre te acercan a tu destino.",
         "Cumplir tus metas te llena de satisfacción y orgullo."
     ],
-    "AmorPropio": [
+    "Amor Propio": [
         "Amarte a ti mismo es el primer amor verdadero.",
         "Aceptarte es el primer paso hacia la felicidad plena.",
         "Cuidarte te da la fuerza para cuidar de los demás.",
@@ -172,7 +172,7 @@ FRASES_POR_TEMA = {
         "La dicha se multiplica cuando agradeces lo que tienes.",
         "El contento es el resultado de vivir en armonía con tus valores."
     ],
-    "Proposito": [
+    "Propósito": [
         "El propósito le da sentido y dirección a tu vida.",
         "La misión personal te guía hacia lo que realmente importa.",
         "La vocación te conecta con tu talento y tu pasión más profunda.",
@@ -268,7 +268,7 @@ FRASES_POR_TEMA = {
         "La comprensión te permite ver más allá de las apariencias.",
         "La asimilación te integra el conocimiento en tu forma de ser."
     ],
-    "Sabiduria": [
+    "Sabiduría": [
         "La sabiduría te ayuda a tomar decisiones acertadas en la vida.",
         "La prudencia te aconseja pensar antes de actuar.",
         "La sensatez te guía por el camino del equilibrio y la razón.",
@@ -280,7 +280,7 @@ FRASES_POR_TEMA = {
         "La sagacidad te permite ver lo que otros no ven.",
         "La intuición te conecta con tu sabiduría interior."
     ],
-    "Conexion": [
+    "Conexión": [
         "La conexión con los demás te hace sentir parte de algo más grande.",
         "El vínculo verdadero se construye con honestidad y respeto.",
         "El lazo emocional te une a las personas que realmente importan.",
@@ -314,6 +314,7 @@ def frases_genericas_para_tema(tema):
     for _ in range(10):
         verbo = random.choice(VERBOS_GENERICOS)
         complemento = random.choice(COMPLEMENTOS_GENERICOS)
+        # Detectar género para el artículo (simple)
         femeninas = ("a", "ad", "ión", "umbre", "dad", "tad", "sis", "ez", "eza")
         if tema.lower().endswith(femeninas) and tema.lower() not in ["amor", "cambio", "crecimiento", "propósito", "optimismo", "entusiasmo", "aprendizaje", "conocimiento"]:
             articulo = "la"
@@ -343,20 +344,25 @@ def obtener_frases_para_tema(tema):
         return frases_genericas_para_tema(tema)
 
 # ============================================
-# GENERACIÓN DE PREGUNTA
+# GENERACIÓN DE PREGUNTA (con tema formateado)
 # ============================================
+def formatear_tema_para_texto(tema):
+    """Convierte el tema para mostrarlo en el texto: minúsculas y con espacios."""
+    return tema.lower()
+
 def generar_pregunta(tema):
+    tema_lower = formatear_tema_para_texto(tema)
     preguntas = [
-        f"¿Alguna vez has reflexionado sobre la importancia de {tema.lower()} en tu vida?",
-        f"¿Qué significa para ti {tema.lower()} en tu día a día?",
-        f"¿Cómo aplicas {tema.lower()} en las situaciones más difíciles?",
-        f"¿Crees que {tema.lower()} puede cambiar tu forma de ver las cosas?",
-        f"¿Cuál es tu mayor aprendizaje sobre {tema.lower()} hasta ahora?",
-        f"¿Te has preguntado cómo {tema.lower()} influye en tus decisiones más importantes?",
-        f"¿Qué harías si te faltara {tema.lower()} en tu vida?",
-        f"¿Cuándo fue la última vez que practicaste {tema.lower()} de forma consciente?",
-        f"¿Cómo te sientes cuando hablas o piensas en {tema.lower()}?",
-        f"¿Qué consejo le darías a alguien sobre {tema.lower()} para empezar su camino?"
+        f"¿Alguna vez has reflexionado sobre la importancia de {tema_lower} en tu vida?",
+        f"¿Qué significa para ti {tema_lower} en tu día a día?",
+        f"¿Cómo aplicas {tema_lower} en las situaciones más difíciles?",
+        f"¿Crees que {tema_lower} puede cambiar tu forma de ver las cosas?",
+        f"¿Cuál es tu mayor aprendizaje sobre {tema_lower} hasta ahora?",
+        f"¿Te has preguntado cómo {tema_lower} influye en tus decisiones más importantes?",
+        f"¿Qué harías si te faltara {tema_lower} en tu vida?",
+        f"¿Cuándo fue la última vez que practicaste {tema_lower} de forma consciente?",
+        f"¿Cómo te sientes cuando hablas o piensas en {tema_lower}?",
+        f"¿Qué consejo le darías a alguien sobre {tema_lower} para empezar su camino?"
     ]
     return random.choice(preguntas)
 
@@ -430,7 +436,8 @@ def crear_video(tema, dia_semana, numero):
     parrafos = dividir_en_parrafos(pregunta, frases_usar, num_parrafos)
 
     # Obtener UNA IMAGEN PARA CADA PÁRRAFO
-    query = tema.lower()
+    # Usamos el tema sin espacios para la búsqueda (Pexels no maneja bien espacios)
+    query = tema.replace(" ", "").lower()
     imagenes_urls = obtener_imagenes(query, num_parrafos)
     while len(imagenes_urls) < num_parrafos:
         imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
@@ -486,7 +493,7 @@ def crear_video(tema, dia_semana, numero):
             draw.text((x, y), linea, font=font, fill='white', stroke_width=7, stroke_fill='black')
             y += font_size * 1.3
 
-        # FIRMA (blanco, tamaño 25, como antes)
+        # FIRMA (blanco, tamaño 25)
         firma = "@jonathan_irigoyen"
         try:
             font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 25)
@@ -507,7 +514,7 @@ def crear_video(tema, dia_semana, numero):
 
         img.save(f"temp_texto_{i}.jpg", "JPEG")
         
-        # Crear clip con fadein/fadeout suave (sin animaciones rotas)
+        # Crear clip con fadein/fadeout suave
         clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
         clip = clip.fadein(0.3).fadeout(0.3)
         
@@ -520,11 +527,12 @@ def crear_video(tema, dia_semana, numero):
 
     video = concatenate_videoclips(clips, method="compose")
 
-    # Guardar video
+    # Guardar video (nombre de archivo con guiones)
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
     fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
-    nombre = f"videos/{dia_semana}-{tema}-{fecha_hora}-video-{numero:03d}.mp4"
+    tema_archivo = tema.replace(" ", "-")  # Reemplazar espacios por guiones
+    nombre = f"videos/{dia_semana}-{tema_archivo}-{fecha_hora}-video-{numero:03d}.mp4"
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
     print(f"   ✅ Video guardado: {nombre}")
 
@@ -546,8 +554,19 @@ def seleccionar_temas(opcion):
         print(f"📌 Temas seleccionados (aleatorios): {', '.join(temas)}")
         return temas
     else:
-        print(f"📌 Usando el tema: {opcion} (todos los días)")
-        return [opcion] * 7
+        # Si el tema escrito por el usuario no coincide exactamente con la lista,
+        # intentamos buscar una coincidencia parcial o lo usamos tal cual.
+        tema_encontrado = None
+        for t in TEMAS_PREDEFINIDOS:
+            if t.lower() == opcion_limpia or t.lower().replace(" ", "") == opcion_limpia.replace(" ", ""):
+                tema_encontrado = t
+                break
+        if tema_encontrado:
+            print(f"📌 Usando el tema: {tema_encontrado} (todos los días)")
+            return [tema_encontrado] * 7
+        else:
+            print(f"📌 Usando el tema: {opcion} (todos los días)")
+            return [opcion] * 7
 
 # ============================================
 # EJECUCIÓN PRINCIPAL
@@ -555,7 +574,7 @@ def seleccionar_temas(opcion):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generador de videos para toda la semana")
     parser.add_argument("--videos", type=int, default=5, help="Número de videos por día (por defecto: 5)")
-    parser.add_argument("--tema", type=str, default="Motivacion", help="Tema o 'todo' para aleatorio (por defecto: Motivacion)")
+    parser.add_argument("--tema", type=str, default="Motivación", help="Tema o 'todo' para aleatorio (por defecto: Motivación)")
     parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
     args = parser.parse_args()
 
