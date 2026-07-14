@@ -387,40 +387,14 @@ def dividir_en_parrafos(pregunta, frases, num_parrafos):
     return parrafos
 
 # ============================================
-# GESTIÓN DE IMÁGENES LOCALES (descarga automática)
+# OBTENER IMÁGENES DE PEXELS
 # ============================================
-IMAGENES_DIR = "imagenes"
-IMAGENES_POR_TEMA = 10  # Número de imágenes a descargar por tema
-
-def asegurar_imagenes_locales():
-    """Descarga imágenes para cada tema si no existen localmente."""
-    os.makedirs(IMAGENES_DIR, exist_ok=True)
-    print("📥 Verificando imágenes locales...")
-    
-    for tema in TEMAS_PREDEFINIDOS:
-        tema_dir = os.path.join(IMAGENES_DIR, tema)
-        os.makedirs(tema_dir, exist_ok=True)
-        
-        # Contar cuántas imágenes ya tenemos
-        archivos = [f for f in os.listdir(tema_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-        if len(archivos) >= IMAGENES_POR_TEMA:
-            continue
-        
-        # Si faltan, descargar
-        print(f"   📥 Descargando imágenes para '{tema}'...")
-        descargar_imagenes_para_tema(tema, IMAGENES_POR_TEMA - len(archivos))
-        print(f"   ✅ Imágenes descargadas para '{tema}'.")
-
-def descargar_imagenes_para_tema(tema, cantidad):
-    """Descarga 'cantidad' imágenes de Pexels para el tema dado."""
-    if cantidad <= 0:
-        return
-    
+def obtener_imagenes(query, cantidad):
     url = "https://api.pexels.com/v1/search"
     headers = {"Authorization": CLAVE_PEXELS}
     params = {
-        "query": tema,
-        "per_page": min(cantidad, 80),
+        "query": query,
+        "per_page": max(cantidad, 5),
         "orientation": "portrait",
         "page": random.randint(1, 5)
     }
@@ -428,40 +402,14 @@ def descargar_imagenes_para_tema(tema, cantidad):
         resp = requests.get(url, headers=headers, params=params, timeout=10)
         if resp.status_code == 200:
             fotos = resp.json().get("photos", [])
-            if not fotos:
-                print(f"      ⚠️ No se encontraron imágenes para '{tema}'.")
-                return
-            # Descargar cada foto
-            tema_dir = os.path.join(IMAGENES_DIR, tema)
-            for i, foto in enumerate(fotos[:cantidad]):
-                img_url = foto["src"]["large"]
-                try:
-                    img_data = requests.get(img_url, timeout=10).content
-                    with open(os.path.join(tema_dir, f"img_{i+1:03d}.jpg"), "wb") as f:
-                        f.write(img_data)
-                except Exception as e:
-                    print(f"      ⚠️ Error al descargar imagen {i+1}: {e}")
-        else:
-            print(f"      ⚠️ Error en Pexels: {resp.status_code}")
-    except Exception as e:
-        print(f"      ⚠️ Error al descargar imágenes para '{tema}': {e}")
-
-def obtener_imagen_local(tema):
-    """Devuelve la ruta de una imagen aleatoria local para el tema."""
-    tema_dir = os.path.join(IMAGENES_DIR, tema)
-    archivos = [f for f in os.listdir(tema_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-    if not archivos:
-        # Si no hay imágenes, intentar descargar una
-        print(f"   ⚠️ No hay imágenes locales para '{tema}'. Descargando una...")
-        descargar_imagenes_para_tema(tema, 1)
-        archivos = [f for f in os.listdir(tema_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-        if not archivos:
-            # Fallback: imagen por defecto
-            return None
-    return os.path.join(tema_dir, random.choice(archivos))
+            if fotos:
+                return [foto["src"]["large"] for foto in fotos[:cantidad]]
+    except:
+        pass
+    return ["https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg"] * cantidad
 
 # ============================================
-# CREAR VÍDEO (con borde grueso, sombra, animación aleatoria y firma dorada)
+# CREAR VÍDEO (estable, sin animaciones rotas)
 # ============================================
 def crear_video(tema, dia_semana, numero):
     num_parrafos = random.choice([6, 7, 8])
@@ -481,27 +429,27 @@ def crear_video(tema, dia_semana, numero):
     
     parrafos = dividir_en_parrafos(pregunta, frases_usar, num_parrafos)
 
-    # Cargar imagen de fondo local para este video
-    # Usaremos la misma imagen para todos los párrafos (para simplificar, ya que cada párrafo podría tener una distinta, pero por simplicidad usamos una por video)
-    # Si quieres que cada párrafo tenga una imagen diferente, puedes llamar a obtener_imagen_local dentro del bucle.
-    img_path = obtener_imagen_local(tema)
-    if img_path is None:
-        # Si no hay imagen, crear una gris
-        img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
-    else:
-        try:
-            img = Image.open(img_path).convert("RGB")
-            img = img.filter(ImageFilter.GaussianBlur(radius=2))
-            img = img.resize((1080, 1920))
-        except Exception as e:
-            print(f"   ⚠️ Error al cargar imagen local: {e}. Usando fondo gris.")
-            img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
+    # Obtener UNA IMAGEN PARA CADA PÁRRAFO
+    query = tema.lower()
+    imagenes_urls = obtener_imagenes(query, num_parrafos)
+    while len(imagenes_urls) < num_parrafos:
+        imagenes_urls.append("https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg")
 
     clips = []
     for i, parrafo in enumerate(parrafos):
-        # Copiar la imagen base para cada párrafo
-        img_copy = img.copy()
-        draw = ImageDraw.Draw(img_copy)
+        # Descargar la imagen correspondiente a este párrafo
+        try:
+            img_data = requests.get(imagenes_urls[i], timeout=10).content
+            with open(f"temp_fondo_{i}.jpg", "wb") as f:
+                f.write(img_data)
+            img = Image.open(f"temp_fondo_{i}.jpg").convert("RGB")
+        except:
+            img = Image.new("RGB", (1080, 1920), color=(50, 50, 50))
+        
+        # Desenfoque suave (radius=2)
+        img = img.filter(ImageFilter.GaussianBlur(radius=2))
+        img = img.resize((1080, 1920))
+        draw = ImageDraw.Draw(img)
 
         # Dividir el texto en líneas
         lineas = textwrap.wrap(parrafo, width=28, break_long_words=False)
@@ -532,19 +480,19 @@ def crear_video(tema, dia_semana, numero):
             ancho_linea = bbox[2] - bbox[0]
             x = (1080 - ancho_linea) // 2
 
-            # Sombra
+            # Sombra (negra con opacidad, desplazada 3px)
             draw.text((x+3, y+3), linea, font=font, fill=(0, 0, 0, 150), stroke_width=0)
-            # Texto principal blanco con borde grueso
+            # Texto blanco con borde grueso
             draw.text((x, y), linea, font=font, fill='white', stroke_width=7, stroke_fill='black')
             y += font_size * 1.3
 
-        # Firma dorada
+        # FIRMA (blanco, tamaño 25, como antes)
         firma = "@jonathan_irigoyen"
         try:
-            font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
+            font_firma = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 25)
         except:
             try:
-                font_firma = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 30)
+                font_firma = ImageFont.truetype("C:/Windows/Fonts/arial.ttf", 25)
             except:
                 font_firma = ImageFont.load_default()
         
@@ -555,20 +503,21 @@ def crear_video(tema, dia_semana, numero):
         y_firma = 1920 - alto_firma - 30
 
         draw.text((x_firma+3, y_firma+3), firma, font=font_firma, fill=(0, 0, 0, 150), stroke_width=0)
-        draw.text((x_firma, y_firma), firma, font=font_firma, fill='#DAA520', stroke_width=4, stroke_fill='black')
+        draw.text((x_firma, y_firma), firma, font=font_firma, fill='white', stroke_width=3, stroke_fill='black')
 
-        # Guardar el frame
-        temp_path = f"temp_texto_{i}.jpg"
-        img_copy.save(temp_path, "JPEG")
+        img.save(f"temp_texto_{i}.jpg", "JPEG")
         
-        # Crear clip con duración
-        clip = ImageClip(temp_path, duration=duraciones[i])
+        # Crear clip con fadein/fadeout suave (sin animaciones rotas)
+        clip = ImageClip(f"temp_texto_{i}.jpg", duration=duraciones[i])
+        clip = clip.fadein(0.3).fadeout(0.3)
         
-        # Aplicar animación de entrada (solo fade in para evitar problemas)
-        clip = clip.fadein(0.5).fadeout(0.2)
         clips.append(clip)
 
-    # Concatenar clips
+        try:
+            os.remove(f"temp_fondo_{i}.jpg")
+        except:
+            pass
+
     video = concatenate_videoclips(clips, method="compose")
 
     # Guardar video
@@ -588,7 +537,7 @@ def crear_video(tema, dia_semana, numero):
                 pass
 
 # ============================================
-# SELECCIÓN DE TEMAS PARA LA SEMANA (CORREGIDA)
+# SELECCIÓN DE TEMAS PARA LA SEMANA
 # ============================================
 def seleccionar_temas(opcion):
     opcion_limpia = opcion.strip().lower()
@@ -609,9 +558,6 @@ if __name__ == "__main__":
     parser.add_argument("--tema", type=str, default="Motivacion", help="Tema o 'todo' para aleatorio (por defecto: Motivacion)")
     parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
     args = parser.parse_args()
-
-    # Asegurar imágenes locales antes de generar cualquier video
-    asegurar_imagenes_locales()
 
     videos_por_dia = args.videos
     tema_input = args.tema
