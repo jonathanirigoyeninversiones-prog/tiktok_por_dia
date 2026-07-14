@@ -9,9 +9,9 @@ on:
         default: 5
         type: number
       tema:
-        description: 'Tema o "todo" para aleatorio (por defecto: Motivacion)'
+        description: 'Tema o "todo" para aleatorio (por defecto: Motivación)'
         required: false
-        default: 'Motivacion'
+        default: 'Motivación'
         type: string
   schedule:
     - cron: '0 10 * * 0'
