@@ -502,9 +502,9 @@ def crear_video(tema, dia_nombre, indice_video):
             os.remove(path_cta_img)
 
 # ============================================
-# FUNCIÓN PRINCIPAL Y EJECUCIÓN
+# FUNCIÓN PRINCIPAL Y EJECUCIÓN (CIERRE IDÉNTICO AL ORIGINAL)
 # ============================================
-def main():
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generador automatizado de videos por día.")
     parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
     parser.add_argument("--tema", type=str, default="todo", help="Tema específico o 'todo'/'aleatorio' para aleatorio")
@@ -530,12 +530,13 @@ def main():
     for dia_idx, tema in enumerate(temas_semana):
         dia_nombre = DIAS_SEMANA[dia_idx]
         print(f"\n📅 Procesando: {dia_nombre} - {tema}")
-        
+        print(f"   📝 Generando {videos_por_dia} videos...")
+
         for i in range(videos_por_dia):
             crear_video(tema, dia_nombre, i+1)
             time.sleep(0.5)
 
-    print("\n🎉 ¡Todos los videos generados con éxito!")
+    print("\n🎉 ¡Todos los videos generados!")
 
     if not args.no_zip:
         nombre_zip = f"videos_generados_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
@@ -545,7 +546,3 @@ def main():
                 for root, dirs, files in os.walk("videos_salida"):
                     for file in files:
                         zipf.write(os.path.join(root, file), file)
-        print(f"[EXITO] Archivo ZIP creado: {nombre_zip}")
-
-if __name__ == "__main__":
-    main()
