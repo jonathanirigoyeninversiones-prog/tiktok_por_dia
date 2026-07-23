@@ -363,8 +363,8 @@ def obtener_fondo_pexels(query):
     return archivo_temp
 
 def seleccionar_temas(tema_input):
-    """Selecciona los temas para los 7 días de la semana."""
-    if tema_input.lower() == "todo":
+    """Selecciona los temas para los 7 días de la semana (soporta 'todo' y 'aleatorio')."""
+    if tema_input.lower() in ["todo", "aleatorio"]:
         temas_disponibles = list(TEMAS_PREDEFINIDOS)
         random.shuffle(temas_disponibles)
         return temas_disponibles[:7]
@@ -507,7 +507,7 @@ def crear_video(tema, dia_nombre, indice_video):
 def main():
     parser = argparse.ArgumentParser(description="Generador automatizado de videos por día.")
     parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
-    parser.add_argument("--tema", type=str, default="todo", help="Tema específico o 'todo' para aleatorio")
+    parser.add_argument("--tema", type=str, default="todo", help="Tema específico o 'todo'/'aleatorio' para aleatorio")
     parser.add_argument("--no-zip", action="store_true", help="No crear archivo ZIP al final")
     args = parser.parse_args()
 
@@ -517,7 +517,7 @@ def main():
     print("🎬 ¡Generador de videos para toda la semana!")
     print("=" * 50)
     print(f"📝 Videos por día: {videos_por_dia} (por defecto: 5)")
-    print(f"🎯 Temática: {tema_input} (escribe 'todo' para aleatorio)")
+    print(f"🎯 Temática: {tema_input} (soporta 'todo' y 'aleatorio')")
     print("=" * 50)
 
     temas_semana = seleccionar_temas(tema_input)
