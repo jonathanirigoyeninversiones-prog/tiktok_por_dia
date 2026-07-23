@@ -75,7 +75,18 @@ GANCHOS_INICIALES = [
 ]
 
 # ============================================
-# FRASES PARA CADA TEMA (con las claves actualizadas)
+# PREGUNTAS RETADORAS POR TEMA
+# ============================================
+PREGUNTAS_RETADORAS = [
+    "Te has preguntado por que la mayoria falla exactamente en este punto sin saberlo?",
+    "Realmente estas dispuesto a hacer lo necesario para transformar tu realidad hoy?",
+    "Cuanto tiempo mas vas a postergar lo que sabes que debes hacer?",
+    "Por que insistes en cometer el mismo error una y otra vez?",
+    "Estas viviendo la vida que deseas o solo la que te toco aceptar?"
+]
+
+# ============================================
+# FRASES PARA CADA TEMA
 # ============================================
 FRASES_POR_TEMA = {
     "Motivación": [
@@ -196,7 +207,7 @@ FRASES_POR_TEMA = {
         "La ligereza del corazón atrae experiencias maravillosas.",
         "Estar en paz contigo mismo es la cima de la felicidad.",
         "Cada risa sincera alimenta tu espíritu de manera única.",
-        "Elegir ser feliz es la decisión más sabiza que puedes tomar."
+        "Elegir ser feliz es la decisión más sabia que puedes tomar."
     ],
     "Propósito": [
         "Tener un propósito claro le da sentido a cada esfuerzo.",
@@ -237,7 +248,7 @@ FRASES_POR_TEMA = {
     "Actitud": [
         "Tu actitud determina la altitud de tus mayores logros.",
         "Una mente abierta convierte cualquier tropiezo en aprendizaje.",
-        "La disposición positiva abre caminos donde antes habías muros.",
+        "La disposición positiva abre caminos donde antes había muros.",
         "Responder con elegancia a los problemas define tu gran valor.",
         "La energía que proyectas es la misma que regresa a ti.",
         "Tomar la iniciativa cambia por completo el rumbo de tu día.",
@@ -346,7 +357,6 @@ def obtener_fondo_pexels(query):
     except Exception as e:
         print(f"[AVISO] Error al conectar con Pexels ({e}). Usando fondo de respaldo.")
     
-    # Fondo de respaldo plano si falla la API
     respaldo = Image.new("RGB", (1080, 1920), color=(25, 25, 25))
     archivo_temp = f"fondo_{random.randint(1000,9999)}.jpg"
     respaldo.save(archivo_temp)
@@ -359,7 +369,6 @@ def seleccionar_temas(tema_input):
         random.shuffle(temas_disponibles)
         return temas_disponibles[:7]
     else:
-        # Si el usuario especifica un tema, se repite para toda la semana o se busca coincidencia
         tema_encontrado = None
         for t in TEMAS_PREDEFINIDOS:
             if t.lower() == tema_input.lower():
@@ -382,11 +391,9 @@ def crear_video(tema, dia_nombre, indice_video):
     ancho, alto = 1080, 1920
     duracion_total = random.randint(75, 85) # Duración estricta entre 75 y 85 segundos
     
-    # Obtener fondo multimedia desde Pexels relacionado con el tema
     path_fondo = obtener_fondo_pexels(f"{tema} background vertical")
     
     try:
-        # Cargar imagen y aplicar desenfoque suave con PIL
         img_pil = Image.open(path_fondo)
         img_pil = img_pil.resize((ancho, alto), Image.Resampling.LANCZOS)
         img_pil = img_pil.filter(ImageFilter.GaussianBlur(radius=8))
@@ -394,37 +401,46 @@ def crear_video(tema, dia_nombre, indice_video):
         path_fondo_procesado = f"fondo_proc_{random.randint(1000,9999)}.jpg"
         img_pil.save(path_fondo_procesado)
         
-        clip_fondo = ImageClip(path_fondo_procesado).set_duration(duracion_total)
-        
-        # Seleccionar gancho inicial único de alto impacto
-        gancho_texto = limpiar_texto(random.choice(GANCHOS_INICIALES))
-        
-        # Obtener frases del cuerpo según el tema
-        frases_disponibles = FRASES_POR_TEMA.get(tema, FRASES_POR_TEMA["Motivación"])
-        frases_seleccionadas = random.sample(frases_disponibles, min(5, len(frases_disponibles)))
-        
-        # Estructura de textos en fotogramas estáticos con PIL para evitar desbordamientos en MoviePy
         clips_secuencia = []
         
-        # 1. Gancho Inicial (Primeros 10 segundos)
-        img_gancho = img_pil.copy()
-        draw = ImageDraw.Draw(img_gancho)
         try:
             font = ImageFont.truetype("DejaVuSans.ttf", 60)
+            font_firma = ImageFont.truetype("DejaVuSans.ttf", 35)
         except IOError:
             font = ImageFont.load_default()
+            font_firma = ImageFont.load_default()
             
-        margin = 100
+        # 1. GANCHO INICIAL (Duración aleatoria orgánica entre 3 y 4 segundos)
+        duracion_gancho = round(random.uniform(3.0, 4.0), 2)
+        gancho_texto = limpiar_texto(random.choice(GANCHOS_INICIALES))
+        img_gancho = img_pil.copy()
+        draw_g = ImageDraw.Draw(img_gancho)
         wrapped_gancho = textwrap.fill(gancho_texto, width=25)
-        draw.multiline_text((ancho/2, alto/2), wrapped_gancho, font=font, fill="white", align="center", anchor="mm")
+        draw_g.multiline_text((ancho/2, alto/2), wrapped_gancho, font=font, fill="white", align="center", anchor="mm")
         
         path_gancho_img = f"temp_gancho_{random.randint(1000,9999)}.png"
         img_gancho.save(path_gancho_img)
-        clip_gancho = ImageClip(path_gancho_img).set_duration(10)
-        clips_secuencia.append(clip_gancho)
+        clips_secuencia.append(ImageClip(path_gancho_img).set_duration(duracion_gancho))
         
-        # 2. Cuerpo de valor (distribuido uniformemente)
-        tiempo_restante = duracion_total - 10 - 10 # Descontando gancho (10s) y CTA (10s)
+        # 2. PREGUNTA RETADORA (Duración aleatoria orgánica entre 3 y 4 segundos)
+        duracion_pregunta = round(random.uniform(3.0, 4.0), 2)
+        pregunta_texto = limpiar_texto(random.choice(PREGUNTAS_RETADORAS))
+        img_pregunta = img_pil.copy()
+        draw_p = ImageDraw.Draw(img_pregunta)
+        wrapped_pregunta = textwrap.fill(pregunta_texto, width=25)
+        draw_p.multiline_text((ancho/2, alto/2), wrapped_pregunta, font=font, fill="yellow", align="center", anchor="mm")
+        
+        path_pregunta_img = f"temp_pregunta_{random.randint(1000,9999)}.png"
+        img_pregunta.save(path_pregunta_img)
+        clips_secuencia.append(ImageClip(path_pregunta_img).set_duration(duracion_pregunta))
+        
+        # 3. CUERPO DE VALOR (Distribuido dinámicamente en el tiempo restante)
+        tiempo_fijo_cabecera = duracion_gancho + duracion_pregunta
+        tiempo_cta = 10.0
+        tiempo_restante = duracion_total - tiempo_fijo_cabecera - tiempo_cta
+        
+        frases_disponibles = FRASES_POR_TEMA.get(tema, FRASES_POR_TEMA["Motivación"])
+        frases_seleccionadas = random.sample(frases_disponibles, min(5, len(frases_disponibles)))
         duracion_por_frase = max(5, tiempo_restante / len(frases_seleccionadas))
         
         for frase in frases_seleccionadas:
@@ -433,19 +449,16 @@ def crear_video(tema, dia_nombre, indice_video):
             wrapped_frase = textwrap.fill(limpiar_texto(frase), width=28)
             draw_f.multiline_text((ancho/2, alto/2), wrapped_frase, font=font, fill="white", align="center", anchor="mm")
             
-            # Firma corporativa fija inferior
-            draw_f.text((ancho/2, alto - 120), "@jonathan_irigoyen", font=ImageFont.load_default(), fill="gray", anchor="mm")
+            draw_f.text((ancho/2, alto - 120), "@jonathan_irigoyen", font=font_firma, fill="gray", anchor="mm")
             
             path_f_img = f"temp_frase_{random.randint(1000,9999)}.png"
             img_frase.save(path_f_img)
-            clip_f = ImageClip(path_f_img).set_duration(duracion_por_frase)
-            clips_secuencia.append(clip_f)
+            clips_secuencia.append(ImageClip(path_f_img).set_duration(duracion_por_frase))
             
-            # Limpiar archivo temporal de frase
             if os.path.exists(path_f_img):
                 os.remove(path_f_img)
                 
-        # 3. Llamado a la Acción (CTA) Final (Últimos 10 segundos)
+        # 4. LLAMADO A LA ACCIÓN (CTA) FINAL (Últimos 10 segundos)
         img_cta = img_pil.copy()
         draw_c = ImageDraw.Draw(img_cta)
         cta_texto = limpiar_texto("Guarda este video y ponlo en practica ahora mismo.")
@@ -454,17 +467,14 @@ def crear_video(tema, dia_nombre, indice_video):
         
         path_cta_img = f"temp_cta_{random.randint(1000,9999)}.png"
         img_cta.save(path_cta_img)
-        clip_cta = ImageClip(path_cta_img).set_duration(10)
-        clips_secuencia.append(clip_cta)
+        clips_secuencia.append(ImageClip(path_cta_img).set_duration(tiempo_cta))
         
-        # Concatenar todos los clips de la secuencia
         video_final = concatenate_videoclips(clips_secuencia, method="compose")
         
-        # Nombre de salida optimizado
         os.makedirs("videos_salida", exist_ok=True)
         nombre_salida = f"videos_salida/video_{dia_nombre.lower()}_{indice_video}_{int(time.time())}.mp4"
         
-        print(f"[INFO] Renderizando video con duración de {video_final.duration} segundos...")
+        print(f"[INFO] Renderizando video con duración de {video_final.duration:.2f} segundos...")
         video_final.write_videofile(
             nombre_salida,
             fps=24,
@@ -480,13 +490,14 @@ def crear_video(tema, dia_nombre, indice_video):
     except Exception as e:
         print(f"[ERROR] Ocurrió un error al generar el video: {e}")
     finally:
-        # Limpieza de archivos temporales de imagen y fondo
         if os.path.exists(path_fondo):
             os.remove(path_fondo)
         if 'path_fondo_procesado' in locals() and os.path.exists(path_fondo_procesado):
             os.remove(path_fondo_procesado)
         if 'path_gancho_img' in locals() and os.path.exists(path_gancho_img):
             os.remove(path_gancho_img)
+        if 'path_pregunta_img' in locals() and os.path.exists(path_pregunta_img):
+            os.remove(path_pregunta_img)
         if 'path_cta_img' in locals() and os.path.exists(path_cta_img):
             os.remove(path_cta_img)
 
