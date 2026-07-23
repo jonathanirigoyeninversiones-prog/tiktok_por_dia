@@ -323,7 +323,7 @@ FRASES_POR_TEMA = {
         "Escuchar con el corazón crea vínculos que duran para siempre.",
         "Sentir la energía de quienes te rodean te hace más empático.",
         "La verdadera unión se basa en el respeto y el cariño sincero.",
-        "Compartir tus vivencias genera una cercanía inigualable.",
+        "Compartir tu vivencias genera una cercanía inigualable.",
         "El amor y la amistad son los hilos que sostienen el mundo.",
         "Mirar a los ojos es conectar con la esencia del otro.",
         "Rodearte de gente positiva eleva tu frecuencia espiritual.",
@@ -502,7 +502,7 @@ def crear_video(tema, dia_nombre, indice_video):
             os.remove(path_cta_img)
 
 # ============================================
-# FUNCIÓN PRINCIPAL Y EJECUCIÓN (CIERRE IDÉNTICO AL ORIGINAL)
+# FUNCIÓN PRINCIPAL Y EJECUCIÓN
 # ============================================
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generador automatizado de videos por día.")
@@ -546,3 +546,4 @@ if __name__ == "__main__":
                 for root, dirs, files in os.walk("videos_salida"):
                     for file in files:
                         zipf.write(os.path.join(root, file), file)
+        print(f"[EXITO] Archivo ZIP creado: {nombre_zip}")
