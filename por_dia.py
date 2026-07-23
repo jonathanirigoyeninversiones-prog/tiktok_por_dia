@@ -49,7 +49,7 @@ TEMAS_PREDEFINIDOS = [
 ]
 
 # ============================================
-# GANCHOS DE ALTO IMPACTO (SIN EMOJIS PARA EVITAR ERRORES VISUALES)
+# GANCHOS DE ALTO IMPACTO (SIN EMOJIS)
 # ============================================
 GANCHOS_INICIALES = [
     "Escucha esto antes de que termine tu día...",
@@ -75,7 +75,7 @@ GANCHOS_INICIALES = [
 ]
 
 # ============================================
-# FRASES PARA CADA TEMA (con las claves actualizadas)
+# FRASES PARA CADA TEMA
 # ============================================
 FRASES_POR_TEMA = {
     "Motivación": [
@@ -111,7 +111,7 @@ FRASES_POR_TEMA = {
         "La fortaleza te permite recuperarte de las caídas más duras.",
         "La renovación te da la oportunidad de empezar de nuevo cada mañana.",
         "Mejorar cada día te lleva a lugares que nunca imaginaste.",
-        "El progreso constante es el camino hacia la excelencia.",
+        "El progreso constante es el camino hacia el crecimiento.",
         "El avance, por pequeño que sea, siempre suma."
     ],
     "Gratitud": [
@@ -369,43 +369,31 @@ def obtener_frases_para_tema(tema):
         return frases_genericas_para_tema(tema)
 
 # ============================================
-# GENERACIÓN DE PREGUNTA Y GANCHOS NO REPETITIVOS
+# GESTIÓN DE GANCHOS ÚNICOS
 # ============================================
-def formatear_tema_para_texto(tema):
-    return tema.lower()
-
-def generar_pregunta(tema):
-    tema_lower = formatear_tema_para_texto(tema)
-    preguntas = [
-        f"¿Alguna vez has reflexionado sobre la importancia de {tema_lower} en tu vida?",
-        f"¿Qué significa para ti {tema_lower} en tu día a día?",
-        f"¿Cómo aplicas {tema_lower} en las situaciones más difíciles?",
-        f"¿Crees que {tema_lower} puede cambiar tu forma de ver las cosas?",
-        f"¿Cuál es tu mayor aprendizaje sobre {tema_lower} hasta ahora?",
-        f"¿Te has preguntado cómo {tema_lower} influye en tus decisiones más importantes?",
-        f"¿Qué harías si te faltara {tema_lower} en tu vida?",
-        f"¿Cuándo fue la última vez que practicaste {tema_lower} de forma consciente?",
-        f"¿Cómo te sientes cuando hablas o piensas en {tema_lower}?",
-        f"¿Qué consejo le darías a alguien sobre {tema_lower} para empezar su camino?"
-    ]
-    return random.choice(preguntas)
-
-# Variables globales para control de ganchos usados en la sesión y evitar duplicados cercanos
 GANCHOS_USADOS = []
 
 def obtener_gancho_unico():
     global GANCHOS_USADOS
     disponibles = [g for g in GANCHOS_INICIALES if g not in GANCHOS_USADOS]
     if not disponibles:
-        GANCHOS_USADOS = [] # Reiniciar si se acaban
+        GANCHOS_USADOS = []
         disponibles = GANCHOS_INICIALES
     gancho = random.choice(disponibles)
     GANCHOS_USADOS.append(gancho)
     return gancho
 
-# ============================================
-# DIVISIÓN EN PÁRRAFOS
-# ============================================
+def generar_pregunta(tema):
+    tema_lower = tema.lower()
+    preguntas = [
+        f"¿Alguna vez has reflexionado sobre la importancia de {tema_lower} en tu vida?",
+        f"¿Qué significa para ti {tema_lower} en tu día a día?",
+        f"¿Cómo aplicas {tema_lower} en las situaciones más difíciles?",
+        f"¿Crees que {tema_lower} puede cambiar tu forma de ver las cosas?",
+        f"¿Cuál es tu mayor aprendizaje sobre {tema_lower} hasta ahora?"
+    ]
+    return random.choice(preguntas)
+
 def dividir_en_parrafos(tema, num_parrafos):
     hook = obtener_gancho_unico()
     pregunta = generar_pregunta(tema)
@@ -423,7 +411,6 @@ def dividir_en_parrafos(tema, num_parrafos):
             seleccionadas.append("Sigue adelante con fe y determinación.")
     
     cta = "Guarda este video y compártelo con alguien que lo necesite hoy."
-    
     parrafos = [hook, pregunta] + seleccionadas + [cta]
     
     while len(parrafos) < num_parrafos:
@@ -464,11 +451,10 @@ def crear_video(tema, dia_semana, numero):
     duracion_por_parrafo = duracion_total / num_parrafos
     duraciones = [duracion_por_parrafo] * num_parrafos
 
-    print(f"   🎬 Video {numero} ({dia_semana} - {tema}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
+    print(f"    🎬 Video {numero} ({dia_semana} - {tema}) - {num_parrafos} párrafos, {duracion_total:.1f}s")
     os.makedirs("videos", exist_ok=True)
 
     parrafos = dividir_en_parrafos(tema, num_parrafos)
-
     query = tema.replace(" ", "").lower()
     imagenes_urls = obtener_imagenes(query, num_parrafos)
     while len(imagenes_urls) < num_parrafos:
@@ -549,14 +535,13 @@ def crear_video(tema, dia_semana, numero):
             pass
 
     video = concatenate_videoclips(clips, method="compose")
-
     tz_venezuela = timezone(timedelta(hours=-4))
     ahora = datetime.now(tz_venezuela)
     fecha_hora = ahora.strftime("%d-%m-%Y-%H-%M-%S")
     tema_archivo = tema.replace(" ", "-")
     nombre = f"videos/{dia_semana}-{tema_archivo}-{fecha_hora}-video-{numero:03d}.mp4"
     video.write_videofile(nombre, fps=15, codec="libx264", audio=False)
-    print(f"   ✅ Video guardado: {nombre}")
+    print(f"    ✅ Video guardado: {nombre}")
 
     for f in os.listdir("."):
         if f.startswith("temp_") and f.endswith(".jpg"):
@@ -581,44 +566,37 @@ def seleccionar_temas(opcion):
                 tema_encontrado = t
                 break
         if tema_encontrado:
-            print(f"📌 Usando el tema: {tema_encontrado} (todos los días)")
+            print(f"📌 Usando el tema: {tema_encontrado}")
             return [tema_encontrado] * 7
         else:
-            print(f"📌 Usando el tema: {opcion} (todos los días)")
+            print(f"📌 Usando el tema: {opcion}")
             return [opcion] * 7
 
 # ============================================
 # EJECUCIÓN PRINCIPAL
 # ============================================
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generador de videos para toda la semana")
-    parser.add_argument("--videos", type=int, default=5, help="Número de videos por día (por defecto: 5)")
-    parser.add_argument("--tema", type=str, default="Motivación", help="Tema o 'todo' para aleatorio (por defecto: Motivación)")
+    parser = argparse.ArgumentParser(description="Generador optimizado de videos")
+    parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
+    parser.add_argument("--tema", type=str, default="Motivación", help="Tema o 'todo'")
     parser.add_argument("--no-zip", action="store_true", help="No crear ZIP")
     args = parser.parse_args()
 
     videos_por_dia = args.videos
     tema_input = args.tema
 
-    print("🎬 ¡Generador de videos para toda la semana!")
+    print("🎬 ¡Generador de videos optimizado!")
     print("=" * 50)
-    print(f"📝 Videos por día: {videos_por_dia} (por defecto: 5)")
-    print(f"🎯 Temática: {tema_input} (escribe 'todo' para aleatorio)")
+    print(f"📝 Videos por día: {videos_por_dia}")
+    print(f"🎯 Temática: {tema_input}")
     print("=" * 50)
 
     temas_semana = seleccionar_temas(tema_input)
-
     DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
-
-    print(f"\n📝 Generando {videos_por_dia} videos por cada día de la semana")
-    print(f"📊 Total: {videos_por_dia * 7} videos")
-    print("=" * 50)
 
     for dia_idx, tema in enumerate(temas_semana):
         dia_nombre = DIAS_SEMANA[dia_idx]
         print(f"\n📅 Procesando: {dia_nombre} - {tema}")
-        print(f"   📝 Generando {videos_por_dia} videos...")
-
         for i in range(videos_por_dia):
             crear_video(tema, dia_nombre, i+1)
             time.sleep(0.5)
@@ -633,6 +611,3 @@ if __name__ == "__main__":
                 for file in files:
                     zipf.write(os.path.join(root, file), arcname=file)
         print(f"✅ ZIP creado: {nombre_zip}")
-        print(f"📁 Revisa la carpeta 'videos' y el archivo '{nombre_zip}'.")
-    else:
-        print("⏭️  No se creó ZIP (opción --no-zip activada).")
