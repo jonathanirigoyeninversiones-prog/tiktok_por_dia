@@ -114,18 +114,20 @@ def obtener_fondo_pexels(query):
     headers = {"Authorization": CLAVE_PEXELS}
     
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        print(f"[PEXELS] Buscando imagen para: {query}")
+        response = requests.get(url, headers=headers, timeout=5)
         if response.status_code == 200:
             data = response.json()
             if data.get("photos"):
                 img_url = data["photos"][0]["src"]["large2x"]
-                img_data = requests.get(img_url, timeout=10).content
+                img_data = requests.get(img_url, timeout=5).content
                 archivo_temp = f"fondo_{random.randint(1000,9999)}.jpg"
                 with open(archivo_temp, "wb") as f:
                     f.write(img_data)
+                print("[PEXELS] Imagen descargada exitosamente.")
                 return archivo_temp
     except Exception as e:
-        print(f"[AVISO] Error al conectar con Pexels ({e}). Usando fondo de respaldo.")
+        print(f"[AVISO] Pexels falló o tardó demasiado ({e}). Usando fondo local de respaldo.")
     
     respaldo = Image.new("RGB", (1080, 1920), color=(25, 25, 25))
     archivo_temp = f"fondo_{random.randint(1000,9999)}.jpg"
@@ -253,14 +255,16 @@ def crear_video(tema, dia_nombre, indice_video):
         nombre_salida = f"videos_salida/video_{dia_nombre.lower()}_{indice_video}_{int(time.time())}.mp4"
         
         print(f"[INFO] Renderizando video con duración de {video_final.duration:.2f} segundos...")
+        
+        # IMPORTANTE: Cambiamos el logger a 'bar' o True para que imprima el progreso en la consola de GitHub y no se congele
         video_final.write_videofile(
             nombre_salida,
             fps=24,
             codec='libx264',
             audio_codec='aac',
-            preset='medium',
-            threads=4,
-            logger=None
+            preset='ultrafast',  # 'ultrafast' evita cuelgues de memoria en GitHub Actions
+            threads=2,
+            logger='bar'
         )
         
         print(f"[EXITO] Video generado: {nombre_salida}")
