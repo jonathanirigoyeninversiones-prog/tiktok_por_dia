@@ -104,31 +104,29 @@ PREGUNTAS_RETADORAS = [
 ]
 
 # ============================================
-# FUNCIONES AUXILIARES BLINDADAS CONTRA BLOQUEOS
+# FUNCIONES AUXILIARES
 # ============================================
 def limpiar_texto(texto):
     return re.sub(r'[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s,.;¿?¡!]', '', texto)
 
 def obtener_fondo_pexels(query):
-    """Descarga el fondo de Pexels con un límite estricto de 5 segundos para evitar congelamientos."""
     url = f"https://api.pexels.com/v1/search?query={query}&per_page=1&orientation=portrait"
     headers = {"Authorization": CLAVE_PEXELS}
     
     try:
-        response = requests.get(url, headers=headers, timeout=5)
+        response = requests.get(url, headers=headers, timeout=10)
         if response.status_code == 200:
             data = response.json()
             if data.get("photos"):
                 img_url = data["photos"][0]["src"]["large2x"]
-                img_data = requests.get(img_url, timeout=5).content
+                img_data = requests.get(img_url, timeout=10).content
                 archivo_temp = f"fondo_{random.randint(1000,9999)}.jpg"
                 with open(archivo_temp, "wb") as f:
                     f.write(img_data)
                 return archivo_temp
     except Exception as e:
-        print(f"[AVISO] Pexels tardó o falló ({e}). Usando fondo de respaldo de inmediato.")
+        print(f"[AVISO] Error al conectar con Pexels ({e}). Usando fondo de respaldo.")
     
-    # Fondo de respaldo automático si Pexels tarda o falla
     respaldo = Image.new("RGB", (1080, 1920), color=(25, 25, 25))
     archivo_temp = f"fondo_{random.randint(1000,9999)}.jpg"
     respaldo.save(archivo_temp)
