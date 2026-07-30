@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       videos:
-        description: 'Número de videos por día'
+        description: 'Numero de videos por dia'
         required: true
         default: '5'
         type: string
       tema:
-        description: 'Tema específico o aleatorio (escribe aleatorio o todo)'
+        description: 'Tema especifico o aleatorio'
         required: true
         default: 'aleatorio'
         type: string
@@ -29,15 +29,15 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Instalar dependencias del sistema y fuentes
+      - name: Actualizar pip e instalar dependencias obligatorias
+        run: |
+          python -m pip install --upgrade pip
+          pip install moviepy==1.0.3 requests pillow
+
+      - name: Instalar fuentes del sistema
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-dejavu
-
-      - name: Instalar librerías de Python
-        run: |
-          python -m pip install --upgrade pip
-          pip install moviepy requests pillow
 
       - name: Ejecutar generador de videos
         env:
