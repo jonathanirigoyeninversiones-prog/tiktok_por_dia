@@ -1,46 +1,58 @@
-name: Generador de Videos Virales
+name: Generar Videos Virales por Dia
 
 on:
   workflow_dispatch:
     inputs:
-      videos:
-        description: 'Numero de videos por dia'
+      videos_por_dia:
+        description: 'Cantidad de videos por dia'
         required: true
-        default: '5'
-        type: string
-      tema:
-        description: 'Tema especifico o aleatorio'
+        default: '1'
+      tematica:
+        description: 'Tematica (aleatorio o todo)'
         required: true
         default: 'aleatorio'
-        type: string
-  schedule:
-    - cron: '0 8 * * *'
 
 jobs:
   construir-videos:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repositorio
+      - name: Checkout del repositorio
         uses: actions/checkout@v4
 
-      - name: Configurar Python
+      - name: Configurar entorno de Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: 'pip'
 
-      - name: Instalar dependencias del sistema (Fuentes y Multimedia)
+      - name: Instalar dependencias del sistema operativo (MoviePy y PIL)
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-dejavu ffmpeg
+          sudo apt-get install -y ffmpeg libmagickwand-dev imagemagick
 
-      - name: Instalar paquetes esenciales de Python
+      - name: Instalar dependencias de Python
         run: |
           python -m pip install --upgrade pip
-          pip install moviepy==1.0.3 requests pillow
+          pip install requests Pillow moviepy
 
-      - name: Ejecutar generador de videos
-        env:
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-          PYTHONUNBUFFERED: "1"
-        run: python por_dia.py --videos ${{ github.event.inputs.videos || 5 }} --tema ${{ github.event.inputs.tema || 'aleatorio' }}
+      - name: Ejecutar generador de videos por dia
+        run: |
+          python por_dia.py --videos ${{ github.event.inputs.videos_por_dia }} --tema ${{ github.event.inputs.tematica }}
+
+      - name: Verificar y asegurar existencia del archivo ZIP
+        run: |
+          echo "Buscando archivos ZIP generados..."
+          find . -name "*.zip"
+          # Por si el script de python no empaquetó, forzamos un ZIP de respaldo con la salida
+          if [ -d "videos_salida" ]; then
+            zip -r videos_generados_forzado.zip videos_salida/
+          fi
+
+      - name: Subir videos como Artifact de GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: mis-videos-generados
+          path: |
+            *.zip
+            videos_salida/*.zip
