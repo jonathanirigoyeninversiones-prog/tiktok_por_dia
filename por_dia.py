@@ -13,12 +13,14 @@ from moviepy.editor import ImageClip, concatenate_videoclips
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # ============================================
-# CONFIGURACIÓN
+# CONFIGURACIÓN INICIAL Y AMBIENTE
 # ============================================
+sys.stdout.reconfigure(line_buffering=True) if hasattr(sys.stdout, 'reconfigure') else None
+
 CLAVE_PEXELS = os.getenv("PEXELS_API_KEY")
 
 if not CLAVE_PEXELS:
-    print("ERROR: Falta la clave de Pexels.")
+    print("[ERROR] Falta la clave de Pexels.")
     print("Asegúrate de configurar PEXELS_API_KEY como secreto en GitHub.")
     sys.exit(1)
 
@@ -104,17 +106,17 @@ PREGUNTAS_RETADORAS = [
 ]
 
 # ============================================
-# FUNCIONES AUXILIARES
+# FUNCIONES AUXILIARES BLINDADAS
 # ============================================
 def limpiar_texto(texto):
     return re.sub(r'[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s,.;¿?¡!]', '', texto)
 
 def obtener_fondo_pexels(query):
+    print(f"[PEXELS] Consultando imagen para: {query}")
     url = f"https://api.pexels.com/v1/search?query={query}&per_page=1&orientation=portrait"
     headers = {"Authorization": CLAVE_PEXELS}
     
     try:
-        print(f"[PEXELS] Buscando imagen para: {query}")
         response = requests.get(url, headers=headers, timeout=5)
         if response.status_code == 200:
             data = response.json()
@@ -124,10 +126,10 @@ def obtener_fondo_pexels(query):
                 archivo_temp = f"fondo_{random.randint(1000,9999)}.jpg"
                 with open(archivo_temp, "wb") as f:
                     f.write(img_data)
-                print("[PEXELS] Imagen descargada exitosamente.")
+                print("[PEXELS] Fondo descargado correctamente.")
                 return archivo_temp
     except Exception as e:
-        print(f"[AVISO] Pexels falló o tardó demasiado ({e}). Usando fondo local de respaldo.")
+        print(f"[AVISO] Pexels no respondió a tiempo ({e}). Usando respaldo local.")
     
     respaldo = Image.new("RGB", (1080, 1920), color=(25, 25, 25))
     archivo_temp = f"fondo_{random.randint(1000,9999)}.jpg"
@@ -148,7 +150,7 @@ def seleccionar_temas(tema_input):
         if tema_encontrado:
             return [tema_encontrado] * 7
         else:
-            print(f"[AVISO] Tema '{tema_input}' no encontrado en predefinidos. Usando aleatorios.")
+            print(f"[AVISO] Tema '{tema_input}' no encontrado. Usando aleatorios.")
             temas_disponibles = list(TEMAS_PREDEFINIDOS)
             random.shuffle(temas_disponibles)
             return temas_disponibles[:7]
@@ -167,7 +169,8 @@ def generar_frases_dinamicas(cantidad=5):
 # CREACIÓN DE VIDEO INDIVIDUAL
 # ============================================
 def crear_video(tema, dia_nombre, indice_video):
-    print(f"\n[PROCESO] Creando video {indice_video} para {dia_nombre} (Tema: {tema})...")
+    print(f"\n[PROCESO] Iniciando video {indice_video} para {dia_nombre} (Tema: {tema})...")
+    sys.stdout.flush()
     
     ancho, alto = 1080, 1920
     duracion_total = random.randint(75, 85)
@@ -254,23 +257,25 @@ def crear_video(tema, dia_nombre, indice_video):
         os.makedirs("videos_salida", exist_ok=True)
         nombre_salida = f"videos_salida/video_{dia_nombre.lower()}_{indice_video}_{int(time.time())}.mp4"
         
-        print(f"[INFO] Renderizando video con duración de {video_final.duration:.2f} segundos...")
+        print(f"[RENDER] Renderizando video con duración de {video_final.duration:.2f} segundos...")
+        sys.stdout.flush()
         
-        # IMPORTANTE: Cambiamos el logger a 'bar' o True para que imprima el progreso en la consola de GitHub y no se congele
         video_final.write_videofile(
             nombre_salida,
             fps=24,
             codec='libx264',
             audio_codec='aac',
-            preset='ultrafast',  # 'ultrafast' evita cuelgues de memoria en GitHub Actions
+            preset='ultrafast',
             threads=2,
-            logger='bar'
+            logger=None
         )
         
-        print(f"[EXITO] Video generado: {nombre_salida}")
+        print(f"[EXITO] Video generado con éxito: {nombre_salida}")
+        sys.stdout.flush()
         
     except Exception as e:
-        print(f"[ERROR] Ocurrió un error al generar el video: {e}")
+        print(f"[ERROR CRÍTICO] Ocurrió un error al generar el video: {e}")
+        sys.stdout.flush()
     finally:
         if os.path.exists(path_fondo):
             os.remove(path_fondo)
@@ -287,6 +292,9 @@ def crear_video(tema, dia_nombre, indice_video):
 # FUNCIÓN PRINCIPAL Y EJECUCIÓN
 # ============================================
 if __name__ == "__main__":
+    print("[INICIO] Script configurado correctamente. Analizando argumentos...")
+    sys.stdout.flush()
+    
     parser = argparse.ArgumentParser(description="Generador automatizado de videos por día.")
     parser.add_argument("--videos", type=int, default=5, help="Número de videos por día")
     parser.add_argument("--tema", type=str, default="todo", help="Tema específico o 'todo'/'aleatorio' para aleatorio")
@@ -306,26 +314,32 @@ if __name__ == "__main__":
     DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 
     print(f"\n📝 Generando {videos_por_dia} videos por cada día de la semana")
-    print(f"📊 Total: {videos_por_dia * 7} videos")
+    print(f"📊 Total estimado: {videos_por_dia * 7} videos")
     print("=" * 50)
+    sys.stdout.flush()
 
     for dia_idx, tema in enumerate(temas_semana):
         dia_nombre = DIAS_SEMANA[dia_idx]
         print(f"\n📅 Procesando: {dia_nombre} - {tema}")
-        print(f"   📝 Generando {videos_por_dia} videos...")
+        sys.stdout.flush()
 
         for i in range(videos_por_dia):
             crear_video(tema, dia_nombre, i+1)
             time.sleep(0.5)
 
-    print("\n🎉 ¡Todos los videos generados!")
+    print("\n🎉 ¡Todos los videos generados correctamente!")
+    sys.stdout.flush()
 
     if not args.no_zip:
         nombre_zip = f"videos_generados_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
         print(f"📦 Comprimiendo videos en {nombre_zip}...")
+        sys.stdout.flush()
+        
         with zipfile.ZipFile(nombre_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
             if os.path.exists("videos_salida"):
                 for root, dirs, files in os.walk("videos_salida"):
                     for file in files:
                         zipf.write(os.path.join(root, file), file)
-        print(f"[EXITO] Archivo ZIP creado: {nombre_zip}")
+                        
+        print(f"[EXITO] Archivo ZIP creado y listo: {nombre_zip}")
+        sys.stdout.flush()
