@@ -7,9 +7,8 @@ import time
 import zipfile
 from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
-from moviepy.editor import ImageClip, concatenate_videoclips, TextClip, CompositeVideoClip
+from moviepy.editor import ImageClip, CompositeVideoClip
 
-# Configuración de Temas y Matrices (Directrices del Máster)
 TEMAS_SEMANA = {
     "Lunes": "Cambio",
     "Martes": "Paz",
@@ -54,8 +53,7 @@ def obtener_fondo_pexels(tema, output_path):
     except Exception as e:
         print(f"[PEXELS] Error de conexion: {e}")
     
-    # Fallback: Imagen vertical sólida si falla la API
-    img = Image.new('RGB', (1080, 1920), color=(20, 20, 30))
+    img = Image.new('RGB', (1080, 1920), color=(15, 15, 25))
     img.save(output_path)
     print(f"[PEXELS] Usando fondo de respaldo para: {tema}")
     return True
@@ -67,61 +65,56 @@ def generar_video(dia, tema, indice, output_dir):
     video_path = os.path.join(output_dir, video_filename)
     bg_path = f"bg_{dia.lower()}_{indice}.jpg"
     
-    print(f"[PROCESO] Iniciando video {indice} para {dia} (Tema: Tema - {tema})...")
+    print(f"[PROCESO] Iniciando video {indice} para {dia} (Tema: {tema})...")
     obtener_fondo_pexels(tema, bg_path)
     
     # Duración estricta y aleatoria entre 75 y 85 segundos
     duracion = random.uniform(75.0, 85.0)
     
-    # Frase y gancho optimizados (Cero emojis para evitar errores en Linux)
     frase = random.choice(MATRIZ_CONTENIDO)
     hook = f"El secreto oculto sobre {tema}"
     
-    # Redimensionar fondo a formato vertical exacto 1080x1920
     img_bg = Image.open(bg_path)
     img_bg = img_bg.resize((1080, 1920), Image.Resampling.LANCZOS)
     img_bg.save(bg_path)
     
     clip_fondo = ImageClip(bg_path).set_duration(duracion)
     
-    # --- CREACIÓN DE TEXTOS Y ELEMENTOS VISUALES CON PIL ---
-    # Creamos una capa transparente para textos, subtítulos y firma para evitar superposiciones
+    # Capa transparente con dimensiones exactas verticales 1080x1920
     capa_txt = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
     draw = ImageDraw.Draw(capa_txt)
     
     try:
         font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-        font_hook = ImageFont.truetype(font_path, 55)
-        font_texto = ImageFont.truetype(font_path, 45)
-        font_firma = ImageFont.truetype(font_path, 30)
+        font_hook = ImageFont.truetype(font_path, 52)
+        font_texto = ImageFont.truetype(font_path, 42)
+        font_firma = ImageFont.truetype(font_path, 28)
     except:
         font_hook = ImageFont.load_default()
         font_texto = ImageFont.load_default()
         font_firma = ImageFont.load_default()
 
-    # 1. Gancho superior (Hook)
-    hook_y = 300
-    draw.text((540 - len(hook)*14, hook_y - 2), hook, font=font_hook, fill=(0, 0, 0, 255)) # Sombra/Borde negro
-    draw.text((540 - len(hook)*14, hook_y + 2), hook, font=font_hook, fill=(0, 0, 0, 255))
-    draw.text((540 - len(hook)*14, hook_y), hook, font=font_hook, fill=(255, 255, 255, 255))
+    # 1. Gancho superior (Hook) centrado con reborde negro y resplandor
+    hook_x = 540 - (len(hook) * 13)
+    hook_y = 280
+    for dx, dy in [(-2,-2), (-2,2), (2,-2), (2,2), (0,-2), (0,2), (-2,0), (2,0)]:
+        draw.text((hook_x + dx, hook_y + dy), hook, font=font_hook, fill=(0, 0, 0, 255))
+    draw.text((hook_x, hook_y), hook, font=font_hook, fill=(255, 255, 255, 255))
 
-    # 2. Firma fija: Abajo a la derecha (coordenadas exactas sin invadir centro)
+    # 2. Firma permanente: Abajo a la derecha (Estrictamente separada y sin tocar el centro)
     firma_texto = "@jonathan_irigoyen"
-    firma_x = 1050 - (len(firma_texto) * 18)
-    firma_y = 1800
-    # Sombra e iluminación inferior para la firma
-    draw.text((firma_x + 2, firma_y + 2), firma_texto, font=font_firma, fill=(0, 0, 0, 255))
-    draw.text((firma_x, firma_y), firma_texto, font=font_firma, fill=(255, 200, 100, 255)) # Tono iluminado
+    firma_x = 1050 - (len(firma_texto) * 17)
+    firma_y = 1820
+    for dx, dy in [(-1,-1), (-1,1), (1,-1), (1,1)]:
+        draw.text((firma_x + dx, firma_y + dy), firma_texto, font=font_firma, fill=(0, 0, 0, 255))
+    draw.text((firma_x, firma_y), firma_texto, font=font_firma, fill=(255, 205, 120, 255)) # Iluminación cálida
 
-    # 3. Párrafo / Texto principal: Ubicado ARRIBA de la firma (sin taparse)
-    texto_y = 1650
-    # Reborde negro y efecto de sombra/iluminación inferior
-    draw.text((540 - len(frase)*11, texto_y - 2), frase, font=font_texto, fill=(0, 0, 0, 255))
-    draw.text((540 - len(frase)*11, texto_y + 2), frase, font=font_texto, fill=(0, 0, 0, 255))
-    draw.text((540 - len(frase)*11 + 2, texto_y), frase, font=font_texto, fill=(0, 0, 0, 255))
-    draw.text((540 - len(frase)*11 - 2, texto_y), frase, font=font_texto, fill=(0, 0, 0, 255))
-    # Texto principal con brillo interior/iluminación
-    draw.text((540 - len(frase)*11, texto_y), frase, font=font_texto, fill=(255, 255, 255, 255))
+    # 3. Párrafo / Texto principal: Posicionado abajo, JUSTO ARRIBA de la firma sin superponerse
+    texto_x = 540 - (len(frase) * 10)
+    texto_y = 1680
+    for dx, dy in [(-2,-2), (-2,2), (2,-2), (2,2), (0,-2), (0,2), (-2,0), (2,0)]:
+        draw.text((texto_x + dx, texto_y + dy), frase, font=font_texto, fill=(0, 0, 0, 255))
+    draw.text((texto_x, texto_y), frase, font=font_texto, fill=(255, 255, 255, 255))
 
     temp_img_path = f"temp_overlay_{dia}.png"
     capa_txt.save(temp_img_path)
@@ -131,7 +124,6 @@ def generar_video(dia, tema, indice, output_dir):
     video_final = CompositeVideoClip([clip_fondo, clip_overlay])
     video_final.write_videofile(video_path, fps=24, codec="libx264", audio=False, logger=None)
     
-    # Limpieza de temporales individuales
     if os.path.exists(bg_path):
         os.remove(bg_path)
     if os.path.exists(temp_img_path):
@@ -161,7 +153,6 @@ def main():
 
     print("🎉 ¡Todos los videos generados correctamente!")
     
-    # Comprimir en ZIP automático
     zip_nombre = f"videos_generados_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
     print(f"📦 Comprimiendo videos en {zip_nombre}...")
     
