@@ -26,27 +26,24 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
 
-      - name: Instalar dependencias del sistema operativo (MoviePy y PIL)
+      - name: Instalar dependencias del sistema operativo
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg libmagickwand-dev imagemagick
 
-      - name: Instalar dependencias de Python
+      - name: Instalar dependencias de Python (MoviePy estable y Pillow)
         run: |
           python -m pip install --upgrade pip
-          pip install requests Pillow moviepy
+          pip install requests Pillow "moviepy==1.0.3"
 
       - name: Ejecutar generador de videos por dia
         run: |
           python por_dia.py --videos ${{ github.event.inputs.videos_por_dia }} --tema ${{ github.event.inputs.tematica }}
 
-      - name: Verificar y asegurar existencia del archivo ZIP
+      - name: Comprimir salida por seguridad si el script no lo hizo
         run: |
-          echo "Buscando archivos ZIP generados..."
-          find . -name "*.zip"
-          # Por si el script de python no empaquetó, forzamos un ZIP de respaldo con la salida
           if [ -d "videos_salida" ]; then
-            zip -r videos_generados_forzado.zip videos_salida/
+            zip -r videos_generados_final.zip videos_salida/
           fi
 
       - name: Subir videos como Artifact de GitHub
