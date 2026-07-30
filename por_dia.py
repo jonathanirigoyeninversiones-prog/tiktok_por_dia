@@ -23,33 +23,54 @@ if not CLAVE_PEXELS:
     sys.exit(1)
 
 # ============================================
-# LISTA DE TEMAS PREDEFINIDOS (20) CON TILDES Y ESPACIOS
+# MATRICES ORIGINALES (20 TEMAS, SUJETOS, VERBOS Y PREDICADOS)
 # ============================================
 TEMAS_PREDEFINIDOS = [
-    "Motivación",
-    "Constancia",
-    "Superación",
-    "Gratitud",
-    "Logros",
-    "Amor Propio",
-    "Esperanza",
-    "Confianza",
-    "Resiliencia",
-    "Felicidad",
-    "Propósito",
-    "Optimismo",
-    "Paz",
-    "Actitud",
-    "Crecimiento",
-    "Cambio",
-    "Libertad",
-    "Aprendizaje",
-    "Sabiduría",
-    "Conexión"
+    "Motivación", "Constancia", "Superación", "Gratitud", "Logros",
+    "Amor Propio", "Esperanza", "Confianza", "Resiliencia", "Felicidad",
+    "Propósito", "Optimismo", "Paz", "Actitud", "Crecimiento",
+    "Cambio", "Libertad", "Aprendizaje", "Sabiduría", "Conexión"
+]
+
+SUJETOS = [
+    "Tu mente", "El éxito", "Cada pequeño esfuerzo", "La disciplina", "Tu actitud",
+    "El camino difícil", "La constancia", "Un hábito diario", "Tu enfoque", "La paciencia",
+    "El verdadero poder", "Tu potencial oculto", "La resiliencia", "Cada decisión", "El coraje",
+    "La energía positiva", "Tu visión", "La determinación", "El compromiso", "La sabiduría"
+]
+
+VERBOS = [
+    "transforma", "construye", "impulsa", "revela", "fortalece",
+    "desbloquea", "genera", "multiplica", "destruye", "activa",
+    "define", "programa", "cataliza", "potencia", "eleva",
+    "equilibra", "garantiza", "materializa", "corona", "inspira"
+]
+
+PREDICADOS = [
+    "el futuro que deseas alcanzar sin mirar atrás.",
+    "los obstáculos que otros consideran imposibles de superar.",
+    "una realidad completamente nueva basada en tus metas.",
+    "la confianza interna que te hace totalmente imparable.",
+    "el camino correcto hacia tus mayores aspiraciones.",
+    "resultados extraordinarios cuando nadie más cree en ti.",
+    "la versión más fuerte y segura de ti mismo hoy.",
+    "oportunidades ocultas detrás de cada desafío diario.",
+    "un escudo impenetrable contra cualquier tipo de duda.",
+    "la claridad mental necesaria para dominar cualquier reto.",
+    "un progreso imparable que acelera tu evolución.",
+    "la paz interior que sostiene tus grandes victorias.",
+    "un ciclo constante de crecimiento y evolución personal.",
+    "la llave maestra para abrir puertas que parecían cerradas.",
+    "la disciplina exacta que separa el sueño de la realidad.",
+    "una energía inagotable para conquistar tus propósitos.",
+    "el magnetismo necesario para atraer el éxito absoluto.",
+    "una transformación profunda que se nota desde el primer día.",
+    "la maestría necesaria para liderar tu propio destino.",
+    "un impacto duradero en todo lo que te propones hacer."
 ]
 
 # ============================================
-# GANCHOS DE ALTO IMPACTO (SIN EMOJIS PARA EVITAR ERRORES VISUALES)
+# GANCHOS DE ALTO IMPACTO (SIN EMOJIS)
 # ============================================
 GANCHOS_INICIALES = [
     "Escucha esto antes de que termine tu día...",
@@ -74,9 +95,6 @@ GANCHOS_INICIALES = [
     "Prepárate porque esta perspectiva lo va a transformar todo."
 ]
 
-# ============================================
-# PREGUNTAS RETADORAS POR TEMA
-# ============================================
 PREGUNTAS_RETADORAS = [
     "Te has preguntado por que la mayoria falla exactamente en este punto sin saberlo?",
     "Realmente estas dispuesto a hacer lo necesario para transformar tu realidad hoy?",
@@ -86,260 +104,12 @@ PREGUNTAS_RETADORAS = [
 ]
 
 # ============================================
-# FRASES PARA CADA TEMA
-# ============================================
-FRASES_POR_TEMA = {
-    "Motivación": [
-        "La motivación te da energía para empezar cada día.",
-        "Tu entusiasmo contagia a las personas que te rodean.",
-        "La fe en ti mismo abre puertas que parecían cerradas.",
-        "El coraje te ayuda a enfrentar los miedos más profundos.",
-        "La determinación te lleva a alcanzar metas lejanas.",
-        "La disciplina convierte los sueños en hábitos diarios.",
-        "La resiliencia te enseña a levantarte después de cada caída.",
-        "La voluntad te permite seguir adelante cuando todo se complica.",
-        "El impulso inicial es el paso más importante de cualquier viaje.",
-        "La constancia transforma los pequeños esfuerzos en grandes logros."
-    ],
-    "Constancia": [
-        "La constancia construye el éxito día tras día.",
-        "La perseverancia te acerca a tus metas aunque el camino sea largo.",
-        "Los hábitos diarios moldean tu carácter y tu futuro.",
-        "La paciencia te ayuda a esperar el momento adecuado.",
-        "El esfuerzo constante vence cualquier obstáculo.",
-        "La rutina bien llevada te da estabilidad y progreso.",
-        "La disciplina te mantiene enfocado en lo que importa.",
-        "La constancia te impide rendirte cuando las cosas se ponen difíciles.",
-        "La resistencia te permite seguir avanzando sin desfallecer.",
-        "La perseverancia es el secreto de todas las grandes historias."
-    ],
-    "Superación": [
-        "Superarse es salir de tu zona de confort y crecer.",
-        "Los errores te enseñan lecciones que ningún libro puede dar.",
-        "Cada desafío te vuelve más fuerte y más sabio.",
-        "La transformación personal empieza cuando decides cambiar.",
-        "El aprendizaje continuo te convierte en una mejor versión de ti mismo.",
-        "La fortaleza te permite recuperarte de las caídas más duras.",
-        "La renovación te da la oportunidad de empezar de nuevo cada mañana.",
-        "Mejorar cada día te lleva a lugares que nunca imaginaste.",
-        "El progreso constante es el camino hacia la excelencia.",
-        "El avance, por pequeño que sea, siempre suma."
-    ],
-    "Gratitud": [
-        "Agradecer te cambia la perspectiva y te llena de paz.",
-        "Dar las gracias te conecta con lo mejor de la vida.",
-        "Valorar lo que tienes te hace más feliz y más humano.",
-        "Reconocer lo bueno te ayuda a vivir mejor.",
-        "Decir gracias abre tu corazón a la alegría.",
-        "La generosidad florece cuando practicas la gratitud a diario.",
-        "Ser humilde te recuerda que todo lo bueno es un regalo.",
-        "La satisfacción nace cuando valoras cada pequeño momento.",
-        "La alegría se multiplica cuando compartes tu agradecimiento.",
-        "La paz interior llega cuando aceptas con gratitud lo que la vida te da."
-    ],
-    "Logros": [
-        "Tus logros reflejan todo el esfuerzo que has invertido.",
-        "Cada victoria, por pequeña que sea, merece ser celebrada.",
-        "Las metas alcanzadas te impulsan a seguir soñando más alto.",
-        "El éxito es el resultado de la constancia y el trabajo duro.",
-        "Los triunfos te enseñan que todo esfuerzo tiene su recompensa.",
-        "El progreso te muestra que estás en el camino correcto.",
-        "La realización personal llega cuando cumples tus objetivos.",
-        "Las conquistas diarias construyen tu historia de éxito.",
-        "Los avances, aunque lentos, siempre te acercan a tu destino.",
-        "Cumplir tus metas te llena de satisfacción y orgullo."
-    ],
-    "Amor Propio": [
-        "Amarte a ti mismo es el primer amor verdadero.",
-        "Aceptarte es el primer paso hacia la felicidad plena.",
-        "Cuidarte te da la fuerza para cuidar de los demás.",
-        "Perdonarte te permite seguir adelante sin culpas.",
-        "Confiar en ti mismo es el cimiento de todo logro.",
-        "Respetarte a ti mismo es la base de todas las relaciones.",
-        "Valorar tu esencia te hace invulnerable a las críticas.",
-        "Escuchar tu intuición es un acto de profundo amor propio.",
-        "Darte tiempo para sanar es prioridad absoluta.",
-        "Tu bienestar emocional no es negociable bajo ninguna circunstancia."
-    ],
-    "Esperanza": [
-        "La esperanza enciende una luz en medio de la oscuridad.",
-        "Confiar en el mañana te da fuerzas para hoy.",
-        "La ilusión es el motor que impulsa nuevos comienzos.",
-        "Creer que lo mejor está por venir transforma tu realidad.",
-        "La expectativa positiva atrae resultados favorables.",
-        "Mantener viva la esperanza es un acto de valentía.",
-        "Cada amanecer trae una nueva oportunidad para empezar.",
-        "El optimismo nutre el alma y aclara la mente.",
-        "La fe en el futuro disipa la incertidumbre del presente.",
-        "Soñar despierto es el primer paso para materializar tus deseos."
-    ],
-    "Confianza": [
-        "La confianza en ti mismo es tu mejor carta de presentación.",
-        "Creer en tus capacidades abre cualquier puerta.",
-        "La seguridad interna ahuyenta los miedos más intensos.",
-        "Tener fe en tus decisiones te hace imparable.",
-        "La convicción firme es la base del éxito seguro.",
-        "Saber quién eres te da un poder incalculable.",
-        "La autoconfianza se entrena con cada pequeño reto superado.",
-        "Caminar con seguridad cambia la forma en que el mundo te mira.",
-        "Tu potencial no tiene límites cuando confías en tu talento.",
-        "La certeza en tus pasos ilumina todo el trayecto."
-    ],
-    "Resiliencia": [
-        "La resiliencia te vuelve más fuerte ante la adversidad.",
-        "Doblarte sin romperte es el arte de sobrevivir con gracia.",
-        "Las tormentas pasan y tu capacidad de resistencia permanece.",
-        "Cada golpe recibido te enseña a construir un escudo mejor.",
-        "La dureza del camino solo demuestra tu enorme capacidad.",
-        "Reinventarte tras un fracaso es tu mayor superpoder.",
-        "El dolor se transforma en sabiduría con el paso del tiempo.",
-        "Soportar la presión es el proceso para convertirte en diamante.",
-        "Ninguna herida es permanente cuando decides sanar.",
-        "Tu capacidad de recuperación asombrará a todos los que dudaron."
-    ],
-    "Felicidad": [
-        "La felicidad se encuentra en los detalles más pequeños del día.",
-        "Sonreír sin motivo es el reflejo de un alma en paz.",
-        "Disfrutar el presente es la clave para una vida plena.",
-        "La alegría genuina no depende de lo externo, sino de ti.",
-        "Compartir tu bienestar multiplica los momentos felices.",
-        "Apreciar lo cotidiano convierte la rutina en magia.",
-        "La ligereza del corazón atrae experiencias maravillosas.",
-        "Estar en paz contigo mismo es la cima de la felicidad.",
-        "Cada risa sincera alimenta tu espíritu de manera única.",
-        "Elegir ser feliz es la decisión más sabia que puedes tomar."
-    ],
-    "Propósito": [
-        "Tener un propósito claro le da sentido a cada esfuerzo.",
-        "Conocer tu misión en la vida alinea todas tus acciones.",
-        "El sentido de dirección te ahorra años de caminar a ciegas.",
-        "Seguir tu vocación es la forma más honesta de vivir.",
-        "Tus metas deben estar conectadas con tu razón de ser.",
-        "El enfoque en tu propósito disipa cualquier distracción.",
-        "Saber por qué luchas hace que cualquier sacrificio valga la pena.",
-        "El destino se construye cuando caminas con una intención firme.",
-        "Tu legado se escribe con cada paso guiado por tu propósito.",
-        "La claridad en tus objetivos te convierte en una fuerza imparable."
-    ],
-    "Optimismo": [
-        "Ver el lado positivo de las cosas multiplica tus oportunidades.",
-        "Una sonrisa sincera atrae energías extraordinarias.",
-        "El vaso medio lleno es suficiente para saciar tu sed.",
-        "Pensar en positivo es elegir vivir con ligereza y paz.",
-        "La actitud optimista disipa las nubes más grises del día.",
-        "Esperar lo mejor te prepara para recibir lo extraordinario.",
-        "La alegría de vivir se contagia con una mirada luminosa.",
-        "Encontrar belleza en el caos es un don que se cultiva.",
-        "La esperanza activa transforma los problemas en soluciones.",
-        "Cada día es una nueva oportunidad para sonreírle al mundo."
-    ],
-    "Paz": [
-        "La paz interior es el refugio que nadie te puede quitar.",
-        "Soltar el control te regala la calma que tanto buscas.",
-        "El silencio de la mente es el inicio de la verdadera sabiduría.",
-        "Elegir la tranquilidad por encima de la discusión es madurez.",
-        "Un suspiro profundo puede ordenar todos tus pensamientos.",
-        "La armonía en tu entorno empieza por la calma en tu alma.",
-        "Alejarte del ruido innecesario te devuelve el centro.",
-        "La serenidad es la armadura más fuerte frente al caos externo.",
-        "Respirar con consciencia te reconecta con tu esencia pura.",
-        "La paz no es ausencia de problemas, sino control interno."
-    ],
-    "Actitud": [
-        "Tu actitud determina la altitud de tus mayores logros.",
-        "Una mente abierta convierte cualquier tropiezo en aprendizaje.",
-        "La disposición positiva abre caminos donde antes había muros.",
-        "Responder con elegancia a los problemas define tu gran valor.",
-        "La energía que proyectas es la misma que regresa a ti.",
-        "Tomar la iniciativa cambia por completo el rumbo de tu día.",
-        "Una sonrisa ante la adversidad desarma cualquier conflicto.",
-        "Tu perspectiva es el filtro que colorea toda tu realidad.",
-        "Elegir buena actitud es un hábito que transforma tu destino.",
-        "El entusiasmo es la chispa que enciende cualquier proyecto."
-    ],
-    "Crecimiento": [
-        "El crecimiento personal requiere paciencia, amor y constancia.",
-        "Aprender de tus propios errores acelera tu evolución.",
-        "Expandir tus horizontes te permite ver el mundo distinto.",
-        "Invertir tiempo en ti mismo es la decisión más rentable.",
-        "La evolución constante deja atrás versiones que ya no te sirven.",
-        "Cultivar tu mente es asegurar un futuro lleno de éxito.",
-        "Cada paso fuera de tu zona de confort es crecimiento puro.",
-        "La madurez llega cuando aceptas que todo cambia y fluye.",
-        "Sembrar buenos hábitos hoy garantiza cosechar bienestar mañana.",
-        "El deseo de superación es la brújula de tu desarrollo."
-    ],
-    "Cambio": [
-        "Aceptar el cambio es la única forma de fluir con la vida.",
-        "Lo que hoy parece un final es solo el inicio de otra etapa.",
-        "Transformar tus costumbres rediseña tu camino por completo.",
-        "Renovarse es vital para no quedarse estancado en el pasado.",
-        "El miedo al cambio desaparece cuando descubres tu potencial.",
-        "Dejar ir lo viejo abre espacio para recibir lo maravilloso.",
-        "Cada transformación interna se refleja en tu entorno exterior.",
-        "Adaptarte con rapidez a las nuevas circunstancias es un arte.",
-        "El ciclo de la vida exige que evolucionemos sin temor.",
-        "Dar el salto hacia lo desconocido es el acto más valiente."
-    ],
-    "Libertad": [
-        "La verdadera libertad nace cuando te liberas del que dirán.",
-        "Tomar tus propias decisiones es el mayor signo de madurez.",
-        "Vivir sin ataduras te permite volar hacia tus metas.",
-        "La independencia emocional es el regalo más valioso.",
-        "Romper con las expectativas ajenas te devuelve tu autenticidad.",
-        "Elegir tu propio camino es un derecho que debes ejercer.",
-        "La mente libre de prejuicios encuentra soluciones donde otros ven muros.",
-        "Ser fiel a tus principios te otorga una paz inquebrantable.",
-        "Soltar las cargas del pasado te devuelve la ligereza para volar.",
-        "Tu autonomía es el pilar fundamental de tu felicidad."
-    ],
-    "Aprendizaje": [
-        "Cada experiencia vivida te deja una lección invaluable.",
-        "Aprender algo nuevo cada día mantiene tu mente joven y activa.",
-        "La curiosidad insaciable es el motor de los grandes genios.",
-        "Equivocarse es solo la evidencia de que lo estás intentando.",
-        "El conocimiento adquirido es un tesoro que nadie te puede quitar.",
-        "Escuchar con atención te enseña más que hablar sin parar.",
-        "La humildad de aprender siempre te llevará a la cima.",
-        "Estudiar tu propio camino te da claridad para el futuro.",
-        "La sabiduría se cultiva con paciencia, lectura y reflexión.",
-        "Abrir tu mente a nuevas ideas es expandir tus propios límites."
-    ],
-    "Sabiduría": [
-        "La sabiduría se manifiesta cuando hablas menos y observas más.",
-        "Entender el tiempo de las cosas te da una ventaja única.",
-        "El silencio prudente vale más que mil palabras vacías.",
-        "La experiencia acumulada es la mejor guía para el presente.",
-        "Saber cuándo retirarse es también una forma de ganar.",
-        "La calma ante la crisis es la marca de la verdadera sabiduría.",
-        "Comprender las diferencias te hace más tolerante y sabio.",
-        "La reflexión constante ilumina las decisiones más difíciles.",
-        "Aceptar lo que no puedes cambiar es un acto de gran lucidez.",
-        "La madurez mental te permite ver el panorama completo."
-    ],
-    "Conexión": [
-        "Conectar con otros seres humanos enriquece profundamente tu alma.",
-        "La empatía es el puente que une dos corazones distintos.",
-        "Escuchar con el corazón crea vínculos que duran para siempre.",
-        "Sentir la energía de quienes te rodean te hace más empático.",
-        "La verdadera unión se basa en el respeto y el cariño sincero.",
-        "Compartir tu vivencias genera una cercanía inigualable.",
-        "El amor y la amistad son los hilos que sostienen el mundo.",
-        "Mirar a los ojos es conectar con la esencia del otro.",
-        "Rodearte de gente positiva eleva tu frecuencia espiritual.",
-        "La sintonía con el universo empieza por conectar contigo mismo."
-    ]
-}
-
-# ============================================
 # FUNCIONES AUXILIARES
 # ============================================
 def limpiar_texto(texto):
-    """Elimina emojis y caracteres especiales para evitar cuadros rotos (□)."""
     return re.sub(r'[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s,.;¿?¡!]', '', texto)
 
 def obtener_fondo_pexels(query):
-    """Descarga un fondo multimedia vertical desde Pexels usando la API."""
     url = f"https://api.pexels.com/v1/search?query={query}&per_page=1&orientation=portrait"
     headers = {"Authorization": CLAVE_PEXELS}
     
@@ -363,7 +133,6 @@ def obtener_fondo_pexels(query):
     return archivo_temp
 
 def seleccionar_temas(tema_input):
-    """Selecciona los temas para los 7 días de la semana (soporta 'todo' y 'aleatorio')."""
     if tema_input.lower() in ["todo", "aleatorio"]:
         temas_disponibles = list(TEMAS_PREDEFINIDOS)
         random.shuffle(temas_disponibles)
@@ -382,6 +151,17 @@ def seleccionar_temas(tema_input):
             random.shuffle(temas_disponibles)
             return temas_disponibles[:7]
 
+def generar_frases_dinamicas(cantidad=5):
+    """Genera frases combinando dinámicamente los sujetos, verbos y predicados."""
+    frases = []
+    for _ in range(cantidad):
+        s = random.choice(SUJETOS)
+        v = random.choice(VERBOS)
+        p = random.choice(PREDIACADOS if 'PREDIACADOS' in globals() else PREDICADOS)
+        frase = f"{s} {v} {p}"
+        frases.append(frase)
+    return frases
+
 # ============================================
 # CREACIÓN DE VIDEO INDIVIDUAL
 # ============================================
@@ -389,7 +169,7 @@ def crear_video(tema, dia_nombre, indice_video):
     print(f"\n[PROCESO] Creando video {indice_video} para {dia_nombre} (Tema: {tema})...")
     
     ancho, alto = 1080, 1920
-    duracion_total = random.randint(75, 85) # Duración estricta entre 75 y 85 segundos
+    duracion_total = random.randint(75, 85)
     
     path_fondo = obtener_fondo_pexels(f"{tema} background vertical")
     
@@ -410,7 +190,7 @@ def crear_video(tema, dia_nombre, indice_video):
             font = ImageFont.load_default()
             font_firma = ImageFont.load_default()
             
-        # 1. GANCHO INICIAL (Duración aleatoria orgánica entre 3 y 4 segundos)
+        # 1. GANCHO INICIAL (Duración orgánica aleatoria entre 3 y 4 segundos)
         duracion_gancho = round(random.uniform(3.0, 4.0), 2)
         gancho_texto = limpiar_texto(random.choice(GANCHOS_INICIALES))
         img_gancho = img_pil.copy()
@@ -422,7 +202,7 @@ def crear_video(tema, dia_nombre, indice_video):
         img_gancho.save(path_gancho_img)
         clips_secuencia.append(ImageClip(path_gancho_img).set_duration(duracion_gancho))
         
-        # 2. PREGUNTA RETADORA (Duración aleatoria orgánica entre 3 y 4 segundos)
+        # 2. PREGUNTA RETADORA (Duración orgánica aleatoria entre 3 y 4 segundos)
         duracion_pregunta = round(random.uniform(3.0, 4.0), 2)
         pregunta_texto = limpiar_texto(random.choice(PREGUNTAS_RETADORAS))
         img_pregunta = img_pil.copy()
@@ -434,13 +214,12 @@ def crear_video(tema, dia_nombre, indice_video):
         img_pregunta.save(path_pregunta_img)
         clips_secuencia.append(ImageClip(path_pregunta_img).set_duration(duracion_pregunta))
         
-        # 3. CUERPO DE VALOR (Distribuido dinámicamente en el tiempo restante)
+        # 3. CUERPO DE VALOR DINÁMICO (Sujetos + Verbos + Predicados)
         tiempo_fijo_cabecera = duracion_gancho + duracion_pregunta
         tiempo_cta = 10.0
         tiempo_restante = duracion_total - tiempo_fijo_cabecera - tiempo_cta
         
-        frases_disponibles = FRASES_POR_TEMA.get(tema, FRASES_POR_TEMA["Motivación"])
-        frases_seleccionadas = random.sample(frases_disponibles, min(5, len(frases_disponibles)))
+        frases_seleccionadas = generar_frases_dinamicas(5)
         duracion_por_frase = max(5, tiempo_restante / len(frases_seleccionadas))
         
         for frase in frases_seleccionadas:
@@ -458,7 +237,7 @@ def crear_video(tema, dia_nombre, indice_video):
             if os.path.exists(path_f_img):
                 os.remove(path_f_img)
                 
-        # 4. LLAMADO A LA ACCIÓN (CTA) FINAL (Últimos 10 segundos)
+        # 4. LLAMADO A LA ACCIÓN (CTA) FINAL
         img_cta = img_pil.copy()
         draw_c = ImageDraw.Draw(img_cta)
         cta_texto = limpiar_texto("Guarda este video y ponlo en practica ahora mismo.")
