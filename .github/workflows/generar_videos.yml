@@ -9,7 +9,7 @@ on:
         default: '5'
         type: string
       tema:
-        description: 'Tema específico o aleatorio (escribe 'aleatorio' o 'todo')'
+        description: 'Tema específico o aleatorio (escribe aleatorio o todo)'
         required: true
         default: 'aleatorio'
         type: string
